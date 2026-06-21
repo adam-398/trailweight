@@ -45,6 +45,9 @@ class MainActivity : ComponentActivity() {
                         navController = navController,
                         startDestination = startDestination!!
                     ) {
+                        composable("landing") {
+                            landingScreen(navController)
+                        }
                         composable("login") {
                             LoginScreen(navController)
                         }
