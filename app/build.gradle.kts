@@ -52,6 +52,9 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.9.7")
     implementation("androidx.compose.material:material-icons-extended")
 
+    implementation(platform("io.github.dautovicharis:charts-bom:2.2.0"))
+    implementation("io.github.dautovicharis:charts-pie")
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

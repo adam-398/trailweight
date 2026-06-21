@@ -2,7 +2,9 @@ package com.example.trailweight.cards
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -15,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.trailweight.DataClasses.Item
+import com.example.trailweight.preferences.formatWeight
 
 /**
  * Composable function that displays an item card.
@@ -29,7 +32,8 @@ fun ItemCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 6.dp),
+            .height(65.dp)
+            .padding(horizontal = 12.dp, vertical = 4.dp),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.elevatedCardElevation(
             defaultElevation = 2.dp,
@@ -41,10 +45,14 @@ fun ItemCard(
         onClick = onClick
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxHeight()
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(modifier = Modifier.weight(1f)) {
+            Column(modifier = Modifier
+                .padding(start = 12.dp)
+                .weight(1f)) {
                 Text(
                     text = item.name,
                     style = MaterialTheme.typography.bodyLarge
@@ -59,12 +67,13 @@ fun ItemCard(
             Icon(
                 imageVector = iconForCategory(item.category),
                 contentDescription = null,
-                modifier = Modifier.padding(horizontal = 12.dp)
+                modifier = Modifier.padding(start = 12.dp, end = 12.dp)
             )
 
             Text(
-                text = item.weight?.let { "${it.toInt()} g" } ?: "—",
-                style = MaterialTheme.typography.bodyMedium
+                text = formatWeight(item.weight),
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(end = 12.dp)
             )
         }
     }

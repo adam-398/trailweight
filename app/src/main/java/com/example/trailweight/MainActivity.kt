@@ -20,12 +20,16 @@ import io.github.jan.supabase.auth.auth
 import androidx.navigation.compose.rememberNavController
 import com.auroralabs.trailweight.loginframes.RegisterUser
 import com.example.trailweight.loginframes.ForgotPassword
+import com.example.trailweight.preferences.ThemePreferences
+import com.example.trailweight.preferences.UnitPreferences
 
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         SupabaseClient.initialize(this)
+        UnitPreferences.initialize(this)
+        ThemePreferences.initialize(this)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         enableEdgeToEdge()
 
@@ -62,6 +66,9 @@ class MainActivity : ComponentActivity() {
                             if (listId != null) {
                                 GearListScreen(navController, listId)
                             }
+                        }
+                        composable("settings") {
+                            SettingsScreen(navController)
                         }
                     }
                 }
