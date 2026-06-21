@@ -8,10 +8,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,7 +35,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.autofill.ContentType
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.semantics.contentType
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import kotlinx.coroutines.launch
@@ -51,99 +57,109 @@ fun ForgotPassword(navController: NavController) {
     val coroutineScope = rememberCoroutineScope()
     var emailState by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
+    var successMessage by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
-    var ReusableMessage by remember { mutableStateOf("") }
-    LocalFocusManager.current
-
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                        MaterialTheme.colorScheme.background
+                    )
+                )
+            )
             .imePadding(),
-        contentAlignment = Alignment.Center,
+        contentAlignment = Alignment.Center
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(75.dp)
+                .padding(24.dp)
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-                Text(
-                    text = "Trail Weight",
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontSize = 49.sp,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(all = 8.dp),
-                )
-                TrailWeightInputField(
-                    value = emailState,
-                    onValueChange = {
-                        emailState = it
-                        errorMessage = ""
-                    },
-                    label = "Email",
-                    modifier = Modifier
-                        .semantics { contentType = ContentType.EmailAddress }
-                        .padding(10.dp),
-                )
-            TrailWeightButton(
-                    text = if (isLoading) "Resetting password..." else "Reset password",
-                    onClick = {
-                        if (isLoading) return@TrailWeightButton
-                        coroutineScope.launch {
-                            isLoading = true
-                            val success = resetPassword(emailState)
-                            isLoading = false
-                            if (success) {
-                                ReusableMessage = "Check your email for a reset link"
-                            } else {
-                                errorMessage = "Invalid email"
-                            }
-                        }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(5.dp),
-                )
-                Text(
-                    text = "Already have an account?",
-                    color = Color(0xFFfef3df),
-                    fontSize = 16.sp,
-                    style = TextStyle(
-                        shadow = Shadow(
-                            color = Color.Black,
-                            offset = Offset(2.0f, 2.0f),
-                            blurRadius = 3f
-                        )
-                    ),
-                    modifier = Modifier
-                        .padding(10.dp)
-                        .align(Alignment.CenterHorizontally)
-                        .clickable { navController.navigate("login") }
-                )
-                if (errorMessage.isNotEmpty()) {
-                    Text(
-                        text = errorMessage,
-                        color = Color.Red,
-                        modifier = Modifier
-                            .padding(10.dp)
+            Text(
+                text = "Trail Weight",
+                style = MaterialTheme.typography.displayMedium,
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+            Text(
+                text = "Enter your email to reset your password",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(bottom = 32.dp)
+            )
+
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(24.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            ) {
+                Column(modifier = Modifier.padding(24.dp)) {
+                    TrailWeightInputField(
+                        value = emailState,
+                        onValueChange = { emailState = it; errorMessage = ""; successMessage = "" },
+                        label = "Email address",
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
                     )
-                }
-                if (ReusableMessage.isNotEmpty()) {
-                    Text(
-                        text = ReusableMessage,
-                        color = Color(0xFF2D5A27),
-                        modifier = Modifier.padding(10.dp)
+
+                    TrailWeightButton(
+                        text = if (isLoading) "Resetting..." else "Reset password",
+                        onClick = {
+                            if (isLoading) return@TrailWeightButton
+                            coroutineScope.launch {
+                                isLoading = true
+                                val success = resetPassword(emailState)
+                                isLoading = false
+                                if (success) {
+                                    successMessage = "Check your email for a reset link"
+                                } else {
+                                    errorMessage = "Invalid email address"
+                                }
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth().padding(top = 16.dp).height(50.dp)
                     )
                 }
             }
+
+            if (errorMessage.isNotEmpty()) {
+                Text(
+                    text = errorMessage,
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.padding(top = 16.dp),
+                    textAlign = TextAlign.Center
+                )
+            }
+
+            if (successMessage.isNotEmpty()) {
+                Text(
+                    text = successMessage,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(top = 16.dp),
+                    textAlign = TextAlign.Center
+                )
+            }
+
+            Text(
+                text = "Back to Login",
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .padding(top = 24.dp)
+                    .clickable { navController.navigate("login") }
+            )
         }
     }
+}
 
 @Preview
 @Composable

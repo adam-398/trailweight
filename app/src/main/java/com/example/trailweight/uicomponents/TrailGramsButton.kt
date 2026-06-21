@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
@@ -39,7 +40,7 @@ fun TrailWeightButton(
     val contentColor = when (style) {
         TrailsGramsButtonStyle.Primary -> MaterialTheme.colorScheme.onPrimary
         TrailsGramsButtonStyle.Secondary -> MaterialTheme.colorScheme.onSecondary
-        TrailsGramsButtonStyle.Outlined -> Color(0xFF2A3019)
+        TrailsGramsButtonStyle.Outlined -> MaterialTheme.colorScheme.primary
     }
     val containerColor = when (style) {
         TrailsGramsButtonStyle.Primary -> MaterialTheme.colorScheme.primary
@@ -47,10 +48,9 @@ fun TrailWeightButton(
         TrailsGramsButtonStyle.Outlined -> Color.Transparent
     }
 
-    val border = when (style) {
-        TrailsGramsButtonStyle.Outlined -> ButtonDefaults.outlinedButtonBorder(true)
-        else -> null
-    }
+    val border = if (style == TrailsGramsButtonStyle.Outlined) {
+        ButtonDefaults.outlinedButtonBorder.copy(brush = SolidColor(MaterialTheme.colorScheme.primary))
+    } else null
 
     Button(
         onClick = onClick,
@@ -61,16 +61,10 @@ fun TrailWeightButton(
         border = border,
         enabled = enabled,
         modifier = modifier.heightIn(min = 48.dp),
-        elevation = when (style) {
-            TrailsGramsButtonStyle.Outlined -> ButtonDefaults.buttonElevation(
-                defaultElevation = 0.dp,
-                pressedElevation = 0.dp
-            )
-            else -> ButtonDefaults.buttonElevation(
-                defaultElevation = 8.dp,
-                pressedElevation = 12.dp
-            )
-        },
+        elevation = if (style == TrailsGramsButtonStyle.Outlined) null else ButtonDefaults.buttonElevation(
+            defaultElevation = 8.dp,
+            pressedElevation = 12.dp
+        ),
         shape = RoundedCornerShape(8.dp)
     ) {
         if (icon != null) {

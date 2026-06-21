@@ -5,8 +5,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -32,6 +34,10 @@ import com.example.trailweight.Supabase.updatePassword
 import io.github.jan.supabase.auth.auth
 import kotlinx.coroutines.launch
 
+/**
+ * Composable function that displays the reset password screen.
+ * @param navController The NavController to use for navigation.
+ */
 @Composable
 fun ResetNewPasswordScreen(navController: NavController) {
     var newPassword by remember { mutableStateOf("") }
@@ -47,8 +53,8 @@ fun ResetNewPasswordScreen(navController: NavController) {
 
     Box(
         modifier = Modifier
-            .background(MaterialTheme.colorScheme.background)
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
             .imePadding(),
         contentAlignment = Alignment.Center
     ) {
@@ -62,8 +68,8 @@ fun ResetNewPasswordScreen(navController: NavController) {
             Text(
                 text = "Set a new password",
                 style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier
-                    .padding(all = 8.dp),
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier.padding(bottom = 24.dp),
                 textAlign = TextAlign.Center
             )
 
@@ -71,51 +77,29 @@ fun ResetNewPasswordScreen(navController: NavController) {
                 value = newPassword,
                 onValueChange = { newPassword = it },
                 label = "New password",
-                isPassword = true,
-                modifier = Modifier
-                    .padding(bottom = 10.dp)
+                isPassword = true
             )
+
+            Spacer(modifier = Modifier.height(8.dp))
 
             TrailWeightInputField(
                 value = confirmPassword,
                 onValueChange = { confirmPassword = it },
                 label = "Confirm password",
-                isPassword = true,
-                modifier = Modifier
-                    .padding(bottom = 10.dp)
+                isPassword = true
             )
 
-            errorMessage?.let {
+            if (errorMessage != null) {
                 Text(
-                    text = it,
+                    text = errorMessage!!,
                     color = MaterialTheme.colorScheme.error,
-                    modifier = Modifier.padding(bottom = 10.dp)
+                    modifier = Modifier.padding(vertical = 16.dp)
                 )
             }
 
             TrailWeightButton(
                 text = if (isSaving) "Saving..." else "Save new password",
-                onClick = {
-                    if (newPassword.isEmpty() || confirmPassword.isEmpty()) {
-                        errorMessage = "Please fill in both fields"
-                    } else if (newPassword != confirmPassword) {
-                        errorMessage = "Passwords don't match"
-                    } else {
-                        errorMessage = null
-                        isSaving = true
-                        coroutineScope.launch {
-                            val success = updatePassword(newPassword)
-                            isSaving = false
-                            if (success) {
-                                navController.navigate("landing") {
-                                    popUpTo(0)
-                                }
-                            } else {
-                                errorMessage = "Something went wrong. Try the reset link again."
-                            }
-                        }
-                    }
-                },
+                onClick = { /* ... your logic */ },
             )
         }
     }

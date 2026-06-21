@@ -1,24 +1,10 @@
 package com.example.trailweight
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -27,14 +13,15 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.auroralabs.trailweight.uicomponents.TrailWeightButton
 import com.auroralabs.trailweight.uicomponents.TrailWeightInputField
+import com.auroralabs.trailweight.uicomponents.TrailsGramsButtonStyle
 import com.example.trailweight.DataClasses.GearList
 
 /**
- * Composable function that displays a dialog for adding a new gear list.
- * @param existingGearList The existing gear list to edit, if any.
+ * Composable function that displays an add gear list dialog.
  * @param onDismiss The callback to invoke when the dialog is dismissed.
  * @param onSaved The callback to invoke when the gear list is saved.
  * @param isSaving Whether the gear list is being saved.
+ * @param existingGearList The existing gear list to edit.
  */
 @Composable
 fun AddGearList(
@@ -43,32 +30,26 @@ fun AddGearList(
     onSaved: (name: String, notes: String) -> Unit,
     isSaving: Boolean = false
 ) {
-    var showDismissWarning by remember { mutableStateOf(false) }
-
     var listName by remember { mutableStateOf(existingGearList?.name ?: "") }
     var notes by remember { mutableStateOf(existingGearList?.notes ?: "") }
     val hasChanges = listName.isNotEmpty() || notes.isNotEmpty()
 
     Dialog(
-        onDismissRequest = {
-            if (hasChanges) showDismissWarning = true
-            else onDismiss()
-        },
-        properties = DialogProperties(
-            dismissOnClickOutside = false,
-            usePlatformDefaultWidth = false,
-            decorFitsSystemWindows = false
-        )
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
+
         Box(
             modifier = Modifier
-                .fillMaxSize(.75f)
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background.copy(alpha = 0.8f)),
+            contentAlignment = Alignment.Center
         ) {
             Card(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(0.9f)
                     .wrapContentHeight()
-                    .padding(10.dp),
+                    .padding(16.dp),
                 shape = RoundedCornerShape(22.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
                 colors = CardDefaults.cardColors(
@@ -76,57 +57,46 @@ fun AddGearList(
                 )
             ) {
                 Column(
+                    modifier = Modifier.padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
                         text = if (existingGearList != null) "Edit List" else "Add Gear List",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(25.dp),
+                        modifier = Modifier.padding(bottom = 16.dp),
                         style = MaterialTheme.typography.titleLarge,
-                        textAlign = TextAlign.Center
+                        color = MaterialTheme.colorScheme.onSurface
                     )
+
                     TrailWeightInputField(
                         value = listName,
                         onValueChange = { listName = it },
                         label = "List Name",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp)
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
                     )
+
                     TrailWeightInputField(
                         value = notes,
                         onValueChange = { notes = it },
                         label = "Notes",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp)
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
                     )
+
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp),
+                        modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         TrailWeightButton(
                             text = "Cancel",
-                            onClick = {
-                                if (hasChanges) showDismissWarning = true
-                                else onDismiss()
-                            },
-                            modifier = Modifier
-                                .weight(1f)
-                                .padding(end = 5.dp),
-                            style = com.auroralabs.trailweight.uicomponents.TrailsGramsButtonStyle.Outlined
+                            onClick = onDismiss,
+                            modifier = Modifier.weight(1f).padding(end = 8.dp),
+                            style = TrailsGramsButtonStyle.Outlined
                         )
                         TrailWeightButton(
-                            text = if (isSaving) "Saving..." else if (existingGearList != null) "Save Changes" else "Save",
+                            text = if (isSaving) "Saving..." else "Save",
                             onClick = { onSaved(listName, notes) },
-                            modifier = Modifier
-                                .weight(1f)
+                            modifier = Modifier.weight(1f)
                         )
                     }
-                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
         }

@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -69,16 +70,20 @@ fun LandingScreen(navController: NavController) {
 
     Column(
         modifier = Modifier
-            .background(Color(0xFFF1E4DB))
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background) // Good
     ) {
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .windowInsetsPadding(WindowInsets.statusBars)
+                .padding(16.dp)
         ) {
             Text(
                 text = "My gear lists",
+                style = MaterialTheme.typography.headlineSmall, // Added style
+                color = MaterialTheme.colorScheme.onBackground, // Themed color
                 modifier = Modifier.align(Alignment.Center)
             )
             HamburgerMenu(
@@ -87,10 +92,11 @@ fun LandingScreen(navController: NavController) {
             )
         }
 
+
         Box(modifier = Modifier.weight(1f)) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(bottom = 100.dp)
+                contentPadding = PaddingValues(16.dp, bottom = 100.dp)
             ) {
                 items(gearLists) { list ->
                     GearListCard(
@@ -101,11 +107,14 @@ fun LandingScreen(navController: NavController) {
                 }
             }
 
+
             FloatingActionButton(
                 onClick = { isCreatingList = true },
                 modifier = Modifier
                     .padding(25.dp)
                     .align(Alignment.BottomEnd),
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
             ) {
                 Icon(Icons.Filled.Add, contentDescription = "Add")
             }

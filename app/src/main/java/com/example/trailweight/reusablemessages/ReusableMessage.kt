@@ -50,7 +50,7 @@ fun ReusableMessage(
                 .fillMaxWidth()
                 .padding(all = 20.dp),
             shape = RoundedCornerShape(22.dp),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFFf7e9d5)),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
             elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
         ) {
             Column {
@@ -61,9 +61,9 @@ fun ReusableMessage(
                         .fillMaxWidth()
                         .padding(20.dp),
                     style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center,
-                    textDecoration = TextDecoration.Underline,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.Bold
                 )
                 if (message != null) {
                     Text(
@@ -72,6 +72,7 @@ fun ReusableMessage(
                             .fillMaxWidth()
                             .padding(all = 10.dp),
                         style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurface,
                         textAlign = TextAlign.Center
                     )
                 }
@@ -79,10 +80,10 @@ fun ReusableMessage(
                     text = confirmString,
                     onClick = { onConfirm() },
                     modifier = Modifier
-                        .fillMaxWidth(.6f)
+                        .fillMaxWidth(0.6f)
                         .align(Alignment.CenterHorizontally)
                         .padding(all = 10.dp),
-                    icon = Icons.Default.Check,
+                    icon = Icons.Default.Check
                 )
                 Spacer(modifier = Modifier.size(20.dp))
             }

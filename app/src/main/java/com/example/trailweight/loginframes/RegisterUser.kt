@@ -1,254 +1,148 @@
 package com.auroralabs.trailweight.loginframes
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.autofill.ContentType
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.contentType
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.trailweight.Supabase.registerUser
 import com.example.trailweight.reusablemessages.ReusableMessage
 import kotlinx.coroutines.launch
 
-
-/**
- * Composable function that displays the register screen.
- * @param navController The NavController to use for navigation.
- */
 @Composable
 fun RegisterUser(navController: NavController) {
     val coroutineScope = rememberCoroutineScope()
+
     var emailState by remember { mutableStateOf("") }
     var passwordState by remember { mutableStateOf("") }
+    var confirmPasswordState by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
-    var confirmPasswordState by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
-
-    val focusManager = LocalFocusManager.current
-
     var showReusableMessage by remember { mutableStateOf(false) }
 
-
-
     Box(
-        Modifier
+        modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                        MaterialTheme.colorScheme.background
+                    )
+                )
+            )
             .imePadding(),
         contentAlignment = Alignment.Center
     ) {
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(75.dp)
+                .padding(24.dp)
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.Top,
+            verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = "Trail Weight",
-                style = MaterialTheme.typography.headlineLarge,
-                fontSize = 49.sp,
+                style = MaterialTheme.typography.displayMedium,
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-            OutlinedTextField(
-                value = emailState,
-                onValueChange = {
-                    emailState = it
-                    errorMessage = ""
-                },
-                label = { Text("Email") },
-                modifier = Modifier
-                    .semantics { contentType = ContentType.EmailAddress }
-                    .padding(10.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedContainerColor = Color(0xFFf9ecdd),
-                    focusedContainerColor = Color(0xFFf9ecdd),
-                ),
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
-                )
+            Text(
+                text = "Create an account to start tracking",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(bottom = 32.dp)
             )
-            OutlinedTextField(
-                value = passwordState,
-                onValueChange = {
-                    passwordState = it
-                    errorMessage = ""
-                },
-                label = { Text("Password") },
-                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                trailingIcon = {
-                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                        Icon(
-                            imageVector = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                            contentDescription = if (passwordVisible) "Hide password" else "Show password"
-                        )
-                    }
-                },
-                modifier = Modifier
-                    .semantics { contentType = ContentType.Password }
-                    .padding(5.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedContainerColor = Color(0xFFf9ecdd),
-                    focusedContainerColor = Color(0xFFf9ecdd),
-                ),
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
-                )
-            )
-            OutlinedTextField(
-                value = confirmPasswordState,
-                onValueChange = {
-                    confirmPasswordState = it
-                    errorMessage = ""
-                },
-                label = { Text("Confirm password") },
-                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                trailingIcon = {
-                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                        Icon(
-                            imageVector = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                            contentDescription = if (passwordVisible) "Hide password" else "Show password"
-                        )
-                    }
-                },
-                modifier = Modifier
-                    .semantics { contentType = ContentType.Password }
-                    .padding(5.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedContainerColor = Color(0xFFf9ecdd),
-                    focusedContainerColor = Color(0xFFf9ecdd),
-                ),
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
-            )
-            Button(
-                elevation = ButtonDefaults.buttonElevation(
-                    defaultElevation = 8.dp,
-                    pressedElevation = 12.dp
-                ),
-                onClick = {
-                    if (passwordState.length < 8) {
-                        errorMessage = "Password must be at least 8 characters"
-                        return@Button
-                    }
-                    if (!passwordState.any { it.isDigit() }) {
-                        errorMessage = "Password must contain at least one number"
-                        return@Button
-                    }
-                    if (!passwordState.any { it.isUpperCase() }) {
-                        errorMessage = "Password must contain at least one uppercase letter"
-                        return@Button
-                    }
-                    if (passwordState != confirmPasswordState) {
-                        errorMessage = "Passwords do not match"
-                        return@Button
-                    }
-                    if (isLoading) return@Button
-                    coroutineScope.launch {
-                        isLoading = true
-                        val error = registerUser(emailState, passwordState)
-                        isLoading = false
-                        if (error == null) {
-                            showReusableMessage = true
-                        } else if (error.contains("already registered", ignoreCase = true) ||
-                            error.contains("already exists", ignoreCase = true)
-                        ) {
-                            errorMessage = "An account with this email already exists"
-                        } else {
-                            errorMessage = "Registration failed, please try again"
-                        }
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(5.dp),
-                shape = RoundedCornerShape(8.dp)
+
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(24.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
             ) {
-                Text(if (isLoading) "Registering..." else "Create account", fontSize = 16.sp)
+                Column(modifier = Modifier.padding(24.dp)) {
+                    AuthTextField(value = emailState, onValueChange = { emailState = it }, label = "Email")
+                    AuthTextField(
+                        value = passwordState,
+                        onValueChange = { passwordState = it },
+                        label = "Password",
+                        isPassword = true,
+                        passwordVisible = passwordVisible,
+                        onVisibilityChange = { passwordVisible = !passwordVisible }
+                    )
+                    AuthTextField(
+                        value = confirmPasswordState,
+                        onValueChange = { confirmPasswordState = it },
+                        label = "Confirm password",
+                        isPassword = true,
+                        passwordVisible = passwordVisible,
+                        onVisibilityChange = { passwordVisible = !passwordVisible },
+                        imeAction = ImeAction.Done
+                    )
+
+                    Button(
+                        onClick = {
+                            if (passwordState.length < 8) errorMessage = "Password must be at least 8 characters"
+                            else if (passwordState != confirmPasswordState) errorMessage = "Passwords do not match"
+                            else {
+                                coroutineScope.launch {
+                                    isLoading = true
+                                    val error = registerUser(emailState, passwordState)
+                                    isLoading = false
+                                    if (error == null) showReusableMessage = true
+                                    else errorMessage = error
+                                }
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 16.dp)
+                            .height(50.dp),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text(if (isLoading) "Registering..." else "Create account")
+                    }
+                }
             }
+
             if (errorMessage.isNotEmpty()) {
                 Text(
                     text = errorMessage,
-                    color = Color.Red,
-                    modifier = Modifier
-                        .padding(10.dp)
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.padding(top = 16.dp),
+                    textAlign = TextAlign.Center
                 )
             }
+
             Text(
-                text = "Already have an account?",
-                color = Color(0xFFfef3df),
-                fontSize = 20.sp,
-                style = TextStyle(
-                    shadow = Shadow(
-                        color = Color.Black,
-                        offset = Offset(2.0f, 2.0f),
-                        blurRadius = 3f
-                    )
-                ),
+                text = "Already have an account? Login",
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
-                    .padding(10.dp)
-                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 24.dp)
                     .clickable { navController.navigate("login") }
             )
         }
@@ -259,13 +153,41 @@ fun RegisterUser(navController: NavController) {
             title = "Success",
             message = "Account created successfully",
             confirmString = "OK",
-            onConfirm = {
-                navController.navigate("login") {
-                    popUpTo("register") { inclusive = true }
-                }
-            }
+            onConfirm = { navController.navigate("login") { popUpTo("register") { inclusive = true } } }
         )
     }
+}
+
+@Composable
+private fun AuthTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    isPassword: Boolean = false,
+    passwordVisible: Boolean = false,
+    onVisibilityChange: () -> Unit = {},
+    imeAction: ImeAction = ImeAction.Next
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text(label) },
+        visualTransformation = if (isPassword && !passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
+        trailingIcon = if (isPassword) {
+            {
+                IconButton(onClick = onVisibilityChange) {
+                    Icon(if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff, null)
+                }
+            }
+        } else null,
+        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+        keyboardOptions = KeyboardOptions(imeAction = imeAction),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+        ),
+        shape = RoundedCornerShape(12.dp)
+    )
 }
 
 @Preview
@@ -273,4 +195,3 @@ fun RegisterUser(navController: NavController) {
 fun RegisterUserPreview() {
     RegisterUser(navController = rememberNavController())
 }
-

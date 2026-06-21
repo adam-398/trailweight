@@ -3,7 +3,9 @@ package com.auroralabs.trailweight.uicomponents
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
@@ -44,20 +46,31 @@ fun TrailWeightInputField(
     minLines: Int = 1,
     textStyle: TextStyle = TextStyle(fontSize = 16.sp),
     keyboardType: KeyboardType = KeyboardType.Text,
-    singleLine: Boolean = false
-){
+    singleLine: Boolean = false,
+    isError: Boolean = false
+) {
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
         label = { Text(label) },
         modifier = modifier,
+        isError = isError,
+
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+            focusedLabelColor = MaterialTheme.colorScheme.primary,
+            cursorColor = MaterialTheme.colorScheme.primary,
+            focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+        ),
         shape = RoundedCornerShape(8.dp),
         keyboardOptions = KeyboardOptions(imeAction = imeAction, keyboardType = keyboardType),
         keyboardActions = keyboardActions,
-        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
+        visualTransformation = if (isPassword) PasswordVisualTransformation() else visualTransformation,
         trailingIcon = trailingIcon,
         minLines = minLines,
         textStyle = textStyle,
-        singleLine = singleLine,
+        singleLine = singleLine
     )
 }

@@ -32,48 +32,53 @@ fun ItemCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(65.dp)
+            .height(72.dp)
             .padding(horizontal = 12.dp, vertical = 4.dp),
-        shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.elevatedCardElevation(
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(
             defaultElevation = 2.dp,
             pressedElevation = 6.dp
         ),
+        // Use a solid color from the theme instead of manual alpha transparency
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         onClick = onClick
     ) {
         Row(
             modifier = Modifier
                 .fillMaxHeight()
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(modifier = Modifier
-                .padding(start = 12.dp)
-                .weight(1f)) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+            ) {
                 Text(
                     text = item.name,
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
                     text = item.category,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )
             }
 
             Icon(
                 imageVector = iconForCategory(item.category),
                 contentDescription = null,
-                modifier = Modifier.padding(start = 12.dp, end = 12.dp)
+                modifier = Modifier.padding(horizontal = 12.dp),
+                tint = MaterialTheme.colorScheme.primary
             )
 
             Text(
                 text = formatWeight(item.weight),
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(end = 12.dp)
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.primary
             )
         }
     }

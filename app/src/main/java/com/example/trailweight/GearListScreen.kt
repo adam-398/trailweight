@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -84,20 +85,26 @@ fun GearListScreen(
 
     Column(
         modifier = Modifier
-            .background(Color(0xFFF1E4DB))
+            .background(MaterialTheme.colorScheme.background)
             .fillMaxSize()
     ) {
+        // Top Bar
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .windowInsetsPadding(WindowInsets.statusBars),
+                .windowInsetsPadding(WindowInsets.statusBars)
+                .padding(8.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(onClick = { navController.popBackStack() }) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
             }
-            Text(text = gearList?.name ?: "Loading...")
+            Text(
+                text = gearList?.name ?: "Loading...",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onBackground
+            )
             EditOrDeleteGearList(
                 listId = listId,
                 gearListName = gearList?.name,
@@ -109,13 +116,15 @@ fun GearListScreen(
         Box(modifier = Modifier.weight(1f)) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(bottom = 100.dp)
+                contentPadding = PaddingValues(16.dp, bottom = 100.dp)
             ) {
                 if (items.isNotEmpty()) {
                     item {
-                        Box(
-                            modifier = Modifier.fillMaxWidth(),
-                            contentAlignment = Alignment.Center
+
+                        androidx.compose.material3.Surface(
+                            modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+                            color = MaterialTheme.colorScheme.surface,
+                            shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
                         ) {
                             val totalWeight = categoryValues.sum()
                             val pieChartDataSet = categoryValues.toChartDataSet(
@@ -123,6 +132,7 @@ fun GearListScreen(
                                 postfix = "g",
                                 labels = categoryLabels
                             )
+
                             PieChart(pieChartDataSet)
                         }
                     }
@@ -140,13 +150,10 @@ fun GearListScreen(
             }
 
             FloatingActionButton(
-                onClick = {
-                    editingItem = null
-                    showItemDialog = true
-                },
-                modifier = Modifier
-                    .padding(25.dp)
-                    .align(Alignment.BottomEnd),
+                onClick = { editingItem = null; showItemDialog = true },
+                modifier = Modifier.padding(25.dp).align(Alignment.BottomEnd),
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
             ) {
                 Icon(Icons.Filled.Add, contentDescription = "Add")
             }

@@ -26,7 +26,18 @@ import androidx.compose.ui.window.DialogProperties
 import com.auroralabs.trailweight.uicomponents.TrailWeightButton
 import com.auroralabs.trailweight.uicomponents.TrailsGramsButtonStyle
 
-
+/**
+ * Reusable confirmation message
+ * @param title The title of the screen
+ * @param message The message to display
+ * @param confirmString to display on the confirm button
+ * @param dismissString to display on the dismiss button
+ * @param onConfirm Invoked when the user taps the confirm button
+ * @param onDismiss Invoked when the user taps the dismiss button
+ * @param confirmIcon to display on the confirm button
+ * @param dismissIcon to display on the dismiss button
+ * @param confirmStyle to apply to the confirm button
+ */
 @Composable
 fun ConfirmationMessage(
     title: String,
@@ -40,64 +51,62 @@ fun ConfirmationMessage(
     confirmStyle: TrailsGramsButtonStyle = TrailsGramsButtonStyle.Primary
 ) {
     Dialog(
-        onDismissRequest = { },
+        onDismissRequest = onDismiss,
         properties = DialogProperties(dismissOnClickOutside = false)
     ) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentHeight(),
-            shape = RoundedCornerShape(18.dp),
+                .wrapContentHeight()
+                .padding(16.dp),
+            shape = RoundedCornerShape(22.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surface
             )
         ) {
-            Column {
+            Column(modifier = Modifier.padding(16.dp)) {
                 Text(
                     text = title,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(25.dp),
+                        .padding(vertical = 16.dp),
                     style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.Bold,
-                    textDecoration = TextDecoration.Underline
+                    fontWeight = FontWeight.Bold
                 )
                 if (message != null) {
                     Text(
                         text = message,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(10.dp),
+                            .padding(bottom = 16.dp),
                         style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         textAlign = TextAlign.Center
                     )
                 }
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(12.dp),
-                    horizontalArrangement = Arrangement.spacedBy(
-                        20.dp, Alignment.CenterHorizontally
-                    ),
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally)
                 ) {
                     TrailWeightButton(
                         text = dismissString,
-                        onClick = { onDismiss() },
+                        onClick = onDismiss,
                         modifier = Modifier.weight(1f),
                         style = TrailsGramsButtonStyle.Outlined,
                         icon = dismissIcon
                     )
                     TrailWeightButton(
                         text = confirmString,
-                        onClick = { onConfirm() },
+                        onClick = onConfirm,
                         style = confirmStyle,
                         modifier = Modifier.weight(1f),
                         icon = confirmIcon
                     )
                 }
-                Spacer(modifier = Modifier.size(20.dp))
+                Spacer(modifier = Modifier.size(8.dp))
             }
         }
     }
