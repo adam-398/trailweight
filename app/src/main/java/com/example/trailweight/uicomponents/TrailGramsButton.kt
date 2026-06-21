@@ -28,7 +28,7 @@ enum class TrailsGramsButtonStyle { Primary, Secondary, Outlined }
  * @param enabled Whether the button is enabled or not.
  */
 @Composable
-fun TrailGramsButton(
+fun TrailWeightButton(
     text: String? = null,
     onClick: () -> Unit,
     style: TrailsGramsButtonStyle = TrailsGramsButtonStyle.Primary,

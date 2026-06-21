@@ -1,6 +1,7 @@
 package com.auroralabs.trailweight.loginframes
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -85,6 +86,7 @@ fun RegisterUser(navController: NavController) {
     Box(
         Modifier
             .fillMaxSize()
+            .background(Color(0xFFf7e9d5))
             .imePadding(),
         contentAlignment = Alignment.Center
     ) {
@@ -98,10 +100,9 @@ fun RegisterUser(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Waymark",
+                text = "Trail Weight",
                 style = MaterialTheme.typography.headlineLarge,
                 fontSize = 49.sp,
-                color = Color(0xFF445033),
                 modifier = Modifier.padding(bottom = 8.dp)
             )
             OutlinedTextField(
@@ -265,5 +266,11 @@ fun RegisterUser(navController: NavController) {
             }
         )
     }
+}
+
+@Preview
+@Composable
+fun RegisterUserPreview() {
+    RegisterUser(navController = rememberNavController())
 }
 

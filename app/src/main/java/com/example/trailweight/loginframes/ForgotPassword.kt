@@ -1,6 +1,7 @@
 package com.example.trailweight.loginframes
 
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,11 +32,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.semantics.contentType
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import kotlinx.coroutines.launch
 import androidx.navigation.NavController
-import com.auroralabs.trailweight.uicomponents.TrailGramsButton
-import com.auroralabs.trailweight.uicomponents.TrailGramsInputField
+import androidx.navigation.compose.rememberNavController
+import com.auroralabs.trailweight.uicomponents.TrailWeightButton
+import com.auroralabs.trailweight.uicomponents.TrailWeightInputField
 import com.example.trailweight.Supabase.resetPassword
+import com.example.trailweight.ui.theme.TrailWeightTheme
 
 /**
  * Composable function that displays the forgot password screen.
@@ -54,6 +59,7 @@ fun ForgotPassword(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color(0xFFf7e9d5))
             .imePadding(),
         contentAlignment = Alignment.Center,
     ) {
@@ -67,12 +73,14 @@ fun ForgotPassword(navController: NavController) {
         ) {
                 Text(
                     text = "Trail Grams",
-                    style = MaterialTheme.typography.headlineLarge,
+                    style = MaterialTheme.typography.headlineMedium,
                     fontSize = 49.sp,
-                    color = Color(0xFF445033),
-                    modifier = Modifier.padding(bottom = 8.dp)
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(all = 8.dp),
                 )
-                TrailGramsInputField(
+                TrailWeightInputField(
                     value = emailState,
                     onValueChange = {
                         emailState = it
@@ -83,10 +91,10 @@ fun ForgotPassword(navController: NavController) {
                         .semantics { contentType = ContentType.EmailAddress }
                         .padding(10.dp),
                 )
-            TrailGramsButton(
+            TrailWeightButton(
                     text = if (isLoading) "Resetting password..." else "Reset password",
                     onClick = {
-                        if (isLoading) return@TrailGramsButton
+                        if (isLoading) return@TrailWeightButton
                         coroutineScope.launch {
                             isLoading = true
                             val success = resetPassword(emailState)
@@ -105,7 +113,7 @@ fun ForgotPassword(navController: NavController) {
                 Text(
                     text = "Already have an account?",
                     color = Color(0xFFfef3df),
-                    fontSize = 20.sp,
+                    fontSize = 16.sp,
                     style = TextStyle(
                         shadow = Shadow(
                             color = Color.Black,
@@ -136,4 +144,13 @@ fun ForgotPassword(navController: NavController) {
             }
         }
     }
+
+@Preview
+@Composable
+fun ForgotPasswordPreview() {
+    TrailWeightTheme() {
+        ForgotPassword(navController = rememberNavController())
+    }
+
+}
 

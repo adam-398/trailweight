@@ -31,7 +31,7 @@ import androidx.compose.ui.text.input.KeyboardType
  * @param textStyle The text style to apply to the input field.
  */
 @Composable
-fun TrailGramsInputField(
+fun TrailWeightInputField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,

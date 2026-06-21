@@ -1,6 +1,7 @@
 package com.auroralabs.trailweight.loginframes
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -49,10 +50,12 @@ import androidx.compose.ui.unit.sp
 import androidx.lint.kotlin.metadata.Visibility
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.auroralabs.trailweight.uicomponents.TrailGramsButton
+import com.auroralabs.trailweight.uicomponents.TrailWeightButton
 import com.auroralabs.trailweight.uicomponents.TrailsGramsButtonStyle
-import com.auroralabs.trailweight.uicomponents.TrailGramsInputField
+import com.auroralabs.trailweight.uicomponents.TrailWeightInputField
 import com.example.trailweight.Supabase.loginUser
+import com.example.trailweight.loginframes.ForgotPassword
+import com.example.trailweight.ui.theme.TrailWeightTheme
 import kotlinx.coroutines.launch
 
 /**
@@ -75,7 +78,8 @@ fun LoginScreen(navController: NavController) {
 
 
     Box(
-        Modifier.fillMaxSize(),
+        Modifier.fillMaxSize()
+        .background(Color(0xFFf7e9d5)),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -89,10 +93,9 @@ fun LoginScreen(navController: NavController) {
                 text = "Trail Grams",
                 style = MaterialTheme.typography.headlineLarge,
                 fontSize = 49.sp,
-                color = Color(0xFF445033),
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-            TrailGramsInputField(
+            TrailWeightInputField(
                 value = emailState,
                 onValueChange = {
                     emailState = it
@@ -107,7 +110,7 @@ fun LoginScreen(navController: NavController) {
                     onNext = { focusManager.moveFocus(FocusDirection.Down) }
                 )
             )
-            TrailGramsInputField(
+            TrailWeightInputField(
                 value = passwordState,
                 onValueChange = {
                     passwordState = it
@@ -129,10 +132,10 @@ fun LoginScreen(navController: NavController) {
                 imeAction = ImeAction.Done,
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
             )
-            TrailGramsButton(
+            TrailWeightButton(
                 text = if (isLoading) "Logging in..." else "Login",
                 onClick = {
-                    if (isLoading) return@TrailGramsButton
+                    if (isLoading) return@TrailWeightButton
                     coroutineScope.launch {
                         isLoading = true
                         val success = loginUser(emailState, passwordState)
@@ -158,7 +161,7 @@ fun LoginScreen(navController: NavController) {
                         .padding(10.dp)
                 )
             }
-            TrailGramsButton(
+            TrailWeightButton(
                 text = "Register",
                 onClick = { navController.navigate("register") },
                 style = TrailsGramsButtonStyle.Secondary,
@@ -184,4 +187,13 @@ fun LoginScreen(navController: NavController) {
             )
         }
     }
+}
+
+@Preview
+@Composable
+fun LoginScreenPreview() {
+    TrailWeightTheme() {
+        LoginScreen(navController = rememberNavController())
+    }
+
 }
