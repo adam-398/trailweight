@@ -27,17 +27,26 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.auroralabs.trailweight.uicomponents.TrailWeightButton
 import com.auroralabs.trailweight.uicomponents.TrailWeightInputField
+import com.example.trailweight.DataClasses.GearList
 
+/**
+ * Composable function that displays a dialog for adding a new gear list.
+ * @param existingGearList The existing gear list to edit, if any.
+ * @param onDismiss The callback to invoke when the dialog is dismissed.
+ * @param onSaved The callback to invoke when the gear list is saved.
+ * @param isSaving Whether the gear list is being saved.
+ */
 @Composable
 fun AddGearList(
+    existingGearList: GearList? = null,
     onDismiss: () -> Unit,
     onSaved: (name: String, notes: String) -> Unit,
     isSaving: Boolean = false
 ) {
     var showDismissWarning by remember { mutableStateOf(false) }
 
-    var listName by remember { mutableStateOf("") }
-    var notes by remember { mutableStateOf("") }
+    var listName by remember { mutableStateOf(existingGearList?.name ?: "") }
+    var notes by remember { mutableStateOf(existingGearList?.notes ?: "") }
     val hasChanges = listName.isNotEmpty() || notes.isNotEmpty()
 
     Dialog(
@@ -70,7 +79,7 @@ fun AddGearList(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Add Gear List",
+                        text = if (existingGearList != null) "Edit List" else "Add Gear List",
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(25.dp),
@@ -111,7 +120,7 @@ fun AddGearList(
                             style = com.auroralabs.trailweight.uicomponents.TrailsGramsButtonStyle.Outlined
                         )
                         TrailWeightButton(
-                            text = if (isSaving) "Saving..." else "Save",
+                            text = if (isSaving) "Saving..." else if (existingGearList != null) "Save Changes" else "Save",
                             onClick = { onSaved(listName, notes) },
                             modifier = Modifier
                                 .weight(1f)

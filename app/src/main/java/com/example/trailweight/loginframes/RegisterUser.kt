@@ -86,7 +86,7 @@ fun RegisterUser(navController: NavController) {
     Box(
         Modifier
             .fillMaxSize()
-            .background(Color(0xFFf7e9d5))
+            .background(MaterialTheme.colorScheme.background)
             .imePadding(),
         contentAlignment = Alignment.Center
     ) {

@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -16,9 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.trailweight.AddGearList
 import com.example.trailweight.DataClasses.GearList
 import com.example.trailweight.preferences.formatWeight
 
@@ -33,7 +29,7 @@ fun GearListCard(
             .fillMaxWidth()
             .height(65.dp)
             .padding(horizontal = 12.dp, vertical = 4.dp),
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.elevatedCardElevation(
             defaultElevation = 2.dp,
             pressedElevation = 6.dp
@@ -45,13 +41,16 @@ fun GearListCard(
     ) {
         Row(
             modifier = Modifier
+                .fillMaxWidth()
                 .fillMaxHeight()
-                .fillMaxWidth(),
+                .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(modifier = Modifier
-                .padding(start = 12.dp)
-                .weight(1f)) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 12.dp)
+            ) {
                 Text(
                     text = gearList.name,
                     style = MaterialTheme.typography.bodyLarge
@@ -83,16 +82,16 @@ val dummyTotalWeights = mapOf(
     "5" to 8150.0
 )
 
-@Preview
-@Composable
-fun GearListCardsPreview() {
-    LazyColumn {
-        items(dummyGearLists) { list ->
-            GearListCard(
-                gearList = list,
-                totalWeight = dummyTotalWeights[list.id] ?: 0.0,
-                onClick = {}
-            )
-        }
-    }
-}
+//@Preview
+//@Composable
+//fun GearListCardsPreview() {
+//    LazyColumn {
+//        items(dummyGearLists) { list ->
+//            GearListCard(
+//                gearList = list,
+//                totalWeight = dummyTotalWeights[list.id] ?: 0.0,
+//                onClick = {}
+//            )
+//        }
+//    }
+//}

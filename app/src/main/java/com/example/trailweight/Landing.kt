@@ -3,6 +3,7 @@ package com.example.trailweight
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,10 +12,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,7 +39,6 @@ import com.example.trailweight.Supabase.getItemsByListId
 import com.example.trailweight.cards.GearListCard
 import com.example.trailweight.menuutils.HamburgerMenu
 import kotlinx.coroutines.launch
-import androidx.compose.foundation.lazy.items
 
 /**
  * Composable function that displays the landing screen.
@@ -67,23 +67,19 @@ fun LandingScreen(navController: NavController) {
         totalWeights = weightsMap
     }
 
-    Box(
+    Column(
         modifier = Modifier
             .background(Color(0xFFF1E4DB))
-            .fillMaxSize(),
-        contentAlignment = Alignment.Center
+            .fillMaxSize()
     ) {
-
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .windowInsetsPadding(WindowInsets.statusBars)
-                .align(Alignment.TopCenter)
         ) {
             Text(
                 text = "My gear lists",
-                modifier = Modifier
-                    .align(Alignment.Center)
+                modifier = Modifier.align(Alignment.Center)
             )
             HamburgerMenu(
                 navController = navController,
@@ -91,32 +87,30 @@ fun LandingScreen(navController: NavController) {
             )
         }
 
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 80.dp),
-            contentPadding = PaddingValues(bottom = 100.dp)
-        ) {
-            items(gearLists) { list ->
-                GearListCard(
-                    gearList = list,
-                    totalWeight = totalWeights[list.id] ?: 0.0,
-                    onClick = { navController.navigate("gearList/${list.id}") }
-                )
+        Box(modifier = Modifier.weight(1f)) {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(bottom = 100.dp)
+            ) {
+                items(gearLists) { list ->
+                    GearListCard(
+                        gearList = list,
+                        totalWeight = totalWeights[list.id] ?: 0.0,
+                        onClick = { navController.navigate("gearList/${list.id}") }
+                    )
+                }
+            }
+
+            FloatingActionButton(
+                onClick = { isCreatingList = true },
+                modifier = Modifier
+                    .padding(25.dp)
+                    .align(Alignment.BottomEnd),
+            ) {
+                Icon(Icons.Filled.Add, contentDescription = "Add")
             }
         }
-
-
-        FloatingActionButton(
-            onClick = { isCreatingList = true },
-            modifier = Modifier
-                .padding(25.dp)
-                .align(Alignment.BottomEnd),
-        ) {
-            Icon(Icons.Filled.Add, contentDescription = "Add")
-        }
     }
-
     if (isCreatingList) {
         AddGearList(
             onDismiss = { isCreatingList = false },

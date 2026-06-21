@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -36,42 +35,57 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.auroralabs.trailweight.uicomponents.TrailWeightButton
 import com.auroralabs.trailweight.uicomponents.TrailWeightInputField
+import com.auroralabs.trailweight.uicomponents.TrailsGramsButtonStyle
+import com.example.trailweight.DataClasses.Item
+import com.example.trailweight.preferences.UnitPreferences
+import com.example.trailweight.reusablemessages.ConfirmationMessage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddItem(
     onDismiss: () -> Unit,
     onSaved: (name: String, weight: Double?, category: String, notes: String) -> Unit,
-    isSaving: Boolean = false
+    isSaving: Boolean = false,
+    onDelete: (() -> Unit)? = null,
+    existingItem: Item? = null,
 ) {
 
     var showDismissWarning by remember { mutableStateOf(false) }
-
-    var itemName by remember { mutableStateOf("") }
-    var itemWeight by remember { mutableStateOf("") }
-    var notes by remember { mutableStateOf("") }
+    var showDeleteItemWarning by remember { mutableStateOf(false) }
 
     val itemCategories = listOf(
+        "Backpack",
+        "Clothing",
+        "Cooking / Kitchen",
+        "Electronics",
+        "First aid",
+        "Hygiene / Toiletries",
+        "Lighting",
+        "Navigation",
+        "Pillow",
         "Shelter",
         "Sleeping bag / quilt",
         "Sleeping pad",
-        "Backpack",
-        "Cooking / Kitchen",
-        "Water / Filtration",
-        "Navigation",
-        "Electronics",
-        "Lighting",
         "Tools / Repair",
-        "Hygiene / Toiletries",
-        "Pillow",
-        "Clothing",
-        "First aid",
+        "Water / Filtration",
         "Other"
     )
+
+    var isMetric by remember { mutableStateOf(UnitPreferences.isMetric) }
+
+    var itemName by remember { mutableStateOf(existingItem?.name ?: "") }
+    var itemWeight by remember {
+        mutableStateOf(
+            existingItem?.weight?.let { grams ->
+                if (isMetric) grams.toInt().toString()
+                else "%.1f".format(grams / 28.3495)
+            } ?: ""
+        )
+    }
+    var notes by remember { mutableStateOf(existingItem?.notes ?: "") }
     var expanded by remember { mutableStateOf(false) }
-    var selectedCategory by remember { mutableStateOf(itemCategories[0]) }
-    var isMetric by remember { mutableStateOf(true) }
-    
+    var selectedCategory by remember { mutableStateOf(existingItem?.category ?: itemCategories[0]) }
+
     val hasChanges = itemName.isNotEmpty() || itemWeight.isNotEmpty() || notes.isNotEmpty()
 
     Dialog(
@@ -105,7 +119,7 @@ fun AddItem(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Add Item",
+                        text = if (existingItem != null) "Edit Item" else "Add Item",
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(25.dp),
@@ -164,7 +178,17 @@ fun AddItem(
                         Spacer(modifier = Modifier.weight(1f))
                         Switch(
                             checked = isMetric,
-                            onCheckedChange = { isMetric = it }
+                            onCheckedChange = { newIsMetric ->
+                                val currentValue = itemWeight.toDoubleOrNull()
+                                if (currentValue != null) {
+                                    itemWeight = if (newIsMetric) {
+                                        (currentValue * 28.3495).toInt().toString() // oz → g
+                                    } else {
+                                        "%.1f".format(currentValue / 28.3495) // g → oz
+                                    }
+                                }
+                                isMetric = newIsMetric
+                            }
                         )
                     }
 
@@ -172,7 +196,7 @@ fun AddItem(
                         value = itemWeight,
                         onValueChange = { itemWeight = it },
                         label = "Item Weight",
-                        keyboardType = KeyboardType.Number,
+                        keyboardType = KeyboardType.Decimal,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(10.dp)
@@ -181,7 +205,7 @@ fun AddItem(
                     TrailWeightInputField(
                         value = notes,
                         onValueChange = { notes = it },
-                        label = "notes",
+                        label = "Notes",
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(10.dp)
@@ -197,17 +221,15 @@ fun AddItem(
                 ) {
                     TrailWeightButton(
                         text = "Cancel",
-                        onClick = {
-                            if (hasChanges) showDismissWarning = true
-                            else onDismiss()
+                        onClick = { onDismiss()
                         },
                         modifier = Modifier
                             .weight(1f)
                             .padding(end = 5.dp),
-                        style = com.auroralabs.trailweight.uicomponents.TrailsGramsButtonStyle.Outlined
+                        style = TrailsGramsButtonStyle.Outlined
                     )
                     TrailWeightButton(
-                        text = if (isSaving) "Saving..." else "Save",
+                        text = if (isSaving) "Saving..." else if (existingItem != null) "Save Changes" else "Save",
                         onClick = {
                             val rawWeight = itemWeight.toDoubleOrNull()
                             val weightInGrams = rawWeight?.let {
@@ -219,9 +241,32 @@ fun AddItem(
                             .weight(1f)
                     )
                 }
+
+                if (existingItem != null && onDelete != null) {
+                    TrailWeightButton(
+                        text = "Delete Item",
+                        onClick = { showDeleteItemWarning = true },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 10.dp, vertical = 5.dp),
+                        style = TrailsGramsButtonStyle.Outlined
+                    )
+                }
+
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }
+    }
+
+    if (showDeleteItemWarning) {
+        ConfirmationMessage(
+            title = "Delete Item",
+            message = "Are you sure you want to delete this item?",
+            confirmString = "Delete",
+            dismissString = "Cancel",
+            onConfirm = { onDelete?.invoke(); showDeleteItemWarning = false },
+            onDismiss = { showDeleteItemWarning = false }
+        )
     }
 }
 
@@ -230,7 +275,7 @@ fun AddItem(
 fun AddItemPreview() {
     AddItem(
         onDismiss = {},
-        onSaved = {_,_,_,_ ->},
+        onSaved = { _, _, _, _ -> },
         isSaving = false
     )
 }

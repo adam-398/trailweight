@@ -59,7 +59,7 @@ fun ForgotPassword(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFf7e9d5))
+            .background(MaterialTheme.colorScheme.background)
             .imePadding(),
         contentAlignment = Alignment.Center,
     ) {
@@ -72,7 +72,7 @@ fun ForgotPassword(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
                 Text(
-                    text = "Trail Grams",
+                    text = "Trail Weight",
                     style = MaterialTheme.typography.headlineMedium,
                     fontSize = 49.sp,
                     textAlign = TextAlign.Center,

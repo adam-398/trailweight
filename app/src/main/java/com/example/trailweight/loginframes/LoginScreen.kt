@@ -79,7 +79,7 @@ fun LoginScreen(navController: NavController) {
 
     Box(
         Modifier.fillMaxSize()
-        .background(Color(0xFFf7e9d5)),
+        .background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -90,7 +90,7 @@ fun LoginScreen(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Trail Grams",
+                text = "Trail Weight",
                 style = MaterialTheme.typography.headlineLarge,
                 fontSize = 49.sp,
                 modifier = Modifier.padding(bottom = 8.dp)
@@ -120,7 +120,7 @@ fun LoginScreen(navController: NavController) {
                 modifier = Modifier
                     .semantics { contentType = ContentType.Password }
                     .padding(10.dp),
-                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                isPassword = !passwordVisible,
                 trailingIcon = {
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
                         Icon(

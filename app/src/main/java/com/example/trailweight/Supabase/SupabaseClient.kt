@@ -32,6 +32,8 @@ object SupabaseClient {
         ) {
             install(Postgrest)
             install(Auth) {
+                host = "reset-password"
+                scheme = "trailweight"
                 sessionManager = SettingsSessionManager(
                     SharedPreferencesSettings(
                         context.getSharedPreferences("supabase_session", Context.MODE_PRIVATE)
@@ -79,7 +81,7 @@ suspend fun logoutUser() {
  */
 suspend fun registerUser(email: String, password: String): String? {
     return try {
-        supabase.auth.signUpWith(Email) {
+        supabase.auth.signUpWith(Email, redirectUrl = "trailweight://confirm-signup") {
             this.email = email
             this.password = password
         }
@@ -96,10 +98,31 @@ suspend fun registerUser(email: String, password: String): String? {
  */
 suspend fun resetPassword(email: String): Boolean {
     return try {
-        supabase.auth.resetPasswordForEmail(email)
+        supabase.auth.resetPasswordForEmail(
+            email = email,
+            redirectUrl = "trailweight://reset-password"
+        )
         true
     } catch (e: Exception) {
-        println("Password reset failed: ${e.message}")
+        println("Error resetting password: $e")
         false
     }
 }
+
+/**
+ * Updates the current user's password.
+ * @param newPassword The new password to set.
+ * @return True if the password was updated successfully, false otherwise.
+ */
+suspend fun updatePassword(newPassword: String): Boolean {
+    return try {
+        supabase.auth.updateUser {
+            password = newPassword
+        }
+        true
+    } catch (e: Exception) {
+        Log.e("UpdatePasswordDebug", "Error updating password", e)
+        false
+    }
+}
+
