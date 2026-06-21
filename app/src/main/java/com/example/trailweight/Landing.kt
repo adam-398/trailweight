@@ -31,6 +31,10 @@ import com.example.trailweight.Supabase.addGearList
 import com.example.trailweight.menuutils.HamburgerMenu
 import kotlinx.coroutines.launch
 
+/**
+ * Composable function that displays the landing screen.
+ * @param navController The navigation controller to use.
+ */
 @Composable
 fun LandingScreen(navController: NavController) {
 
