@@ -10,9 +10,10 @@ import io.github.jan.supabase.postgrest.query.Columns
 /**
  * Adds a new gear list to the database.
  * @param name The name of the gear list.
+ * @param notes Any additional notes about the gear list.
  * @return The ID of the newly created gear list, or null if an error occurred.
  */
-suspend fun addGearList(name: String): String? {
+suspend fun addGearList(name: String, notes: String?): String? {
     return try {
         val userId = supabase.auth.currentSessionOrNull()?.user?.id
             ?: return null
@@ -20,11 +21,12 @@ suspend fun addGearList(name: String): String? {
         val newGearList = GearList(
             user_id = userId,
             name = name,
+            notes = notes
         )
 
         supabase.postgrest["lists"]
             .insert(newGearList) {
-                select(Columns.list("id"))
+                select()
             }
             .decodeSingle<GearList>()
             .id
@@ -166,3 +168,19 @@ suspend fun updateGearListById(listId: String, updatedList: GearList): Boolean {
         false
     }
 }
+
+suspend fun getGearListById(listId: String): GearList? {
+    return try {
+        supabase.postgrest["lists"]
+            .select {
+                filter {
+                    eq("id", listId)
+                }
+            }
+            .decodeSingle<GearList>()
+    } catch (e: Exception) {
+        println("Error fetching gear list: $e")
+        null
+    }
+}
+

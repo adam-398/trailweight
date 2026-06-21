@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
  * @property id The ID of the gear list.
  * @property user_id The ID of the user who owns the gear list.
  * @property name The name of the gear list.
+ * @property notes Any additional notes about the gear list.
  * @property created_at The date and time when the gear list was created.
  */
 @Serializable
@@ -14,5 +15,6 @@ data class GearList(
     val id: String? = null,
     val user_id: String,
     val name: String,
+    val notes: String? = null,
     val created_at: String? = null,
 )

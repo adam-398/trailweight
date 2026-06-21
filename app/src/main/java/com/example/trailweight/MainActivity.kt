@@ -57,12 +57,16 @@ class MainActivity : ComponentActivity() {
                         composable("forgotPassword") {
                             ForgotPassword(navController)
                         }
+                        composable("gearList/{listId}") { backStackEntry ->
+                            val listId = backStackEntry.arguments?.getString("listId")
+                            if (listId != null) {
+                                GearListScreen(navController, listId)
+                            }
+                        }
                     }
                 }
             }
         }
-
-
     }
 }
 
