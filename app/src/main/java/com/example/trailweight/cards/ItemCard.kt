@@ -1,4 +1,4 @@
-package com.example.trailweight.cards
+package dev.auroralaboratories.trailweight.cards
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
@@ -18,9 +18,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.trailweight.DataClasses.Item
-import com.example.trailweight.preferences.formatWeight
-import com.example.trailweight.ui.theme.TrailWeightTheme
+import dev.auroralaboratories.trailweight.dataclasses.Item
+import dev.auroralaboratories.trailweight.preferences.formatWeight
+import dev.auroralaboratories.trailweight.ui.theme.TrailWeightTheme
 
 /**
  * Composable function that displays an item card.

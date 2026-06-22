@@ -1,4 +1,4 @@
-package com.example.trailweight.preferences
+package dev.auroralaboratories.trailweight.preferences
 
 import android.content.Context
 import android.content.SharedPreferences

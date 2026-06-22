@@ -1,4 +1,4 @@
-package com.example.trailweight.menuutils
+package dev.auroralaboratories.trailweight.menuutils
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

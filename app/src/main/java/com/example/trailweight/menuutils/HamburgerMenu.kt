@@ -1,4 +1,4 @@
-package com.example.trailweight.menuutils
+package dev.auroralaboratories.trailweight.menuutils
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -19,7 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.trailweight.Supabase.logoutUser
+import dev.auroralaboratories.trailweight.Supabase.logoutUser
 import kotlinx.coroutines.launch
 
 /**

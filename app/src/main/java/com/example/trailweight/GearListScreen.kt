@@ -1,4 +1,4 @@
-package com.example.trailweight
+package dev.auroralaboratories.trailweight
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -39,18 +39,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.trailweight.DataClasses.GearList
-import com.example.trailweight.DataClasses.Item
-import com.example.trailweight.Supabase.addItem
-import com.example.trailweight.Supabase.deleteItemById
-import com.example.trailweight.Supabase.getGearListById
-import com.example.trailweight.Supabase.getItemsByListId
-import com.example.trailweight.Supabase.updateGearListById
-import com.example.trailweight.Supabase.updateItemById
-import com.example.trailweight.cards.ItemCard
-import com.example.trailweight.menuutils.EditOrDeleteGearList
-import com.example.trailweight.piechartutils.weightsByCategory
-import com.example.trailweight.preferences.formatWeight
+import dev.auroralaboratories.trailweight.dataclasses.GearList
+import dev.auroralaboratories.trailweight.dataclasses.Item
+import dev.auroralaboratories.trailweight.Supabase.addItem
+import dev.auroralaboratories.trailweight.Supabase.deleteItemById
+import dev.auroralaboratories.trailweight.Supabase.getGearListById
+import dev.auroralaboratories.trailweight.Supabase.getItemsByListId
+import dev.auroralaboratories.trailweight.Supabase.updateGearListById
+import dev.auroralaboratories.trailweight.Supabase.updateItemById
+import dev.auroralaboratories.trailweight.addfunctions.AddGearList
+import dev.auroralaboratories.trailweight.addfunctions.AddItem
+import dev.auroralaboratories.trailweight.cards.ItemCard
+import dev.auroralaboratories.trailweight.menuutils.EditOrDeleteGearList
+import dev.auroralaboratories.trailweight.piechartutils.weightsByCategory
+import dev.auroralaboratories.trailweight.preferences.formatWeight
 import io.github.dautovicharis.charts.PieChart
 import io.github.dautovicharis.charts.model.toChartDataSet
 import io.github.dautovicharis.charts.style.PieChartDefaults
@@ -139,7 +141,8 @@ fun GearListScreen(
                 listId = listId,
                 gearListName = gearList?.name,
                 onEditClick = { showEditListDialog = true },
-                onDeleted = { navController.popBackStack() }
+                onDeleted = { navController.popBackStack() },
+                shareId = gearList?.share_id
             )
         }
 

@@ -1,4 +1,4 @@
-package com.example.trailweight
+package dev.auroralaboratories.trailweight
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,8 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.trailweight.preferences.ThemePreferences
-import com.example.trailweight.preferences.UnitPreferences
+import dev.auroralaboratories.trailweight.preferences.ThemePreferences
+import dev.auroralaboratories.trailweight.preferences.UnitPreferences
 
 @Composable
 fun SettingsScreen(navController: NavController) {

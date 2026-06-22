@@ -1,11 +1,10 @@
-package com.example.trailweight.Supabase
+package dev.auroralaboratories.trailweight.Supabase
 
-import com.example.trailweight.DataClasses.GearList
-import com.example.trailweight.DataClasses.Item
-import com.example.trailweight.Supabase.SupabaseClient.supabase
+import dev.auroralaboratories.trailweight.dataclasses.GearList
+import dev.auroralaboratories.trailweight.dataclasses.Item
+import dev.auroralaboratories.trailweight.Supabase.SupabaseClient.supabase
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.postgrest
-import io.github.jan.supabase.postgrest.query.Columns
 
 /**
  * Adds a new gear list to the database.

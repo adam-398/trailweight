@@ -1,4 +1,4 @@
-package com.example.trailweight.loginframes
+package dev.auroralaboratories.trailweight.loginframes
 
 
 import androidx.compose.foundation.background
@@ -45,8 +45,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.auroralabs.trailweight.uicomponents.TrailWeightButton
 import com.auroralabs.trailweight.uicomponents.TrailWeightInputField
-import com.example.trailweight.Supabase.resetPassword
-import com.example.trailweight.ui.theme.TrailWeightTheme
+import dev.auroralaboratories.trailweight.Supabase.resetPassword
+import dev.auroralaboratories.trailweight.ui.theme.TrailWeightTheme
 
 /**
  * Composable function that displays the forgot password screen.

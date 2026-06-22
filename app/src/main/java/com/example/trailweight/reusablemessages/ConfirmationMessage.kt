@@ -1,4 +1,4 @@
-package com.example.trailweight.reusablemessages
+package dev.auroralaboratories.trailweight.reusablemessages
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

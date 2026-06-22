@@ -47,8 +47,8 @@ import androidx.navigation.compose.rememberNavController
 import com.auroralabs.trailweight.uicomponents.TrailWeightButton
 import com.auroralabs.trailweight.uicomponents.TrailWeightInputField
 import com.auroralabs.trailweight.uicomponents.TrailsGramsButtonStyle
-import com.example.trailweight.Supabase.loginUser
-import com.example.trailweight.ui.theme.TrailWeightTheme
+import dev.auroralaboratories.trailweight.Supabase.loginUser
+import dev.auroralaboratories.trailweight.ui.theme.TrailWeightTheme
 import kotlinx.coroutines.launch
 
 /**
@@ -98,7 +98,7 @@ fun LoginScreen(navController: NavController) {
                 modifier = Modifier.padding(bottom = 8.dp)
             )
             Text(
-                text = "Welcome back to the trail",
+                text = "Build a lighter trip",
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(bottom = 32.dp)

@@ -1,4 +1,4 @@
-package com.example.trailweight.cards
+package dev.auroralaboratories.trailweight.cards
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home

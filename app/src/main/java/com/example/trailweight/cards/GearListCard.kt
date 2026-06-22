@@ -1,4 +1,4 @@
-package com.example.trailweight.cards
+package dev.auroralaboratories.trailweight.cards
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
@@ -16,8 +16,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.trailweight.DataClasses.GearList
-import com.example.trailweight.preferences.formatWeight
+import dev.auroralaboratories.trailweight.dataclasses.GearList
+import dev.auroralaboratories.trailweight.preferences.formatWeight
 
 /**
  * Composable function that displays a gear list card.

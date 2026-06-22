@@ -1,4 +1,4 @@
-package com.example.trailweight
+package dev.auroralaboratories.trailweight
 
 import android.content.Intent
 import android.os.Bundle
@@ -16,16 +16,16 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.auroralabs.trailweight.loginframes.LoginScreen
-import com.example.trailweight.Supabase.SupabaseClient
-import com.example.trailweight.Supabase.SupabaseClient.supabase
-import com.example.trailweight.ui.theme.TrailWeightTheme
+import dev.auroralaboratories.trailweight.Supabase.SupabaseClient
+import dev.auroralaboratories.trailweight.Supabase.SupabaseClient.supabase
+import dev.auroralaboratories.trailweight.ui.theme.TrailWeightTheme
 import io.github.jan.supabase.auth.auth
 import androidx.navigation.compose.rememberNavController
 import com.auroralabs.trailweight.loginframes.RegisterUser
-import com.example.trailweight.loginframes.ForgotPassword
-import com.example.trailweight.loginframes.ResetNewPasswordScreen
-import com.example.trailweight.preferences.ThemePreferences
-import com.example.trailweight.preferences.UnitPreferences
+import dev.auroralaboratories.trailweight.loginframes.ForgotPassword
+import dev.auroralaboratories.trailweight.loginframes.ResetNewPasswordScreen
+import dev.auroralaboratories.trailweight.preferences.ThemePreferences
+import dev.auroralaboratories.trailweight.preferences.UnitPreferences
 import io.github.jan.supabase.auth.parseSessionFromFragment
 import kotlinx.coroutines.launch
 

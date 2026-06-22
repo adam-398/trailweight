@@ -1,4 +1,4 @@
-package com.example.trailweight.ui.theme
+package dev.auroralaboratories.trailweight.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

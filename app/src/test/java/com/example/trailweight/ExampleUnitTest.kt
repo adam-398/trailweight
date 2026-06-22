@@ -1,4 +1,4 @@
-package com.example.trailweight
+package dev.auroralaboratories.trailweight
 
 import org.junit.Test
 

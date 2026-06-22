@@ -1,10 +1,10 @@
-package com.example.trailweight.Supabase
+package dev.auroralaboratories.trailweight.Supabase
 
 import android.content.Context
 import android.util.Log
 import com.russhwolf.settings.SharedPreferencesSettings
-import com.example.trailweight.BuildConfig
-import com.example.trailweight.Supabase.SupabaseClient.supabase
+import dev.auroralaboratories.trailweight.BuildConfig
+import dev.auroralaboratories.trailweight.Supabase.SupabaseClient.supabase
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.auth.SettingsSessionManager
 import io.github.jan.supabase.auth.auth

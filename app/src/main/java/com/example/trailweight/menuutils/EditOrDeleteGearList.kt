@@ -1,5 +1,6 @@
-package com.example.trailweight.menuutils
+package dev.auroralaboratories.trailweight.menuutils
 
+import android.content.Intent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -17,9 +18,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.example.trailweight.Supabase.deleteGearListById
-import com.example.trailweight.reusablemessages.ConfirmationMessage
+import dev.auroralaboratories.trailweight.Supabase.deleteGearListById
+import dev.auroralaboratories.trailweight.reusablemessages.ConfirmationMessage
 import kotlinx.coroutines.launch
 
 /**
@@ -34,6 +36,7 @@ import kotlinx.coroutines.launch
 fun EditOrDeleteGearList(
     modifier: Modifier = Modifier,
     listId: String,
+    shareId: String?,
     gearListName: String?,
     onEditClick: () -> Unit,
     onDeleted: () -> Unit,
@@ -41,6 +44,7 @@ fun EditOrDeleteGearList(
     val coroutineScope = rememberCoroutineScope()
     var expanded by remember { mutableStateOf(false) }
     var showDeleteListWarning by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     Box(modifier = modifier.padding(8.dp)) {
         IconButton(onClick = { expanded = !expanded }) {
@@ -67,6 +71,23 @@ fun EditOrDeleteGearList(
                 onClick = {
                     expanded = false
                     showDeleteListWarning = true
+                }
+            )
+            DropdownMenuItem(
+                text = { Text("Share", color = MaterialTheme.colorScheme.onSurface) },
+                onClick = {
+                    expanded = false
+                    if (shareId != null) {
+                        val shareLink = "trailweight://list/$shareId"
+                        val sendIntent = Intent(Intent.ACTION_SEND).apply {
+                            type = "text/plain"
+                            putExtra(
+                                Intent.EXTRA_TEXT,
+                                "Check out my gear list on Trailweight: $shareLink"
+                            )
+                        }
+                        context.startActivity(Intent.createChooser(sendIntent, "Share list"))
+                    }
                 }
             )
         }

@@ -1,4 +1,4 @@
-package com.example.trailweight.reusablemessages
+package dev.auroralaboratories.trailweight.reusablemessages
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.auroralabs.trailweight.uicomponents.TrailWeightButton
-import com.example.trailweight.ui.theme.TrailWeightTheme
+import dev.auroralaboratories.trailweight.ui.theme.TrailWeightTheme
 
 /**
  * Reusable success screen

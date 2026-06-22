@@ -1,6 +1,6 @@
-package com.example.trailweight.piechartutils
+package dev.auroralaboratories.trailweight.piechartutils
 
-import com.example.trailweight.DataClasses.Item
+import dev.auroralaboratories.trailweight.dataclasses.Item
 
 fun weightsByCategory(items: List<Item>): Map<String, Double> {
     return items

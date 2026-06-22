@@ -1,4 +1,4 @@
-package com.example.trailweight.ui.theme
+package dev.auroralaboratories.trailweight.ui.theme
 
 import android.app.Activity
 import android.os.Build
@@ -13,7 +13,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.auroralabs.waymark.ui.theme.Pink80
 import com.auroralabs.waymark.ui.theme.Purple80
 import com.auroralabs.waymark.ui.theme.PurpleGrey80
-import com.example.trailweight.preferences.ThemePreferences
+import dev.auroralaboratories.trailweight.preferences.ThemePreferences
 
 private val DarkColorScheme = darkColorScheme(
     background = Color(0xFF151812),

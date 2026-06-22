@@ -1,4 +1,4 @@
-package com.example.trailweight.preferences
+package dev.auroralaboratories.trailweight.preferences
 
 fun formatWeight(weightInGrams: Double?): String {
     if (weightInGrams == null) return "—"
