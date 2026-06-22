@@ -127,7 +127,8 @@ fun GearListScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(onClick = { navController.popBackStack() }) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back",
+                    tint = MaterialTheme.colorScheme.onBackground)
             }
             Text(
                 text = gearList?.name ?: "Loading...",
@@ -184,12 +185,14 @@ fun GearListScreen(
                                             Spacer(modifier = Modifier.width(8.dp))
                                             Text(
                                                 category,
-                                                style = MaterialTheme.typography.bodyMedium
+                                                style = MaterialTheme.typography.bodyMedium,
+                                                color = MaterialTheme.colorScheme.onSurface
                                             )
                                         }
                                         Text(
                                             formatWeight(weight),
-                                            style = MaterialTheme.typography.bodyMedium
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            color = MaterialTheme.colorScheme.onSurface
                                         )
                                     }
                                 }

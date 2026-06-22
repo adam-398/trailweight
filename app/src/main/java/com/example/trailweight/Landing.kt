@@ -71,7 +71,7 @@ fun LandingScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background) // Good
+            .background(MaterialTheme.colorScheme.background)
     ) {
 
         Box(
@@ -82,8 +82,8 @@ fun LandingScreen(navController: NavController) {
         ) {
             Text(
                 text = "My gear lists",
-                style = MaterialTheme.typography.headlineSmall, // Added style
-                color = MaterialTheme.colorScheme.onBackground, // Themed color
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.align(Alignment.Center)
             )
             HamburgerMenu(

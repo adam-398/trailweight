@@ -30,7 +30,7 @@ import com.example.trailweight.preferences.UnitPreferences
 fun SettingsScreen(navController: NavController) {
     Column(
         modifier = Modifier
-            .background(Color(0xFFF1E4DB))
+            .background(MaterialTheme.colorScheme.background)
             .fillMaxSize()
     ) {
         Row(
@@ -41,11 +41,13 @@ fun SettingsScreen(navController: NavController) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(onClick = { navController.popBackStack() }) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back",
+                    tint = MaterialTheme.colorScheme.onBackground)
             }
             Text(
                 text = "Settings",
                 style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding(start = 8.dp)
             )
         }
@@ -57,7 +59,8 @@ fun SettingsScreen(navController: NavController) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(if (UnitPreferences.isMetric) "Metric (g)" else "Imperial (oz)")
+            Text(if (UnitPreferences.isMetric) "Metric (g)" else "Imperial (oz)",
+                color = MaterialTheme.colorScheme.onSurface,)
             Switch(
                 checked = UnitPreferences.isMetric,
                 onCheckedChange = { UnitPreferences.setIsMetric(it) }
@@ -71,7 +74,8 @@ fun SettingsScreen(navController: NavController) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Dark mode")
+            Text("Dark mode",
+                color = MaterialTheme.colorScheme.onSurface,)
             Switch(
                 checked = ThemePreferences.isDarkMode,
                 onCheckedChange = { ThemePreferences.setIsDarkMode(it) }
