@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     kotlin("plugin.serialization") version "2.2.21"
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -56,6 +58,9 @@ dependencies {
 
     implementation(platform("io.github.dautovicharis:charts-bom:2.2.0"))
     implementation("io.github.dautovicharis:charts-pie")
+
+    implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
+    implementation("com.google.firebase:firebase-crashlytics")
 
 
     implementation(libs.androidx.core.ktx)

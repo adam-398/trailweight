@@ -87,7 +87,7 @@ suspend fun registerUser(email: String, password: String): String? {
         }
         null
     } catch (e: Exception) {
-        println("Registration failed: ${e.message}")
+        FirebaseCrashlytics.getInstance().recordException(Exception("Registration failed: ${e.message}")
         e.message
     }
 }
@@ -104,7 +104,7 @@ suspend fun resetPassword(email: String): Boolean {
         )
         true
     } catch (e: Exception) {
-        println("Error resetting password: $e")
+        FirebaseCrashlytics.getInstance().recordException(Exception("Error resetting password: $e")
         false
     }
 }
