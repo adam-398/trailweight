@@ -1,4 +1,4 @@
-package com.example.trailweight
+package com.example.trailweight.loginframes
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
@@ -30,9 +29,7 @@ import androidx.navigation.NavController
 import com.auroralabs.trailweight.uicomponents.TrailWeightButton
 import com.auroralabs.trailweight.uicomponents.TrailWeightInputField
 import com.example.trailweight.Supabase.SupabaseClient.supabase
-import com.example.trailweight.Supabase.updatePassword
 import io.github.jan.supabase.auth.auth
-import kotlinx.coroutines.launch
 
 /**
  * Composable function that displays the reset password screen.

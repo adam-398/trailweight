@@ -41,8 +41,7 @@ fun AddGearList(
 
         Box(
             modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background.copy(alpha = 0.8f)),
+                .fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
             Card(

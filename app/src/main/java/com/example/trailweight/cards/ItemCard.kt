@@ -1,5 +1,6 @@
 package com.example.trailweight.cards
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -15,9 +16,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.trailweight.DataClasses.Item
 import com.example.trailweight.preferences.formatWeight
+import com.example.trailweight.ui.theme.TrailWeightTheme
 
 /**
  * Composable function that displays an item card.
@@ -35,11 +38,12 @@ fun ItemCard(
             .height(72.dp)
             .padding(horizontal = 12.dp, vertical = 4.dp),
         shape = RoundedCornerShape(16.dp),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 2.dp,
             pressedElevation = 6.dp
         ),
-        // Use a solid color from the theme instead of manual alpha transparency
+
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
@@ -82,4 +86,23 @@ fun ItemCard(
             )
         }
     }
+}
+
+@Preview
+@Composable
+fun ItemCardPreview() {
+    TrailWeightTheme() {
+        ItemCard(
+            item = Item(
+                id = "1",
+                list_id = "list1",
+                name = "test",
+                weight = 1200.0,
+                category = "Shelter",
+                notes = null
+            ),
+            onClick = {}
+        )
+    }
+
 }

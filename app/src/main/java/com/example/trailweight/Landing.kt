@@ -96,7 +96,7 @@ fun LandingScreen(navController: NavController) {
         Box(modifier = Modifier.weight(1f)) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(16.dp, bottom = 100.dp)
+                contentPadding = PaddingValues( bottom = 100.dp)
             ) {
                 items(gearLists) { list ->
                     GearListCard(

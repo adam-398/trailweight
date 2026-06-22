@@ -23,9 +23,9 @@ import io.github.jan.supabase.auth.auth
 import androidx.navigation.compose.rememberNavController
 import com.auroralabs.trailweight.loginframes.RegisterUser
 import com.example.trailweight.loginframes.ForgotPassword
+import com.example.trailweight.loginframes.ResetNewPasswordScreen
 import com.example.trailweight.preferences.ThemePreferences
 import com.example.trailweight.preferences.UnitPreferences
-import io.github.jan.supabase.auth.handleDeeplinks
 import io.github.jan.supabase.auth.parseSessionFromFragment
 import kotlinx.coroutines.launch
 

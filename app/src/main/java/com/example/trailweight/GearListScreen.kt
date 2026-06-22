@@ -6,14 +6,18 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
@@ -49,6 +53,7 @@ import com.example.trailweight.piechartutils.weightsByCategory
 import com.example.trailweight.preferences.formatWeight
 import io.github.dautovicharis.charts.PieChart
 import io.github.dautovicharis.charts.model.toChartDataSet
+import io.github.dautovicharis.charts.style.PieChartDefaults
 import kotlinx.coroutines.launch
 
 /**
@@ -82,13 +87,37 @@ fun GearListScreen(
     val categoryLabels = categoryWeights.keys.toList()
     val categoryValues = categoryWeights.values.map { it.toFloat() }
     val sortedItems = items.sortedByDescending { it.weight ?: 0.0 }
+    val totalWeight = categoryValues.sum()
+
+    val allCategories = listOf(
+        "Backpack", "Clothing", "Cooking / Kitchen", "Electronics", "First aid",
+        "Hygiene / Toiletries", "Lighting", "Navigation", "Pillow", "Shelter",
+        "Sleeping bag / quilt", "Sleeping pad", "Tools / Repair", "Water / Filtration", "Other"
+    )
+
+    val basePieColors = listOf(
+        Color(0xFF2D5B43), Color(0xFFC1683C), Color(0xFFD4A24C),
+        Color(0xFF7FB69A), Color(0xFFE08A5B), Color(0xFFE8C27A),
+        Color(0xFF4A7C6B), Color(0xFFB8854A), Color(0xFF6B8E5A),
+        Color(0xFFA85C3F), Color(0xFF8FA85C), Color(0xFF5C7A8E),
+        Color(0xFFC4A35A), Color(0xFF6E5C8E), Color(0xFF8E5C6E)
+    )
+
+    val categoryColorMap = allCategories.zip(basePieColors).toMap()
+    val chartColors = categoryLabels.map { categoryColorMap[it] ?: Color.Gray }
+
+    val pieChartDataSet = categoryValues.toChartDataSet(
+        title = "${gearList?.name ?: ""} - ${formatWeight(totalWeight.toDouble())}",
+        postfix = "g",
+        labels = categoryLabels
+    )
 
     Column(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
             .fillMaxSize()
     ) {
-        // Top Bar
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -116,28 +145,57 @@ fun GearListScreen(
         Box(modifier = Modifier.weight(1f)) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(16.dp, bottom = 100.dp)
+                contentPadding = PaddingValues(bottom = 100.dp)
             ) {
                 if (items.isNotEmpty()) {
                     item {
-
-                        androidx.compose.material3.Surface(
-                            modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
-                            color = MaterialTheme.colorScheme.surface,
-                            shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
+                        Box(
+                            modifier = Modifier.fillMaxWidth(),
+                            contentAlignment = Alignment.Center
                         ) {
-                            val totalWeight = categoryValues.sum()
-                            val pieChartDataSet = categoryValues.toChartDataSet(
-                                title = "${gearList?.name ?: ""} - ${formatWeight(totalWeight.toDouble())}",
-                                postfix = "g",
-                                labels = categoryLabels
+                            PieChart(
+                                dataSet = pieChartDataSet,
+                                style = PieChartDefaults.style(
+                                    legendVisible = false,
+                                    pieColors = chartColors
+                                )
                             )
-
-                            PieChart(pieChartDataSet)
+                        }
+                    }
+                    item {
+                        Column(
+                            modifier = Modifier.fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 8.dp)
+                        ) {
+                            categoryWeights.entries.sortedByDescending { it.value }
+                                .forEach { (category, weight) ->
+                                    val dotColor = categoryColorMap[category] ?: Color.Gray
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.SpaceBetween
+                                    ) {
+                                        Row(verticalAlignment = Alignment.CenterVertically) {
+                                            Box(
+                                                modifier = Modifier
+                                                    .size(10.dp)
+                                                    .background(dotColor, shape = CircleShape)
+                                            )
+                                            Spacer(modifier = Modifier.width(8.dp))
+                                            Text(
+                                                category,
+                                                style = MaterialTheme.typography.bodyMedium
+                                            )
+                                        }
+                                        Text(
+                                            formatWeight(weight),
+                                            style = MaterialTheme.typography.bodyMedium
+                                        )
+                                    }
+                                }
                         }
                     }
                 }
-
                 items(sortedItems) { item ->
                     ItemCard(
                         item = item,
@@ -150,80 +208,85 @@ fun GearListScreen(
             }
 
             FloatingActionButton(
-                onClick = { editingItem = null; showItemDialog = true },
-                modifier = Modifier.padding(25.dp).align(Alignment.BottomEnd),
+                onClick = {
+                    editingItem = null
+                    showItemDialog = true
+                },
+                modifier = Modifier
+                    .padding(25.dp)
+                    .align(Alignment.BottomEnd),
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary
             ) {
                 Icon(Icons.Filled.Add, contentDescription = "Add")
             }
         }
-    }
 
-    if (showItemDialog) {
-        AddItem(
-            existingItem = editingItem,
-            onDismiss = { showItemDialog = false },
-            onSaved = { name, weight, category, notes ->
-                coroutineScope.launch {
-                    val currentEditingItem = editingItem
-                    val success = if (currentEditingItem != null) {
-                        val updatedItem = currentEditingItem.copy(
-                            name = name,
-                            weight = weight,
-                            category = category,
-                            notes = notes
-                        )
-                        updateItemById(currentEditingItem.id ?: "", updatedItem)
-                    } else {
-                        val newItem = Item(
-                            list_id = listId,
-                            name = name,
-                            weight = weight,
-                            category = category,
-                            notes = notes
-                        )
-                        addItem(newItem)
-                    }
-                    showItemDialog = false
-                    if (success) {
-                        items = getItemsByListId(listId)
-                    }
-                }
-            },
-            onDelete = if (editingItem != null) {
-                {
-                    val itemToDelete = editingItem
+        if (showItemDialog) {
+            AddItem(
+                existingItem = editingItem,
+                onDismiss = { showItemDialog = false },
+                onSaved = { name, weight, category, notes ->
                     coroutineScope.launch {
-                        val success = deleteItemById(itemToDelete?.id ?: "")
+                        val currentEditingItem = editingItem
+                        val success = if (currentEditingItem != null) {
+                            val updatedItem = currentEditingItem.copy(
+                                name = name,
+                                weight = weight,
+                                category = category,
+                                notes = notes
+                            )
+                            updateItemById(currentEditingItem.id ?: "", updatedItem)
+                        } else {
+                            val newItem = Item(
+                                list_id = listId,
+                                name = name,
+                                weight = weight,
+                                category = category,
+                                notes = notes
+                            )
+                            addItem(newItem)
+                        }
                         showItemDialog = false
                         if (success) {
                             items = getItemsByListId(listId)
                         }
                     }
-                }
-            } else null
-        )
-    }
+                },
+                onDelete = if (editingItem != null) {
+                    {
+                        val itemToDelete = editingItem
+                        coroutineScope.launch {
+                            val success = deleteItemById(itemToDelete?.id ?: "")
+                            showItemDialog = false
+                            if (success) {
+                                items = getItemsByListId(listId)
+                            }
+                        }
+                    }
+                } else null
+            )
+        }
 
-    if (showEditListDialog) {
-        AddGearList(
-            existingGearList = gearList,
-            onDismiss = { showEditListDialog = false },
-            onSaved = { name, notes ->
-                coroutineScope.launch {
-                    val currentGearList = gearList
-                    if (currentGearList != null) {
-                        val updated = currentGearList.copy(name = name, notes = notes)
-                        val success = updateGearListById(listId, updated)
-                        showEditListDialog = false
-                        if (success) {
-                            gearList = getGearListById(listId)
+        if (showEditListDialog) {
+            AddGearList(
+                existingGearList = gearList,
+                onDismiss = { showEditListDialog = false },
+                onSaved = { name, notes ->
+                    coroutineScope.launch {
+                        val currentGearList = gearList
+                        if (currentGearList != null) {
+                            val updated = currentGearList.copy(name = name, notes = notes)
+                            val success = updateGearListById(listId, updated)
+                            showEditListDialog = false
+                            if (success) {
+                                gearList = getGearListById(listId)
+                            }
                         }
                     }
                 }
-            }
-        )
+            )
+        }
     }
 }
 
