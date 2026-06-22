@@ -2,7 +2,14 @@ package com.auroralabs.trailweight.loginframes
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -10,12 +17,27 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.contentType
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -84,7 +106,11 @@ fun RegisterUser(navController: NavController) {
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
             ) {
                 Column(modifier = Modifier.padding(24.dp)) {
-                    AuthTextField(value = emailState, onValueChange = { emailState = it }, label = "Email")
+                    AuthTextField(
+                        value = emailState,
+                        onValueChange = { emailState = it },
+                        label = "Email"
+                    )
                     AuthTextField(
                         value = passwordState,
                         onValueChange = { passwordState = it },
@@ -105,8 +131,10 @@ fun RegisterUser(navController: NavController) {
 
                     Button(
                         onClick = {
-                            if (passwordState.length < 8) errorMessage = "Password must be at least 8 characters"
-                            else if (passwordState != confirmPasswordState) errorMessage = "Passwords do not match"
+                            if (passwordState.length < 8) errorMessage =
+                                "Password must be at least 8 characters"
+                            else if (passwordState != confirmPasswordState) errorMessage =
+                                "Passwords do not match"
                             else {
                                 coroutineScope.launch {
                                     isLoading = true
@@ -151,13 +179,29 @@ fun RegisterUser(navController: NavController) {
     if (showReusableMessage) {
         ReusableMessage(
             title = "Success",
-            message = "Account created successfully",
+            message = "Account created successfully, Please check your email for confirmation link",
             confirmString = "OK",
-            onConfirm = { navController.navigate("login") { popUpTo("register") { inclusive = true } } }
+            onConfirm = {
+                navController.navigate("login") {
+                    popUpTo("register") {
+                        inclusive = true
+                    }
+                }
+            }
         )
     }
 }
 
+/**
+ * Composable function that displays a text field for authentication.
+ * @param value The current value of the text field.
+ * @param onValueChange The callback function to be invoked when the value of the text field changes.
+ * @param label The label to be displayed above the text field.
+ * @param isPassword Whether the text field is a password field.
+ * @param passwordVisible Whether the password is currently visible.
+ * @param onVisibilityChange The callback function to be invoked when the visibility of the password changes.
+ * @param imeAction The ImeAction to be used for the keyboard.
+ */
 @Composable
 private fun AuthTextField(
     value: String,
@@ -176,11 +220,17 @@ private fun AuthTextField(
         trailingIcon = if (isPassword) {
             {
                 IconButton(onClick = onVisibilityChange) {
-                    Icon(if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff, null)
+                    Icon(
+                        if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                        null
+                    )
                 }
             }
         } else null,
-        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .semantics { contentType = ContentType.EmailAddress }
+            .padding(vertical = 8.dp),
         keyboardOptions = KeyboardOptions(imeAction = imeAction),
         colors = OutlinedTextFieldDefaults.colors(
             focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),

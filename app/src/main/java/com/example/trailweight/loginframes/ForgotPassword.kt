@@ -108,7 +108,10 @@ fun ForgotPassword(navController: NavController) {
                         value = emailState,
                         onValueChange = { emailState = it; errorMessage = ""; successMessage = "" },
                         label = "Email address",
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .semantics { contentType = ContentType.EmailAddress }
+                            .padding(vertical = 8.dp)
                     )
 
                     TrailWeightButton(
