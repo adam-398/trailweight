@@ -22,6 +22,7 @@ import dev.auroralaboratories.trailweight.ui.theme.TrailWeightTheme
 import io.github.jan.supabase.auth.auth
 import androidx.navigation.compose.rememberNavController
 import com.auroralabs.trailweight.loginframes.RegisterUser
+import dev.auroralaboratories.trailweight.Supabase.getGearListByShareId
 import dev.auroralaboratories.trailweight.loginframes.ForgotPassword
 import dev.auroralaboratories.trailweight.loginframes.ResetNewPasswordScreen
 import dev.auroralaboratories.trailweight.preferences.ThemePreferences
@@ -30,9 +31,14 @@ import io.github.jan.supabase.auth.parseSessionFromFragment
 import kotlinx.coroutines.launch
 
 
+/**
+ * The main activity of the application.
+ */
 class MainActivity : ComponentActivity() {
 
     private var pendingResetPasswordLink by mutableStateOf(false)
+
+    private var pendingSharedListId by mutableStateOf<String?>(null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,6 +77,14 @@ class MainActivity : ComponentActivity() {
                     }
                 }
 
+                LaunchedEffect(pendingSharedListId) {
+                    pendingSharedListId?.let {
+                        navController.navigate("sharedList/$it")
+                        pendingSharedListId = null
+                    }
+                }
+
+
                 if (startDestination != null) {
                     NavHost(
                         navController = navController,
@@ -100,6 +114,19 @@ class MainActivity : ComponentActivity() {
                         composable("resetNewPassword") {
                             ResetNewPasswordScreen(navController)
                         }
+                        composable("sharedList/{shareId}") { backStackEntry ->
+                            val shareId = backStackEntry.arguments?.getString("shareId")
+                            if (shareId != null) {
+                                LaunchedEffect(shareId) {
+                                    val gearList = getGearListByShareId(shareId)
+                                    if (gearList?.id != null) {
+                                        navController.navigate("gearList/${gearList.id}") {
+                                            popUpTo("sharedList/$shareId") { inclusive = true }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -107,7 +134,10 @@ class MainActivity : ComponentActivity() {
     }
 
 
-
+    /**
+     * Handles new intents.
+     * @param intent The new intent.
+     */
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
@@ -150,6 +180,12 @@ class MainActivity : ComponentActivity() {
                             Log.e("DeepLinkDebug", "Signup session import failed: ${e.message}", e)
                         }
                     }
+                }
+            }
+            data?.scheme == "trailweight" && data.host == "list" -> {
+                val shareId = data.lastPathSegment
+                if (shareId != null) {
+                    pendingSharedListId = shareId
                 }
             }
         }

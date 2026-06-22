@@ -168,6 +168,10 @@ suspend fun updateGearListById(listId: String, updatedList: GearList): Boolean {
     }
 }
 
+/**
+ * Fetches a gear list by its ID from the database.
+ * @param listId The ID of the gear list to fetch.
+ */
 suspend fun getGearListById(listId: String): GearList? {
     return try {
         supabase.postgrest["lists"]
@@ -183,4 +187,22 @@ suspend fun getGearListById(listId: String): GearList? {
     }
 }
 
+/**
+ * Fetches a gear list by its share ID from the database.
+ * @param shareId The share ID of the gear list to fetch.
+ */
+suspend fun getGearListByShareId(shareId: String): GearList? {
+    return try {
+        supabase.postgrest["lists"]
+            .select {
+                filter {
+                    eq("share_id", shareId)
+                }
+            }
+            .decodeSingle<GearList>()
+    } catch (e: Exception) {
+        println("Error fetching gear list: $e")
+        null
+    }
+}
 
