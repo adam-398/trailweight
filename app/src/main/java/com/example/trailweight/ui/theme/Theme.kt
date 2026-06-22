@@ -20,16 +20,16 @@ private val DarkColorScheme = darkColorScheme(
     surface = Color(0xFF1D211A),
     surfaceVariant = Color(0xFF2A2E26),
 
-    primary = Color(0xFFB3C68D), // A softer green that glows nicely on dark
-    onPrimary = Color(0xFF2A301D), // Dark text on the light primary
+    primary = Color(0xFFB3C68D),
+    onPrimary = Color(0xFF2A301D),
 
-    secondary = Color(0xFFE38D64), // A muted clay tone
+    secondary = Color(0xFFE38D64),
     onSecondary = Color(0xFF331D11),
 
     tertiary = Color(0xFF7D99B5),
     onTertiary = Color(0xFF0F1B26),
 
-    error = Color(0xFFF2B8B5) // Softer red for dark mode accessibility
+    error = Color(0xFFF2B8B5)
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -46,7 +46,7 @@ private val LightColorScheme = lightColorScheme(
     tertiary = Color(0xFF1A344F),
     onTertiary = Color(0xFFFFFFFF),
 
-    error = Color(0xFFB3261E) // Standardized Material error red
+    error = Color(0xFFB3261E)
 )
 
 @Composable

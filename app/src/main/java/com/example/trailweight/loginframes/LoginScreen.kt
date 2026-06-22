@@ -1,6 +1,5 @@
 package com.auroralabs.trailweight.loginframes
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -11,9 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
@@ -35,37 +32,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentType
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Brush.Companion.verticalGradient
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.lint.kotlin.metadata.Visibility
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.auroralabs.trailweight.uicomponents.TrailWeightButton
-import com.auroralabs.trailweight.uicomponents.TrailsGramsButtonStyle
 import com.auroralabs.trailweight.uicomponents.TrailWeightInputField
+import com.auroralabs.trailweight.uicomponents.TrailsGramsButtonStyle
 import com.example.trailweight.Supabase.loginUser
-import com.example.trailweight.loginframes.ForgotPassword
 import com.example.trailweight.ui.theme.TrailWeightTheme
 import kotlinx.coroutines.launch
 
@@ -133,16 +115,22 @@ fun LoginScreen(navController: NavController) {
                         value = emailState,
                         onValueChange = { emailState = it; errorMessage = "" },
                         label = "Email",
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .semantics { contentType = ContentType.EmailAddress }
+                            .padding(vertical = 8.dp),
                         imeAction = ImeAction.Next,
-                        keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) })
+                        keyboardActions = KeyboardActions(
+                            onNext = { focusManager.moveFocus(FocusDirection.Down) })
                     )
 
                     TrailWeightInputField(
                         value = passwordState,
                         onValueChange = { passwordState = it; errorMessage = "" },
                         label = "Password",
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp),
                         isPassword = !passwordVisible,
                         trailingIcon = {
                             IconButton(onClick = { passwordVisible = !passwordVisible }) {
@@ -173,7 +161,10 @@ fun LoginScreen(navController: NavController) {
                                 }
                             }
                         },
-                        modifier = Modifier.fillMaxWidth().padding(top = 16.dp).height(50.dp)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 16.dp)
+                            .height(50.dp)
                     )
                 }
             }
@@ -191,7 +182,10 @@ fun LoginScreen(navController: NavController) {
                 text = "Register",
                 onClick = { navController.navigate("register") },
                 style = TrailsGramsButtonStyle.Secondary,
-                modifier = Modifier.fillMaxWidth().padding(top = 24.dp).height(50.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 24.dp)
+                    .height(50.dp)
             )
 
             Text(
@@ -209,7 +203,7 @@ fun LoginScreen(navController: NavController) {
 @Preview
 @Composable
 fun LoginScreenPreview() {
-    TrailWeightTheme() {
+    TrailWeightTheme {
         LoginScreen(navController = rememberNavController())
     }
 
