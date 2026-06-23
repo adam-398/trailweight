@@ -1,5 +1,6 @@
 package dev.auroralaboratories.trailweight.Supabase
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dev.auroralaboratories.trailweight.dataclasses.GearList
 import dev.auroralaboratories.trailweight.dataclasses.Item
 import dev.auroralaboratories.trailweight.Supabase.SupabaseClient.supabase
@@ -30,7 +31,7 @@ suspend fun addGearList(name: String, notes: String?): String? {
             .decodeSingle<GearList>()
             .id
     } catch (e: Exception) {
-        FirebaseCrashlytics.getInstance().recordException(Exception("Error adding gear list: $e")
+        FirebaseCrashlytics.getInstance().recordException(Exception("Error adding gear list: $e"))
         null
     }
 }
@@ -46,7 +47,7 @@ suspend fun addItem(item: Item): Boolean {
             .insert(item)
         true
     } catch (e: Exception) {
-        FirebaseCrashlytics.getInstance().recordException(Exception("Error adding item: $e")
+        FirebaseCrashlytics.getInstance().recordException(Exception("Error adding item: $e"))
         false
     }
 }
@@ -61,7 +62,7 @@ suspend fun fetchAllGearLists(): List<GearList> {
             .select()
             .decodeList<GearList>()
     } catch (e: Exception) {
-        FirebaseCrashlytics.getInstance().recordException(Exception("Error fetching gear lists: $e")
+        FirebaseCrashlytics.getInstance().recordException(Exception("Error fetching gear lists: $e"))
         emptyList()
     }
 }
@@ -81,7 +82,7 @@ suspend fun getItemsByListId(listId: String): List<Item> {
             }
             .decodeList<Item>()
     } catch (e: Exception) {
-        FirebaseCrashlytics.getInstance().recordException(Exception("Error fetching items: $e")
+        FirebaseCrashlytics.getInstance().recordException(Exception("Error fetching items: $e"))
         emptyList()
     }
 }
@@ -101,7 +102,7 @@ suspend fun deleteGearListById(listId: String): Boolean {
             }
         true
     } catch (e: Exception) {
-        FirebaseCrashlytics.getInstance().recordException(Exception("Error deleting gear list: $e")
+        FirebaseCrashlytics.getInstance().recordException(Exception("Error deleting gear list: $e"))
         false
     }
 }
@@ -121,7 +122,7 @@ suspend fun deleteItemById(itemId: String): Boolean {
             }
         true
     } catch (e: Exception) {
-        FirebaseCrashlytics.getInstance().recordException(Exception("Error deleting item: $e")
+        FirebaseCrashlytics.getInstance().recordException(Exception("Error deleting item: $e"))
         false
     }
 }
@@ -142,7 +143,7 @@ suspend fun updateItemById(itemId: String, updatedItem: Item): Boolean {
             }
         true
     } catch (e: Exception) {
-        FirebaseCrashlytics.getInstance().recordException(Exception("Error updating item: $e")
+        FirebaseCrashlytics.getInstance().recordException(Exception("Error updating item: $e"))
         false
     }
 }
@@ -163,7 +164,7 @@ suspend fun updateGearListById(listId: String, updatedList: GearList): Boolean {
             }
         true
     } catch (e: Exception) {
-        FirebaseCrashlytics.getInstance().recordException(Exception("Error updating gear list: $e")
+        FirebaseCrashlytics.getInstance().recordException(Exception("Error updating gear list: $e"))
         false
     }
 }
@@ -182,7 +183,7 @@ suspend fun getGearListById(listId: String): GearList? {
             }
             .decodeSingle<GearList>()
     } catch (e: Exception) {
-        FirebaseCrashlytics.getInstance().recordException(Exception("Error fetching gear list: $e")
+        FirebaseCrashlytics.getInstance().recordException(Exception("Error fetching gear list: $e"))
         null
     }
 }
@@ -201,7 +202,7 @@ suspend fun getGearListByShareId(shareId: String): GearList? {
             }
             .decodeSingle<GearList>()
     } catch (e: Exception) {
-        FirebaseCrashlytics.getInstance().recordException(Exception("Error fetching gear list: $e")
+        FirebaseCrashlytics.getInstance().recordException(Exception("Error fetching gear list: $e"))
         null
     }
 }

@@ -39,8 +39,8 @@ fun AddItem(
 
     val itemCategories = listOf(
         "Backpack", "Clothing", "Cooking / Kitchen", "Electronics", "First aid",
-        "Hygiene / Toiletries", "Lighting", "Navigation", "Pillow", "Shelter",
-        "Sleeping bag / quilt", "Sleeping pad", "Tools / Repair", "Water / Filtration", "Other"
+        "Hygiene / Toiletries", "Lighting", "Navigation", "Shelter",
+        "Sleep system", "Tools / Repair", "Water / Filtration", "Other"
     )
 
     var isMetric by remember { mutableStateOf(UnitPreferences.isMetric) }

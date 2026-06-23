@@ -2,6 +2,7 @@ package dev.auroralaboratories.trailweight.Supabase
 
 import android.content.Context
 import android.util.Log
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.russhwolf.settings.SharedPreferencesSettings
 import dev.auroralaboratories.trailweight.BuildConfig
 import dev.auroralaboratories.trailweight.Supabase.SupabaseClient.supabase
@@ -12,6 +13,9 @@ import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.auth.status.SessionSource
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
+import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.postgrest
+import java.util.Locale.filter
 
 /**
  * Singleton Supabase client object.
@@ -87,7 +91,7 @@ suspend fun registerUser(email: String, password: String): String? {
         }
         null
     } catch (e: Exception) {
-        FirebaseCrashlytics.getInstance().recordException(Exception("Registration failed: ${e.message}")
+        FirebaseCrashlytics.getInstance().recordException(Exception("Registration failed: ${e.message}"))
         e.message
     }
 }
@@ -104,7 +108,7 @@ suspend fun resetPassword(email: String): Boolean {
         )
         true
     } catch (e: Exception) {
-        FirebaseCrashlytics.getInstance().recordException(Exception("Error resetting password: $e")
+        FirebaseCrashlytics.getInstance().recordException(Exception("Error resetting password: $e"))
         false
     }
 }
@@ -122,6 +126,25 @@ suspend fun updatePassword(newPassword: String): Boolean {
         true
     } catch (e: Exception) {
         Log.e("UpdatePasswordDebug", "Error updating password", e)
+        false
+    }
+}
+
+/**
+ * Deletes the current user's account.
+ * @return True if the account was deleted successfully, false otherwise.
+ */
+suspend fun deleteUserAccount(): Boolean {
+    return try {
+        val userId = supabase.auth.currentUserOrNull()?.id ?: return false
+        supabase.from("lists").delete {
+            filter { eq("user_id", userId) }
+        }
+        supabase.postgrest.rpc("delete_user")
+        supabase.auth.signOut()
+        true
+    } catch (e: Exception) {
+        FirebaseCrashlytics.getInstance().recordException(Exception("Error deleting user account: $e"))
         false
     }
 }

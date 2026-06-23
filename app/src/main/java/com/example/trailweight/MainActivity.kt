@@ -22,6 +22,7 @@ import dev.auroralaboratories.trailweight.ui.theme.TrailWeightTheme
 import io.github.jan.supabase.auth.auth
 import androidx.navigation.compose.rememberNavController
 import com.auroralabs.trailweight.loginframes.RegisterUser
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dev.auroralaboratories.trailweight.Supabase.getGearListByShareId
 import dev.auroralaboratories.trailweight.loginframes.ForgotPassword
 import dev.auroralaboratories.trailweight.loginframes.ResetNewPasswordScreen

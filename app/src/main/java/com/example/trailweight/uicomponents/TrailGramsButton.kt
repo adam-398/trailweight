@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
 
-enum class TrailsGramsButtonStyle { Primary, Secondary, Outlined }
+enum class TrailsGramsButtonStyle { Primary, Secondary, Outlined, Destructive }
 
 /**
  * Composable function that displays a waymark button.
@@ -30,10 +30,10 @@ enum class TrailsGramsButtonStyle { Primary, Secondary, Outlined }
  */
 @Composable
 fun TrailWeightButton(
+    modifier: Modifier = Modifier,
     text: String? = null,
     onClick: () -> Unit,
     style: TrailsGramsButtonStyle = TrailsGramsButtonStyle.Primary,
-    modifier: Modifier = Modifier,
     icon: ImageVector? = null,
     enabled: Boolean = true,
 ) {
@@ -41,11 +41,13 @@ fun TrailWeightButton(
         TrailsGramsButtonStyle.Primary -> MaterialTheme.colorScheme.onPrimary
         TrailsGramsButtonStyle.Secondary -> MaterialTheme.colorScheme.onSecondary
         TrailsGramsButtonStyle.Outlined -> MaterialTheme.colorScheme.primary
+        TrailsGramsButtonStyle.Destructive -> MaterialTheme.colorScheme.onError
     }
     val containerColor = when (style) {
         TrailsGramsButtonStyle.Primary -> MaterialTheme.colorScheme.primary
         TrailsGramsButtonStyle.Secondary -> MaterialTheme.colorScheme.secondary
         TrailsGramsButtonStyle.Outlined -> Color.Transparent
+        TrailsGramsButtonStyle.Destructive -> MaterialTheme.colorScheme.error
     }
 
     val border = if (style == TrailsGramsButtonStyle.Outlined) {

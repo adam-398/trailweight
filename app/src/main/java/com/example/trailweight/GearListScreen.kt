@@ -50,7 +50,7 @@ import dev.auroralaboratories.trailweight.Supabase.updateItemById
 import dev.auroralaboratories.trailweight.addfunctions.AddGearList
 import dev.auroralaboratories.trailweight.addfunctions.AddItem
 import dev.auroralaboratories.trailweight.cards.ItemCard
-import dev.auroralaboratories.trailweight.menuutils.EditOrDeleteGearList
+import dev.auroralaboratories.trailweight.menuutils.GearListOptions
 import dev.auroralaboratories.trailweight.piechartutils.weightsByCategory
 import dev.auroralaboratories.trailweight.preferences.formatWeight
 import io.github.dautovicharis.charts.PieChart
@@ -93,16 +93,26 @@ fun GearListScreen(
 
     val allCategories = listOf(
         "Backpack", "Clothing", "Cooking / Kitchen", "Electronics", "First aid",
-        "Hygiene / Toiletries", "Lighting", "Navigation", "Pillow", "Shelter",
-        "Sleeping bag / quilt", "Sleeping pad", "Tools / Repair", "Water / Filtration", "Other"
+        "Hygiene / Toiletries", "Lighting", "Navigation", "Shelter",
+        "Sleep system", "Tools / Repair", "Water / Filtration", "Other"
     )
 
+
+
     val basePieColors = listOf(
-        Color(0xFF2D5B43), Color(0xFFC1683C), Color(0xFFD4A24C),
-        Color(0xFF7FB69A), Color(0xFFE08A5B), Color(0xFFE8C27A),
-        Color(0xFF4A7C6B), Color(0xFFB8854A), Color(0xFF6B8E5A),
-        Color(0xFFA85C3F), Color(0xFF8FA85C), Color(0xFF5C7A8E),
-        Color(0xFFC4A35A), Color(0xFF6E5C8E), Color(0xFF8E5C6E)
+        Color(0xFF2D5B43),
+        Color(0xFF5C8A7A),
+        Color(0xFFC1683C),
+        Color(0xFF4A7C6B),
+        Color(0xFFD4A24C),
+        Color(0xFF8E3A2F),
+        Color(0xFFE8C27A),
+        Color(0xFF3D6B8E),
+        Color(0xFF7FB69A),
+        Color(0xFFB85C3A),
+        Color(0xFF6B8E5A),
+        Color(0xFF5C7A8E),
+        Color(0xFFA89070),
     )
 
     val categoryColorMap = allCategories.zip(basePieColors).toMap()
@@ -137,7 +147,7 @@ fun GearListScreen(
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onBackground
             )
-            EditOrDeleteGearList(
+            GearListOptions(
                 listId = listId,
                 gearListName = gearList?.name,
                 onEditClick = { showEditListDialog = true },
