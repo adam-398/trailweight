@@ -21,6 +21,7 @@ import dev.auroralaboratories.trailweight.preferences.formatWeight
 
 /**
  * Composable function that displays a gear list card.
+ * @param modifier The modifier to apply to the card.
  * @param gearList The gear list to display.
  * @param totalWeight The total weight of the items in the gear list.
  * @param onClick The action to perform when the card is clicked.
@@ -33,6 +34,7 @@ import dev.auroralaboratories.trailweight.preferences.formatWeight
  */
 @Composable
 fun GearListCard(
+    modifier: Modifier = Modifier,
     gearList: GearList,
     totalWeight: Double,
     onClick: () -> Unit

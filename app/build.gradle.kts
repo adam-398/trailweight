@@ -54,6 +54,9 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.9.7")
     implementation("androidx.compose.material:material-icons-extended")
 
+    implementation("sh.calvin.reorderable:reorderable:2.4.0")
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.36.0")
+
 
 
     implementation(platform("io.github.dautovicharis:charts-bom:2.2.0"))

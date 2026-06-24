@@ -15,10 +15,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -41,25 +43,19 @@ import dev.auroralaboratories.trailweight.cards.GearListCard
 import dev.auroralaboratories.trailweight.menuutils.HamburgerMenu
 import kotlinx.coroutines.launch
 
-/**
- * Composable function that displays the landing screen.
- * @param navController The navigation controller to use.
- */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LandingScreen(navController: NavController) {
 
     var isCreatingList by remember { mutableStateOf(false) }
-
     val coroutineScope = rememberCoroutineScope()
-
     var gearLists by remember { mutableStateOf<List<GearList>>(emptyList()) }
-
     var totalWeights by remember { mutableStateOf<Map<String, Double>>(emptyMap()) }
+    var isRefreshing by remember { mutableStateOf(false) }
 
-    LaunchedEffect(Unit) {
+    suspend fun loadData() {
         val lists = fetchAllGearLists()
         gearLists = lists
-
         val weightsMap = mutableMapOf<String, Double>()
         for (list in lists) {
             val listItems = getItemsByListId(list.id ?: continue)
@@ -68,12 +64,13 @@ fun LandingScreen(navController: NavController) {
         totalWeights = weightsMap
     }
 
+    LaunchedEffect(Unit) { loadData() }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -92,21 +89,31 @@ fun LandingScreen(navController: NavController) {
             )
         }
 
-
         Box(modifier = Modifier.weight(1f)) {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues( bottom = 100.dp)
+            PullToRefreshBox(
+                isRefreshing = isRefreshing,
+                onRefresh = {
+                    coroutineScope.launch {
+                        isRefreshing = true
+                        loadData()
+                        isRefreshing = false
+                    }
+                },
+                modifier = Modifier.fillMaxSize()
             ) {
-                items(gearLists) { list ->
-                    GearListCard(
-                        gearList = list,
-                        totalWeight = totalWeights[list.id] ?: 0.0,
-                        onClick = { navController.navigate("gearList/${list.id}") }
-                    )
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(bottom = 100.dp)
+                ) {
+                    items(gearLists) { list ->
+                        GearListCard(
+                            gearList = list,
+                            totalWeight = totalWeights[list.id] ?: 0.0,
+                            onClick = { navController.navigate("gearList/${list.id}") }
+                        )
+                    }
                 }
             }
-
 
             FloatingActionButton(
                 onClick = { isCreatingList = true },
@@ -120,6 +127,7 @@ fun LandingScreen(navController: NavController) {
             }
         }
     }
+
     if (isCreatingList) {
         AddGearList(
             onDismiss = { isCreatingList = false },
@@ -135,11 +143,7 @@ fun LandingScreen(navController: NavController) {
             }
         )
     }
-
-
-
 }
-
 
 @Preview
 @Composable

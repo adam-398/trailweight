@@ -92,27 +92,29 @@ fun GearListScreen(
     val totalWeight = categoryValues.sum()
 
     val allCategories = listOf(
-        "Backpack", "Clothing", "Cooking / Kitchen", "Electronics", "First aid",
+        "Backpack", "Clothing", "Cooking / Kitchen", "Dog supplies", "Electronics", "First aid",
         "Hygiene / Toiletries", "Lighting", "Navigation", "Shelter",
-        "Sleep system", "Tools / Repair", "Water / Filtration", "Other"
+        "Sleep system", "Tools / Repair", "Water / Filtration", "Waterproof clothing", "Other"
     )
 
 
 
     val basePieColors = listOf(
-        Color(0xFF2D5B43),
-        Color(0xFF5C8A7A),
-        Color(0xFFC1683C),
-        Color(0xFF4A7C6B),
-        Color(0xFFD4A24C),
-        Color(0xFF8E3A2F),
-        Color(0xFFE8C27A),
-        Color(0xFF3D6B8E),
-        Color(0xFF7FB69A),
-        Color(0xFFB85C3A),
-        Color(0xFF6B8E5A),
-        Color(0xFF5C7A8E),
-        Color(0xFFA89070),
+        Color(0xFFE05C4B), // Tomato red
+        Color(0xFF3A86C8), // Steel blue
+        Color(0xFFF0A500), // Amber gold
+        Color(0xFF2DBF7F), // Emerald
+        Color(0xFF9B59B6), // Violet
+        Color(0xFFE8854A), // Burnt orange
+        Color(0xFF1A8C8C), // Teal
+        Color(0xFFD63E7A), // Raspberry
+        Color(0xFF5C9E3A), // Fern green
+        Color(0xFF6C7FD8), // Periwinkle
+        Color(0xFFC0392B), // Crimson
+        Color(0xFFF5D040), // Sunflower
+        Color(0xFF2E4FA3), // Cobalt
+        Color(0xFFA0522D), // Sienna
+        Color(0xFF4BC8D4), // Sky cyan
     )
 
     val categoryColorMap = allCategories.zip(basePieColors).toMap()
