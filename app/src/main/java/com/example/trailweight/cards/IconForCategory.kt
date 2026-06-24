@@ -1,42 +1,30 @@
 package dev.auroralaboratories.trailweight.cards
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Bed
-import androidx.compose.material.icons.filled.Backpack
-import androidx.compose.material.icons.filled.Restaurant
-import androidx.compose.material.icons.filled.WaterDrop
-import androidx.compose.material.icons.filled.Navigation
-import androidx.compose.material.icons.filled.Power
-import androidx.compose.material.icons.filled.Lightbulb
-import androidx.compose.material.icons.filled.Build
-import androidx.compose.material.icons.filled.Soap
-import androidx.compose.material.icons.filled.Checkroom
-import androidx.compose.material.icons.filled.MedicalServices
-import androidx.compose.material.icons.filled.Inventory
-import androidx.compose.ui.graphics.vector.ImageVector
+import dev.auroralaboratories.trailweight.R
 
 /**
  * Returns the corresponding icon for a given category.
  * @param category The category to get the icon for.
  * @return The corresponding icon.
  */
-fun iconForCategory(category: String): ImageVector {
+fun iconForCategory(category: String): Int {
     return when (category) {
-        "Shelter" -> Icons.Filled.Home
-        "Sleeping bag / quilt" -> Icons.Filled.Bed
-        "Sleeping pad" -> Icons.Filled.Bed
-        "Backpack" -> Icons.Filled.Backpack
-        "Cooking / Kitchen" -> Icons.Filled.Restaurant
-        "Water / Filtration" -> Icons.Filled.WaterDrop
-        "Navigation" -> Icons.Filled.Navigation
-        "Electronics" -> Icons.Filled.Power
-        "Lighting" -> Icons.Filled.Lightbulb
-        "Tools / Repair" -> Icons.Filled.Build
-        "Hygiene / Toiletries" -> Icons.Filled.Soap
-        "Pillow" -> Icons.Filled.Bed
-        "Clothing" -> Icons.Filled.Checkroom
-        "First aid" -> Icons.Filled.MedicalServices
-        else -> Icons.Filled.Inventory
+        "Shelter" -> R.drawable.ic_shelter
+        "Sleeping bag / quilt" -> R.drawable.ic_sleep
+        "Sleeping pad" -> R.drawable.ic_sleep
+        "Backpack" -> R.drawable.ic_backpack
+        "Cooking / Kitchen" -> R.drawable.ic_cooking
+        "Water / Filtration" -> R.drawable.ic_water
+        "Navigation" -> R.drawable.ic_navigation
+        "Electronics" -> R.drawable.ic_electronics
+        "Lighting" -> R.drawable.ic_lighting
+        "Tools / Repair" -> R.drawable.ic_tools
+        "Hygiene / Toiletries" -> R.drawable.ic_hygiene
+        "Pillow" -> R.drawable.ic_sleep
+        "Clothing" -> R.drawable.ic_clothing
+        "First aid" -> R.drawable.ic_firstaid
+        "Dog supplies" -> R.drawable.ic_dog
+        "Waterproof clothing" -> R.drawable.ic_waterproof
+        else -> R.drawable.ic_other
     }
 }
