@@ -1,6 +1,5 @@
 package dev.auroralaboratories.trailweight.cards
 
-import android.R.attr.category
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -38,7 +38,10 @@ fun ItemCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(72.dp)
+            .then(
+                if (item.notes.isNullOrBlank()) Modifier.height(72.dp)
+                else Modifier.wrapContentHeight()
+            )
             .padding(horizontal = 12.dp, vertical = 4.dp),
         shape = RoundedCornerShape(16.dp),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)),
@@ -54,9 +57,8 @@ fun ItemCard(
     ) {
         Row(
             modifier = Modifier
-                .fillMaxHeight()
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(
@@ -73,12 +75,21 @@ fun ItemCard(
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )
+                if (!item.notes.isNullOrBlank()) {
+                    Text(
+                        text = item.notes,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.9f)
+                    )
+                }
             }
 
             Icon(
                 painter = painterResource(id = iconForCategory(item.category)),
                 contentDescription = item.category,
-                modifier = Modifier.size(45.dp),
+                modifier = Modifier
+                    .size(45.dp)
+                    .padding(end = 8.dp),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
@@ -94,7 +105,7 @@ fun ItemCard(
 @Preview
 @Composable
 fun ItemCardPreview() {
-    TrailWeightTheme() {
+    TrailWeightTheme {
         ItemCard(
             item = Item(
                 id = "1",
@@ -102,7 +113,7 @@ fun ItemCardPreview() {
                 name = "test",
                 weight = 1200.0,
                 category = "Shelter",
-                notes = null
+                notes = "some test notes"
             ),
             onClick = {}
         )

@@ -10,8 +10,7 @@ import dev.auroralaboratories.trailweight.R
 fun iconForCategory(category: String): Int {
     return when (category) {
         "Shelter" -> R.drawable.ic_shelter
-        "Sleeping bag / quilt" -> R.drawable.ic_sleep
-        "Sleeping pad" -> R.drawable.ic_sleep
+        "Sleep system" -> R.drawable.ic_sleep
         "Backpack" -> R.drawable.ic_backpack
         "Cooking / Kitchen" -> R.drawable.ic_cooking
         "Water / Filtration" -> R.drawable.ic_water
@@ -20,7 +19,6 @@ fun iconForCategory(category: String): Int {
         "Lighting" -> R.drawable.ic_lighting
         "Tools / Repair" -> R.drawable.ic_tools
         "Hygiene / Toiletries" -> R.drawable.ic_hygiene
-        "Pillow" -> R.drawable.ic_sleep
         "Clothing" -> R.drawable.ic_clothing
         "First aid" -> R.drawable.ic_firstaid
         "Dog supplies" -> R.drawable.ic_dog
