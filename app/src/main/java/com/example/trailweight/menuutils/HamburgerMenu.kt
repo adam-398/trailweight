@@ -40,8 +40,7 @@ fun HamburgerMenu(
     var expanded by remember { mutableStateOf(false) }
     var showLogOutDialog by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
-    var deleteAccountMessage by remember { mutableStateOf(false) }
-    var showDeleteErrorMessage by remember { mutableStateOf(false) }
+
 
     Box(modifier = modifier.padding(8.dp)) {
         IconButton(onClick = { expanded = !expanded }) {
@@ -70,13 +69,6 @@ fun HamburgerMenu(
                     showLogOutDialog = true
                 }
             )
-            DropdownMenuItem(
-                text = { Text("Delete account", color = MaterialTheme.colorScheme.error) },
-                onClick = {
-                    expanded = false
-                    deleteAccountMessage = true
-                }
-            )
         }
     }
 
@@ -95,37 +87,6 @@ fun HamburgerMenu(
                 }
             },
             onDismiss = { showLogOutDialog = false }
-        )
-    }
-
-    if (deleteAccountMessage) {
-        ConfirmationMessage(
-            title = "Delete account",
-            message = "Are you sure you want to delete your account?",
-            confirmString = "Delete",
-            dismissString = "Cancel",
-            confirmStyle = TrailsGramsButtonStyle.Destructive,
-            onConfirm = {
-                coroutineScope.launch {
-                    val success = deleteUserAccount()
-                    if (success) {
-                    navController.navigate("login") {
-                        popUpTo("login") { inclusive = true }
-                    }
-                } else { showDeleteErrorMessage = true
-                        deleteAccountMessage = false}
-                }
-            },
-            onDismiss = { deleteAccountMessage = false }
-        )
-    }
-
-    if (showDeleteErrorMessage) {
-        ReusableMessage(
-            title = "Error",
-            message = "Failed to delete account",
-            confirmString = "OK",
-            onConfirm = { showDeleteErrorMessage = false }
         )
     }
 }
