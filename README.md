@@ -8,11 +8,11 @@ Trailweight is a native Android app for hikers, backpackers, and ultralight enth
 ## Screenshots
 
 <p float="left">
-  <img src="https://github.com/user-attachments/assets/cd66b006-b091-4414-af27-15773dff87a0" width="200"/>
-  <img src="https://github.com/user-attachments/assets/60dd9d01-e799-4c99-8669-0fc6d14a2083" width="200"/>
-  <img src="https://github.com/user-attachments/assets/8955e749-c67e-46be-b6aa-89b3945e0333" width="200"/>
-  <img src="https://github.com/user-attachments/assets/1762ddcb-78aa-4a85-baee-241738f7e2cb" width="200"/>
   <img src="https://github.com/user-attachments/assets/e076f09f-d3cb-43e4-97cb-95f11b8080c9" width="200"/>
+  <img src="https://github.com/user-attachments/assets/1762ddcb-78aa-4a85-baee-241738f7e2cb" width="200"/>
+  <img src="https://github.com/user-attachments/assets/8955e749-c67e-46be-b6aa-89b3945e0333" width="200"/>
+  <img src="https://github.com/user-attachments/assets/60dd9d01-e799-4c99-8669-0fc6d14a2083" width="200"/>
+  <img src="https://github.com/user-attachments/assets/cd66b006-b091-4414-af27-15773dff87a0" width="200"/>
 </p>
 ---
 
