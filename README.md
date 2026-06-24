@@ -1,3 +1,8 @@
+<img width="1344" height="2992" alt="Screenshot_20260623-122502" src="https://github.com/user-attachments/assets/cd66b006-b091-4414-af27-15773dff87a0" />
+<img width="1344" height="2992" alt="Screenshot_20260623-122039" src="https://github.com/user-attachments/assets/60dd9d01-e799-4c99-8669-0fc6d14a2083" />
+<img width="1344" height="2992" alt="Screenshot_20260621-210902" src="https://github.com/user-attachments/assets/8955e749-c67e-46be-b6aa-89b3945e0333" />
+<img width="1344" height="2992" alt="Screenshot_20260623-122816" src="https://github.com/user-attachments/assets/1762ddcb-78aa-4a85-baee-241738f7e2cb" />
+<img width="1344" height="2992" alt="Screenshot_20260623-122838" src="https://github.com/user-attachments/assets/e076f09f-d3cb-43e4-97cb-95f11b8080c9" />
 # Trailweight
 
 > Gear management for people who care about every gram.
