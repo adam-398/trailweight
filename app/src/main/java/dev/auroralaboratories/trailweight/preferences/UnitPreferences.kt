@@ -6,6 +6,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 
+/**
+ * A singleton object that manages the unit preferences for the app.
+ */
 object UnitPreferences {
     private const val PREFS_NAME = "trailweight_prefs"
     private const val KEY_IS_METRIC = "is_metric"
@@ -24,4 +27,9 @@ object UnitPreferences {
         isMetric = value
         prefs.edit().putBoolean(KEY_IS_METRIC, value).apply()
     }
+
+    fun setIsMetricForTesting(value: Boolean) {
+        isMetric = value
+    }
+
 }

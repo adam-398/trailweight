@@ -67,11 +67,11 @@ fun AddItem(
         "Sleep system", "Tools / Repair", "Water / Filtration", "Waterproof clothing", "Other"
     )
 
-    var isMetric by remember { mutableStateOf(UnitPreferences.isMetric) }
+    val isMetric = UnitPreferences.isMetric
     var itemName by remember { mutableStateOf(existingItem?.name ?: "") }
     var itemWeight by remember {
         mutableStateOf(existingItem?.weight?.let { grams ->
-            if (isMetric) grams.toInt().toString() else "%.1f".format(grams / 28.3495)
+            if (UnitPreferences.isMetric) grams.toInt().toString() else "%.1f".format(grams / 28.3495)
         } ?: "")
     }
     var notes by remember { mutableStateOf(existingItem?.notes ?: "") }
@@ -82,9 +82,11 @@ fun AddItem(
         onDismissRequest = onDismiss,
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp), contentAlignment = Alignment.Center) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp), contentAlignment = Alignment.Center
+        ) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -144,34 +146,10 @@ fun AddItem(
                         }
                     }
 
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            "Unit: ${if (isMetric) "Metric (g)" else "Imperial (oz)"}",
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Spacer(modifier = Modifier.weight(1f))
-                        Switch(
-                            checked = isMetric,
-                            onCheckedChange = { newMetric ->
-                                val current = itemWeight.toDoubleOrNull()
-                                if (current != null) itemWeight =
-                                    if (newMetric) (current * 28.3495).toInt()
-                                        .toString() else "%.1f".format(current / 28.3495)
-                                isMetric = newMetric
-                            },
-                            colors = SwitchDefaults.colors(checkedTrackColor = MaterialTheme.colorScheme.primary)
-                        )
-                    }
-
                     TrailWeightInputField(
                         value = itemWeight,
                         onValueChange = { itemWeight = it },
-                        label = "Item Weight",
+                        label = if (isMetric) "Item Weight (g)" else "Item Weight (oz/lbs)",
                         keyboardType = KeyboardType.Decimal
                     )
 
@@ -184,9 +162,11 @@ fun AddItem(
                         label = "Notes"
                     )
 
-                    Row(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp)) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 16.dp)
+                    ) {
                         TrailWeightButton(
                             text = "Cancel",
                             onClick = onDismiss,
@@ -219,7 +199,6 @@ fun AddItem(
             }
         }
     }
-
     if (showDeleteItemWarning) {
         ConfirmationMessage(
             title = "Delete Item",
