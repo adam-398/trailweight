@@ -149,7 +149,7 @@ fun AddItem(
                     TrailWeightInputField(
                         value = itemWeight,
                         onValueChange = { itemWeight = it },
-                        label = if (isMetric) "Item Weight (g)" else "Item Weight (oz/lbs)",
+                        label = if (isMetric) "Item Weight (g)" else "Item Weight (oz)",
                         keyboardType = KeyboardType.Decimal
                     )
 
