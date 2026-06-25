@@ -2,6 +2,9 @@ package dev.auroralaboratories.trailweight.addfunctions
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Cancel
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -86,12 +89,15 @@ fun AddGearList(
                             text = "Cancel",
                             onClick = onDismiss,
                             modifier = Modifier.weight(1f).padding(end = 8.dp),
-                            style = TrailsGramsButtonStyle.Outlined
+                            style = TrailsGramsButtonStyle.Outlined,
+                            icon = Icons.Default.Cancel
                         )
                         TrailWeightButton(
                             text = if (isSaving) "Saving..." else "Save",
                             onClick = { onSaved(listName, notes) },
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.weight(1f),
+                            enabled = hasChanges,
+                            icon = Icons.Default.Save
                         )
                     }
                 }

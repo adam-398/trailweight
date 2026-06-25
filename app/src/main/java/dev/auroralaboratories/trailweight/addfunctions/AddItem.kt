@@ -3,12 +3,15 @@ package dev.auroralaboratories.trailweight.addfunctions
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Cancel
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -18,8 +21,6 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -71,7 +72,8 @@ fun AddItem(
     var itemName by remember { mutableStateOf(existingItem?.name ?: "") }
     var itemWeight by remember {
         mutableStateOf(existingItem?.weight?.let { grams ->
-            if (UnitPreferences.isMetric) grams.toInt().toString() else "%.1f".format(grams / 28.3495)
+            if (UnitPreferences.isMetric) grams.toInt()
+                .toString() else "%.1f".format(grams / 28.3495)
         } ?: "")
     }
     var notes by remember { mutableStateOf(existingItem?.notes ?: "") }
@@ -173,7 +175,8 @@ fun AddItem(
                             modifier = Modifier
                                 .weight(1f)
                                 .padding(end = 8.dp),
-                            style = TrailsGramsButtonStyle.Outlined
+                            style = TrailsGramsButtonStyle.Outlined,
+                            icon = Icons.Default.Cancel,
                         )
                         TrailWeightButton(
                             text = if (isSaving) "Saving..." else "Save",
@@ -182,18 +185,20 @@ fun AddItem(
                                     ?.let { if (isMetric) it else it * 28.3495 }
                                 onSaved(itemName, weightInGrams, selectedCategory, notes)
                             },
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.weight(1f),
+                            icon = Icons.Default.Save,
+                            enabled = itemName.isNotBlank()
                         )
                     }
 
                     if (existingItem != null && onDelete != null) {
-                        TextButton(
+                        TrailWeightButton(
+                            text = ("Delete Item"),
                             onClick = { showDeleteItemWarning = true },
                             modifier = Modifier.padding(top = 8.dp),
-                            colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
-                        ) {
-                            Text("Delete Item")
-                        }
+                            style = TrailsGramsButtonStyle.Destructive,
+                            icon = Icons.Default.Delete,
+                        )
                     }
                 }
             }
