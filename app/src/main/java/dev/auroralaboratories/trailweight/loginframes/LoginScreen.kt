@@ -39,6 +39,8 @@ import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -130,8 +132,9 @@ fun LoginScreen(navController: NavController) {
                         label = "Password",
                         modifier = Modifier
                             .fillMaxWidth()
+                            .semantics { contentType = ContentType.Password }
                             .padding(vertical = 8.dp),
-                        isPassword = !passwordVisible,
+                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         trailingIcon = {
                             IconButton(onClick = { passwordVisible = !passwordVisible }) {
                                 Icon(
@@ -148,6 +151,10 @@ fun LoginScreen(navController: NavController) {
                         text = if (isLoading) "Logging in..." else "Login",
                         onClick = {
                             if (isLoading) return@TrailWeightButton
+                            if (!emailState.contains("@")) {
+                                errorMessage = "Please enter a valid email"
+                                return@TrailWeightButton
+                            }
                             coroutineScope.launch {
                                 isLoading = true
                                 val success = loginUser(emailState, passwordState)

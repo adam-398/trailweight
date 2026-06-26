@@ -40,13 +40,12 @@ fun TrailWeightInputField(
     modifier: Modifier = Modifier,
     imeAction: ImeAction = ImeAction.Done,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
-    isPassword: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     trailingIcon: @Composable (() -> Unit)? = null,
     minLines: Int = 1,
     textStyle: TextStyle = TextStyle(fontSize = 16.sp),
     keyboardType: KeyboardType = KeyboardType.Text,
-    singleLine: Boolean = false,
+    singleLine: Boolean = true,
     isError: Boolean = false
 ) {
     OutlinedTextField(
@@ -55,7 +54,6 @@ fun TrailWeightInputField(
         label = { Text(label) },
         modifier = modifier,
         isError = isError,
-
         colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = MaterialTheme.colorScheme.primary,
             unfocusedBorderColor = MaterialTheme.colorScheme.outline,
@@ -67,7 +65,7 @@ fun TrailWeightInputField(
         shape = RoundedCornerShape(8.dp),
         keyboardOptions = KeyboardOptions(imeAction = imeAction, keyboardType = keyboardType),
         keyboardActions = keyboardActions,
-        visualTransformation = if (isPassword) PasswordVisualTransformation() else visualTransformation,
+        visualTransformation = visualTransformation,  // Fix #1: trust the caller
         trailingIcon = trailingIcon,
         minLines = minLines,
         textStyle = textStyle,

@@ -17,13 +17,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -47,6 +45,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.auroralabs.trailweight.uicomponents.TrailWeightButton
+import com.auroralabs.trailweight.uicomponents.TrailWeightInputField
 import dev.auroralaboratories.trailweight.Supabase.registerUser
 import dev.auroralaboratories.trailweight.reusablemessages.ReusableMessage
 import kotlinx.coroutines.launch
@@ -60,7 +60,9 @@ fun RegisterUser(navController: NavController) {
     var confirmPasswordState by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
+    // Fix #1: separate visibility state for each password field
     var passwordVisible by remember { mutableStateOf(false) }
+    var confirmPasswordVisible by remember { mutableStateOf(false) }
     var showReusableMessage by remember { mutableStateOf(false) }
 
     Box(
@@ -119,19 +121,24 @@ fun RegisterUser(navController: NavController) {
                         passwordVisible = passwordVisible,
                         onVisibilityChange = { passwordVisible = !passwordVisible }
                     )
+
                     AuthTextField(
                         value = confirmPasswordState,
                         onValueChange = { confirmPasswordState = it },
                         label = "Confirm password",
                         isPassword = true,
-                        passwordVisible = passwordVisible,
-                        onVisibilityChange = { passwordVisible = !passwordVisible },
+                        passwordVisible = confirmPasswordVisible,
+                        onVisibilityChange = { confirmPasswordVisible = !confirmPasswordVisible },
                         imeAction = ImeAction.Done
                     )
 
-                    Button(
+                    TrailWeightButton(
+                        text = if (isLoading) "Registering..." else "Create account",
                         onClick = {
-                            if (passwordState.length < 8) errorMessage =
+                            errorMessage = ""
+                            if (!emailState.contains("@")) errorMessage =
+                                "Please enter a valid email"
+                            else if (passwordState.length < 8) errorMessage =
                                 "Password must be at least 8 characters"
                             else if (passwordState != confirmPasswordState) errorMessage =
                                 "Passwords do not match"
@@ -149,10 +156,7 @@ fun RegisterUser(navController: NavController) {
                             .fillMaxWidth()
                             .padding(top = 16.dp)
                             .height(50.dp),
-                        shape = RoundedCornerShape(12.dp)
-                    ) {
-                        Text(if (isLoading) "Registering..." else "Create account")
-                    }
+                    )
                 }
             }
 
@@ -179,7 +183,7 @@ fun RegisterUser(navController: NavController) {
     if (showReusableMessage) {
         ReusableMessage(
             title = "Success",
-            message = "Account created successfully, Please check your email for confirmation link",
+            message = "Account created successfully. Please check your email for a confirmation link.",
             confirmString = "OK",
             onConfirm = {
                 navController.navigate("login") {
@@ -192,16 +196,6 @@ fun RegisterUser(navController: NavController) {
     }
 }
 
-/**
- * Composable function that displays a text field for authentication.
- * @param value The current value of the text field.
- * @param onValueChange The callback function to be invoked when the value of the text field changes.
- * @param label The label to be displayed above the text field.
- * @param isPassword Whether the text field is a password field.
- * @param passwordVisible Whether the password is currently visible.
- * @param onVisibilityChange The callback function to be invoked when the visibility of the password changes.
- * @param imeAction The ImeAction to be used for the keyboard.
- */
 @Composable
 private fun AuthTextField(
     value: String,
@@ -212,31 +206,30 @@ private fun AuthTextField(
     onVisibilityChange: () -> Unit = {},
     imeAction: ImeAction = ImeAction.Next
 ) {
-    OutlinedTextField(
+    TrailWeightInputField(
         value = value,
         onValueChange = onValueChange,
-        label = { Text(label) },
+        label = label,
         visualTransformation = if (isPassword && !passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
         trailingIcon = if (isPassword) {
             {
                 IconButton(onClick = onVisibilityChange) {
                     Icon(
-                        if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                        null
+                        imageVector = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                        contentDescription = if (passwordVisible) "Hide password" else "Show password"
                     )
                 }
             }
         } else null,
         modifier = Modifier
             .fillMaxWidth()
-            .semantics { contentType = ContentType.EmailAddress }
+            .semantics {
+                contentType = when {
+                    isPassword -> ContentType.Password
+                    else -> ContentType.EmailAddress
+                }
+            }
             .padding(vertical = 8.dp),
-        keyboardOptions = KeyboardOptions(imeAction = imeAction),
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
-        ),
-        shape = RoundedCornerShape(12.dp)
     )
 }
 
