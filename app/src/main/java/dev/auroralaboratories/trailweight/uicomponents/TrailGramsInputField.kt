@@ -65,7 +65,7 @@ fun TrailWeightInputField(
         shape = RoundedCornerShape(8.dp),
         keyboardOptions = KeyboardOptions(imeAction = imeAction, keyboardType = keyboardType),
         keyboardActions = keyboardActions,
-        visualTransformation = visualTransformation,  // Fix #1: trust the caller
+        visualTransformation = visualTransformation,
         trailingIcon = trailingIcon,
         minLines = minLines,
         textStyle = textStyle,

@@ -45,8 +45,8 @@ import kotlinx.coroutines.launch
 fun ResetNewPasswordScreen(navController: NavController) {
     var newPassword by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
-    var errorMessage by remember { mutableStateOf("") }  // Fix: non-nullable, consistent with isNotEmpty() checks
-    var isLoading by remember { mutableStateOf(false) }  // Fix: removed unused isSaving
+    var errorMessage by remember { mutableStateOf("") }
+    var isLoading by remember { mutableStateOf(false) }
     var successMessage by remember { mutableStateOf(false) }
 
     val coroutineScope = rememberCoroutineScope()
@@ -110,6 +110,12 @@ fun ResetNewPasswordScreen(navController: NavController) {
                     errorMessage = ""
                     if (newPassword.length < 8) {
                         errorMessage = "Password must be at least 8 characters"
+                    } else if (!newPassword.any { it.isUpperCase() }) {
+                        errorMessage = "Password must contain at least one uppercase letter"
+                    } else if (!newPassword.any { it.isLowerCase() }) {
+                        errorMessage = "Password must contain at least one lowercase letter"
+                    } else if (!newPassword.any { it.isDigit() }) {
+                        errorMessage = "Password must contain at least one number"
                     } else if (newPassword != confirmPassword) {
                         errorMessage = "Passwords do not match"
                     } else {
