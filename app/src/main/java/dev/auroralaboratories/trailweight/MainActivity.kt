@@ -23,6 +23,7 @@ import io.github.jan.supabase.auth.auth
 import androidx.navigation.compose.rememberNavController
 import com.auroralabs.trailweight.loginframes.RegisterUser
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import dev.auroralaboratories.trailweight.Supabase.addListShare
 import dev.auroralaboratories.trailweight.Supabase.getGearListByShareId
 import dev.auroralaboratories.trailweight.loginframes.ForgotPassword
 import dev.auroralaboratories.trailweight.loginframes.ResetNewPasswordScreen
@@ -121,6 +122,7 @@ class MainActivity : ComponentActivity() {
                                 LaunchedEffect(shareId) {
                                     val gearList = getGearListByShareId(shareId)
                                     if (gearList?.id != null) {
+                                        addListShare(gearList.id)
                                         navController.navigate("gearList/${gearList.id}") {
                                             popUpTo("sharedList/$shareId") { inclusive = true }
                                         }

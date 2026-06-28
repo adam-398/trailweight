@@ -7,22 +7,20 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,7 +31,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentType
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -48,6 +48,7 @@ import androidx.navigation.compose.rememberNavController
 import com.auroralabs.trailweight.uicomponents.TrailWeightButton
 import com.auroralabs.trailweight.uicomponents.TrailWeightInputField
 import dev.auroralaboratories.trailweight.Supabase.registerUser
+import dev.auroralaboratories.trailweight.otherutils.passwordChecker
 import dev.auroralaboratories.trailweight.reusablemessages.ReusableMessage
 import kotlinx.coroutines.launch
 
@@ -64,6 +65,7 @@ fun RegisterUser(navController: NavController) {
     var passwordVisible by remember { mutableStateOf(false) }
     var confirmPasswordVisible by remember { mutableStateOf(false) }
     var showReusableMessage by remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
 
     Box(
         modifier = Modifier
@@ -108,66 +110,122 @@ fun RegisterUser(navController: NavController) {
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
             ) {
                 Column(modifier = Modifier.padding(24.dp)) {
-                    AuthTextField(
+                    TrailWeightInputField(
                         value = emailState,
-                        onValueChange = { emailState = it },
-                        label = "Email"
+                        onValueChange = { emailState = it; errorMessage = "" },
+                        label = "Email",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .semantics { contentType = ContentType.EmailAddress }
+                            .padding(10.dp),
+                        imeAction = ImeAction.Next,
+                        keyboardActions = KeyboardActions(
+                            onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                        )
                     )
-                    AuthTextField(
+                    TrailWeightInputField(
                         value = passwordState,
-                        onValueChange = { passwordState = it },
+                        onValueChange = {
+                            passwordState = it
+                            errorMessage = passwordChecker(it) ?: ""
+                        },
                         label = "Password",
-                        isPassword = true,
-                        passwordVisible = passwordVisible,
-                        onVisibilityChange = { passwordVisible = !passwordVisible }
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .semantics { contentType = ContentType.Password }
+                            .padding(10.dp),
+                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        trailingIcon = {
+                            IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                                Icon(
+                                    imageVector = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                                    contentDescription = if (passwordVisible) "Hide password" else "Show password"
+                                )
+                            }
+                        },
+                        imeAction = ImeAction.Done,
+                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
                     )
 
-                    AuthTextField(
+                    TrailWeightInputField(
                         value = confirmPasswordState,
-                        onValueChange = { confirmPasswordState = it },
+                        onValueChange = {
+                            confirmPasswordState = it
+                            errorMessage = if (it != passwordState) "Passwords do not match" else ""
+                        },
                         label = "Confirm password",
-                        isPassword = true,
-                        passwordVisible = confirmPasswordVisible,
-                        onVisibilityChange = { confirmPasswordVisible = !confirmPasswordVisible },
-                        imeAction = ImeAction.Done
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .semantics { contentType = ContentType.Password }
+                            .padding(10.dp),
+                        visualTransformation = if (confirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        trailingIcon = {
+                            IconButton(onClick = {
+                                confirmPasswordVisible = !confirmPasswordVisible
+                            }) {
+                                Icon(
+                                    imageVector = if (confirmPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                                    contentDescription = if (confirmPasswordVisible) "Hide password" else "Show password"
+                                )
+                            }
+                        },
+                        imeAction = ImeAction.Done,
+                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
                     )
+
+                    if (errorMessage.isNotEmpty()) {
+                        Text(
+                            text = errorMessage,
+                            color = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.padding(top = 16.dp),
+                            textAlign = TextAlign.Center
+                        )
+                    }
 
                     TrailWeightButton(
                         text = if (isLoading) "Registering..." else "Create account",
                         onClick = {
-                            errorMessage = ""
-                            if (!emailState.contains("@")) errorMessage =
-                                "Please enter a valid email"
-                            else if (passwordState.length < 8) errorMessage =
-                                "Password must be at least 8 characters"
-                            else if (passwordState != confirmPasswordState) errorMessage =
-                                "Passwords do not match"
-                            else {
-                                coroutineScope.launch {
-                                    isLoading = true
-                                    val error = registerUser(emailState, passwordState)
-                                    isLoading = false
-                                    if (error == null) showReusableMessage = true
-                                    else errorMessage = error
+                            if (!emailState.contains("@")) {
+                                errorMessage = "Please enter a valid email"
+                                return@TrailWeightButton
+                            }
+                            val passwordError = passwordChecker(passwordState)
+                            if (passwordError != null) {
+                                errorMessage = passwordError
+                                return@TrailWeightButton
+                            }
+                            if (passwordState != confirmPasswordState) {
+                                errorMessage = "Passwords do not match"
+                                return@TrailWeightButton
+                            }
+                            if (isLoading) return@TrailWeightButton
+                            coroutineScope.launch {
+                                isLoading = true
+                                val error = registerUser(emailState, passwordState)
+                                isLoading = false
+                                if (error == null) {
+                                    showReusableMessage = true
+                                } else if (error.contains(
+                                        "already registered",
+                                        ignoreCase = true
+                                    ) ||
+                                    error.contains("already exists", ignoreCase = true)
+                                ) {
+                                    errorMessage = "An account with this email already exists"
+                                } else {
+                                    errorMessage = "Registration failed, please try again"
                                 }
                             }
                         },
+                        enabled = passwordChecker(passwordState) == null && passwordState == confirmPasswordState,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 16.dp)
-                            .height(50.dp),
+                            .padding(5.dp),
                     )
                 }
             }
 
-            if (errorMessage.isNotEmpty()) {
-                Text(
-                    text = errorMessage,
-                    color = MaterialTheme.colorScheme.error,
-                    modifier = Modifier.padding(top = 16.dp),
-                    textAlign = TextAlign.Center
-                )
-            }
+
 
             Text(
                 text = "Already have an account? Login",
@@ -196,42 +254,7 @@ fun RegisterUser(navController: NavController) {
     }
 }
 
-@Composable
-private fun AuthTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    label: String,
-    isPassword: Boolean = false,
-    passwordVisible: Boolean = false,
-    onVisibilityChange: () -> Unit = {},
-    imeAction: ImeAction = ImeAction.Next
-) {
-    TrailWeightInputField(
-        value = value,
-        onValueChange = onValueChange,
-        label = label,
-        visualTransformation = if (isPassword && !passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
-        trailingIcon = if (isPassword) {
-            {
-                IconButton(onClick = onVisibilityChange) {
-                    Icon(
-                        imageVector = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                        contentDescription = if (passwordVisible) "Hide password" else "Show password"
-                    )
-                }
-            }
-        } else null,
-        modifier = Modifier
-            .fillMaxWidth()
-            .semantics {
-                contentType = when {
-                    isPassword -> ContentType.Password
-                    else -> ContentType.EmailAddress
-                }
-            }
-            .padding(vertical = 8.dp),
-    )
-}
+
 
 @Preview
 @Composable

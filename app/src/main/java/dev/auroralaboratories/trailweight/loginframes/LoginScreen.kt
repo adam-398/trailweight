@@ -50,6 +50,7 @@ import com.auroralabs.trailweight.uicomponents.TrailWeightButton
 import com.auroralabs.trailweight.uicomponents.TrailWeightInputField
 import com.auroralabs.trailweight.uicomponents.TrailsGramsButtonStyle
 import dev.auroralaboratories.trailweight.Supabase.loginUser
+import dev.auroralaboratories.trailweight.otherutils.passwordChecker
 import dev.auroralaboratories.trailweight.ui.theme.TrailWeightTheme
 import kotlinx.coroutines.launch
 
@@ -128,18 +129,21 @@ fun LoginScreen(navController: NavController) {
 
                     TrailWeightInputField(
                         value = passwordState,
-                        onValueChange = { passwordState = it; errorMessage = "" },
+                        onValueChange = {
+                            passwordState = it
+                            errorMessage = passwordChecker(it) ?: ""
+                        },
                         label = "Password",
                         modifier = Modifier
                             .fillMaxWidth()
                             .semantics { contentType = ContentType.Password }
-                            .padding(vertical = 8.dp),
+                            .padding(10.dp),
                         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         trailingIcon = {
                             IconButton(onClick = { passwordVisible = !passwordVisible }) {
                                 Icon(
                                     imageVector = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                                    contentDescription = null
+                                    contentDescription = if (passwordVisible) "Hide password" else "Show password"
                                 )
                             }
                         },
@@ -147,14 +151,19 @@ fun LoginScreen(navController: NavController) {
                         keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
                     )
 
+                    if (errorMessage.isNotEmpty()) {
+                        Text(
+                            text = errorMessage,
+                            color = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.padding(top = 16.dp),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
                     TrailWeightButton(
                         text = if (isLoading) "Logging in..." else "Login",
                         onClick = {
                             if (isLoading) return@TrailWeightButton
-                            if (!emailState.contains("@")) {
-                                errorMessage = "Please enter a valid email"
-                                return@TrailWeightButton
-                            }
                             coroutineScope.launch {
                                 isLoading = true
                                 val success = loginUser(emailState, passwordState)
@@ -170,19 +179,9 @@ fun LoginScreen(navController: NavController) {
                         },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 16.dp)
-                            .height(50.dp)
+                            .padding(5.dp),
                     )
                 }
-            }
-
-            if (errorMessage.isNotEmpty()) {
-                Text(
-                    text = errorMessage,
-                    color = MaterialTheme.colorScheme.error,
-                    modifier = Modifier.padding(top = 16.dp),
-                    textAlign = TextAlign.Center
-                )
             }
 
             TrailWeightButton(

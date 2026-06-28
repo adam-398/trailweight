@@ -1,10 +1,12 @@
 package dev.auroralaboratories.trailweight.Supabase
 
+import android.util.Log
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dev.auroralaboratories.trailweight.dataclasses.GearList
 import dev.auroralaboratories.trailweight.dataclasses.Item
 import dev.auroralaboratories.trailweight.Supabase.SupabaseClient.supabase
 import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.postgrest
 
 /**
@@ -207,3 +209,23 @@ suspend fun getGearListByShareId(shareId: String): GearList? {
     }
 }
 
+/**
+ * Adds a list share to the database.
+ * @param listId The ID of the gear list to share.
+ * @return True if the list share was added successfully, false otherwise.
+ */
+suspend fun addListShare(listId: String): Boolean {
+    return try {
+        val userId = supabase.auth.currentUserOrNull()?.id ?: return false
+        supabase.from("list_shares").insert(
+            mapOf(
+                "list_id" to listId,
+                "shared_with" to userId
+            )
+        )
+        true
+    } catch (e: Exception) {
+        Log.e("ShareDebug", "Error adding list share: ${e.message}", e)
+        false
+    }
+}
