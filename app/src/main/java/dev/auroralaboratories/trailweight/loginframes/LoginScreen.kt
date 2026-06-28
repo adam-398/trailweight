@@ -5,11 +5,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -50,7 +53,6 @@ import com.auroralabs.trailweight.uicomponents.TrailWeightButton
 import com.auroralabs.trailweight.uicomponents.TrailWeightInputField
 import com.auroralabs.trailweight.uicomponents.TrailsGramsButtonStyle
 import dev.auroralaboratories.trailweight.Supabase.loginUser
-import dev.auroralaboratories.trailweight.otherutils.passwordChecker
 import dev.auroralaboratories.trailweight.ui.theme.TrailWeightTheme
 import kotlinx.coroutines.launch
 
@@ -81,16 +83,18 @@ fun LoginScreen(navController: NavController) {
                         MaterialTheme.colorScheme.background
                     )
                 )
-            )
-            .imePadding(),
+            ),
         contentAlignment = Alignment.Center
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(24.dp)
+                .padding(horizontal = 24.dp)
+                .windowInsetsPadding(WindowInsets.statusBars)
+                .padding(top = 35.dp)
+                .imePadding()
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -121,7 +125,7 @@ fun LoginScreen(navController: NavController) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .semantics { contentType = ContentType.EmailAddress }
-                            .padding(vertical = 8.dp),
+                            .padding(10.dp),
                         imeAction = ImeAction.Next,
                         keyboardActions = KeyboardActions(
                             onNext = { focusManager.moveFocus(FocusDirection.Down) })
@@ -131,7 +135,7 @@ fun LoginScreen(navController: NavController) {
                         value = passwordState,
                         onValueChange = {
                             passwordState = it
-                            errorMessage = passwordChecker(it) ?: ""
+                            errorMessage = ""
                         },
                         label = "Password",
                         modifier = Modifier
@@ -164,6 +168,10 @@ fun LoginScreen(navController: NavController) {
                         text = if (isLoading) "Logging in..." else "Login",
                         onClick = {
                             if (isLoading) return@TrailWeightButton
+                            if (!emailState.contains("@")) {
+                                errorMessage = "Please enter a valid email"
+                                return@TrailWeightButton
+                            }
                             coroutineScope.launch {
                                 isLoading = true
                                 val success = loginUser(emailState, passwordState)
@@ -181,6 +189,16 @@ fun LoginScreen(navController: NavController) {
                             .fillMaxWidth()
                             .padding(5.dp),
                     )
+                    Text(
+                        text = "Forgot password?",
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = MaterialTheme.typography.labelLarge,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 24.dp)
+                            .clickable { navController.navigate("forgotPassword") },
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
 
@@ -194,14 +212,7 @@ fun LoginScreen(navController: NavController) {
                     .height(50.dp)
             )
 
-            Text(
-                text = "Forgot password?",
-                color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.labelLarge,
-                modifier = Modifier
-                    .padding(top = 24.dp)
-                    .clickable { navController.navigate("forgotPassword") }
-            )
+
         }
     }
 }

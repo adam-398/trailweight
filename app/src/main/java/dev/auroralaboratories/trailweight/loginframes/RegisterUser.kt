@@ -5,10 +5,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -50,6 +53,7 @@ import com.auroralabs.trailweight.uicomponents.TrailWeightInputField
 import dev.auroralaboratories.trailweight.Supabase.registerUser
 import dev.auroralaboratories.trailweight.otherutils.passwordChecker
 import dev.auroralaboratories.trailweight.reusablemessages.ReusableMessage
+import dev.auroralaboratories.trailweight.ui.theme.TrailWeightTheme
 import kotlinx.coroutines.launch
 
 @Composable
@@ -61,7 +65,6 @@ fun RegisterUser(navController: NavController) {
     var confirmPasswordState by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
-    // Fix #1: separate visibility state for each password field
     var passwordVisible by remember { mutableStateOf(false) }
     var confirmPasswordVisible by remember { mutableStateOf(false) }
     var showReusableMessage by remember { mutableStateOf(false) }
@@ -77,16 +80,18 @@ fun RegisterUser(navController: NavController) {
                         MaterialTheme.colorScheme.background
                     )
                 )
-            )
-            .imePadding(),
+            ),
         contentAlignment = Alignment.Center
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(24.dp)
+                .padding(horizontal = 24.dp)
+                .windowInsetsPadding(WindowInsets.statusBars)
+                .padding(top = 35.dp)
+                .imePadding()
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -182,6 +187,7 @@ fun RegisterUser(navController: NavController) {
                         )
                     }
 
+
                     TrailWeightButton(
                         text = if (isLoading) "Registering..." else "Create account",
                         onClick = {
@@ -217,24 +223,25 @@ fun RegisterUser(navController: NavController) {
                                 }
                             }
                         },
-                        enabled = passwordChecker(passwordState) == null && passwordState == confirmPasswordState,
+                        enabled = passwordChecker(passwordState) == null && passwordState == confirmPasswordState && !isLoading,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(5.dp),
                     )
+
+                    Text(
+                        text = "Already have an account? Login",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 24.dp)
+                            .clickable { navController.navigate("login") },
+                        textAlign = TextAlign.Center
+                    )
+
                 }
             }
-
-
-
-            Text(
-                text = "Already have an account? Login",
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier
-                    .padding(top = 24.dp)
-                    .clickable { navController.navigate("login") }
-            )
         }
     }
 
@@ -259,5 +266,8 @@ fun RegisterUser(navController: NavController) {
 @Preview
 @Composable
 fun RegisterUserPreview() {
-    RegisterUser(navController = rememberNavController())
+    TrailWeightTheme {
+        RegisterUser(navController = rememberNavController())
+    }
+
 }
