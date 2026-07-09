@@ -14,6 +14,8 @@ object ThemePreferences {
     private const val PREFS_NAME = "trailweight_prefs"
     private const val KEY_IS_DARK_MODE = "is_dark_mode"
 
+
+
     private lateinit var prefs: SharedPreferences
 
     var isDarkMode by mutableStateOf(false)

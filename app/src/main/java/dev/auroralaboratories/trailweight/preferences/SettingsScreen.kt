@@ -130,14 +130,34 @@ fun SettingsScreen(navController: NavController) {
                 .padding(20.dp),
             contentAlignment = Alignment.BottomCenter
         ) {
-            Text(
-                "Delete account",
-                color = MaterialTheme.colorScheme.error,
-                modifier = Modifier
-                    .padding(20.dp)
-                    .clickable { deleteAccountMessage = true },
-                style = MaterialTheme.typography.titleMedium,
-            )
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    "Privacy Policy",
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .clickable {
+                            val intent = Intent(Intent.ACTION_VIEW).apply {
+                                data =
+                                    Uri.parse("https://auroralaboratories.dev/privacy-trailweight")
+                            }
+                            context.startActivity(intent)
+                        },
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Text(
+                    "Delete account",
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier
+                        .padding(20.dp)
+                        .clickable { deleteAccountMessage = true },
+                    style = MaterialTheme.typography.titleMedium,
+                )
+            }
+
         }
 
     }
