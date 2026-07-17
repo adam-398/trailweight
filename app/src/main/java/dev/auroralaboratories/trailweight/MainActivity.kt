@@ -166,7 +166,7 @@ class MainActivity : ComponentActivity() {
                             val session = supabase.auth.parseSessionFromFragment(fragment)
                             supabase.auth.importSession(session)
                         } catch (e: Exception) {
-                            Log.e("DeepLinkDebug", "Reset session import failed: ${e.message}", e)
+                            FirebaseCrashlytics.getInstance().recordException(e)
                         }
                     }
                 }
@@ -180,7 +180,7 @@ class MainActivity : ComponentActivity() {
                             supabase.auth.importSession(session)
                             pendingSignupConfirmed = true
                         } catch (e: Exception) {
-                            Log.e("DeepLinkDebug", "Signup session import failed: ${e.message}", e)
+                            FirebaseCrashlytics.getInstance().recordException(e)
                         }
                     }
                 }

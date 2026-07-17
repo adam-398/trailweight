@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -43,6 +44,11 @@ import dev.auroralaboratories.trailweight.reusablemessages.ReusableMessage
 import dev.auroralaboratories.trailweight.ui.theme.TrailWeightTheme
 import kotlinx.coroutines.launch
 
+
+/**
+ * Composable function that displays the settings screen.
+ * @param navController The NavController to use for navigation.
+ */
 @Composable
 fun SettingsScreen(navController: NavController) {
 
@@ -101,14 +107,26 @@ fun SettingsScreen(navController: NavController) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                "Dark mode",
-                color = MaterialTheme.colorScheme.onSurface,
-            )
-            Switch(
-                checked = ThemePreferences.isDarkMode,
-                onCheckedChange = { ThemePreferences.setIsDarkMode(it) }
-            )
+            Text("Theme", color = MaterialTheme.colorScheme.onSurface)
+            Row {
+                listOf(
+                    "Light" to ThemePreferences.ThemeMode.LIGHT,
+                    "System" to ThemePreferences.ThemeMode.SYSTEM,
+                    "Dark" to ThemePreferences.ThemeMode.DARK
+                ).forEach { (label, mode) ->
+                    val selected = ThemePreferences.themeMode == mode
+                    Text(
+                        text = label,
+                        modifier = Modifier
+                            .padding(horizontal = 10.dp, vertical = 4.dp)
+                            .clickable { ThemePreferences.applyThemeMode(mode) },
+                        color = if (selected) MaterialTheme.colorScheme.primary
+                        else MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal
+                    )
+                }
+            }
         }
         Text(
             "Contact us: contact@auroralaboratories.dev",

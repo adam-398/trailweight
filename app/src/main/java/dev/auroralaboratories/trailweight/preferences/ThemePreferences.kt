@@ -8,26 +8,34 @@ import androidx.compose.runtime.setValue
 import androidx.core.content.edit
 
 /**
- * Singleton object for managing theme preferences.
+ * A singleton object that manages the theme preferences for the app.
  */
 object ThemePreferences {
     private const val PREFS_NAME = "trailweight_prefs"
-    private const val KEY_IS_DARK_MODE = "is_dark_mode"
+    private const val KEY_THEME_MODE = "theme_mode"
 
-
+    enum class ThemeMode { LIGHT, SYSTEM, DARK }
 
     private lateinit var prefs: SharedPreferences
 
-    var isDarkMode by mutableStateOf(false)
+    var themeMode by mutableStateOf(ThemeMode.SYSTEM)
         private set
 
+    /**
+     * Initializes the theme preferences.
+     */
     fun initialize(context: Context) {
         prefs = context.applicationContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        isDarkMode = prefs.getBoolean(KEY_IS_DARK_MODE, false)
+        themeMode = ThemeMode.valueOf(
+            prefs.getString(KEY_THEME_MODE, ThemeMode.SYSTEM.name) ?: ThemeMode.SYSTEM.name
+        )
     }
 
-    fun setIsDarkMode(value: Boolean) {
-        isDarkMode = value
-        prefs.edit { putBoolean(KEY_IS_DARK_MODE, value) }
+    /**
+     * Sets the theme mode.
+     */
+    fun applyThemeMode(mode: ThemeMode) {
+        themeMode = mode
+        prefs.edit { putString(KEY_THEME_MODE, mode.name) }
     }
 }
