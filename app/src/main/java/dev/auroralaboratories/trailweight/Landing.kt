@@ -43,6 +43,10 @@ import dev.auroralaboratories.trailweight.cards.GearListCard
 import dev.auroralaboratories.trailweight.menuutils.HamburgerMenu
 import kotlinx.coroutines.launch
 
+/**
+ * Composable function that displays the landing screen.
+ * @param navController The NavController to use for navigation.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LandingScreen(navController: NavController) {
