@@ -30,6 +30,7 @@ import dev.auroralaboratories.trailweight.loginframes.ResetNewPasswordScreen
 import dev.auroralaboratories.trailweight.preferences.ThemePreferences
 import dev.auroralaboratories.trailweight.preferences.UnitPreferences
 import io.github.jan.supabase.auth.parseSessionFromFragment
+import io.github.jan.supabase.auth.status.SessionStatus
 import kotlinx.coroutines.launch
 
 
@@ -60,9 +61,21 @@ class MainActivity : ComponentActivity() {
 
 
                 LaunchedEffect(Unit) {
-                    supabase.auth.awaitInitialization()
-                    startDestination =
-                        if (supabase.auth.currentSessionOrNull() != null) "landing" else "login"
+                    supabase.auth.sessionStatus.collect { status ->
+                        when (status) {
+                            is SessionStatus.Authenticated -> {
+                                startDestination = "landing"
+                            }
+                            is SessionStatus.RefreshFailure -> {
+                                startDestination = "landing"
+                            }
+                            is SessionStatus.NotAuthenticated -> {
+                                startDestination = "login"
+                            }
+                            SessionStatus.Initializing -> {
+                            }
+                        }
+                    }
                 }
 
                 LaunchedEffect(pendingResetPasswordLink) {
