@@ -2,9 +2,9 @@ package dev.auroralaboratories.trailweight.Supabase
 
 import android.util.Log
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import dev.auroralaboratories.trailweight.Supabase.SupabaseClient.supabase
 import dev.auroralaboratories.trailweight.dataclasses.GearList
 import dev.auroralaboratories.trailweight.dataclasses.Item
-import dev.auroralaboratories.trailweight.Supabase.SupabaseClient.supabase
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.postgrest
@@ -64,7 +64,8 @@ suspend fun fetchAllGearLists(): List<GearList> {
             .select()
             .decodeList<GearList>()
     } catch (e: Exception) {
-        FirebaseCrashlytics.getInstance().recordException(Exception("Error fetching gear lists: $e"))
+        FirebaseCrashlytics.getInstance()
+            .recordException(Exception("Error fetching gear lists: $e"))
         emptyList()
     }
 }

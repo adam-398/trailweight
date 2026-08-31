@@ -5,9 +5,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
@@ -36,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.semantics.semantics
@@ -69,6 +72,7 @@ fun RegisterUser(navController: NavController) {
     var confirmPasswordVisible by remember { mutableStateOf(false) }
     var showReusableMessage by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
+    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
 
     Box(
         modifier = Modifier
@@ -88,12 +92,12 @@ fun RegisterUser(navController: NavController) {
                 .fillMaxSize()
                 .padding(horizontal = 24.dp)
                 .windowInsetsPadding(WindowInsets.statusBars)
-                .padding(top = 35.dp)
                 .imePadding()
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Spacer(modifier = Modifier.height(screenHeight * 0.10f))
             Text(
                 text = "Trail Weight",
                 style = MaterialTheme.typography.displayMedium,
