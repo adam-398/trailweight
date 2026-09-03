@@ -38,7 +38,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.auroralabs.trailweight.uicomponents.TrailWeightButton
 import com.auroralabs.trailweight.uicomponents.TrailWeightInputField
-import com.auroralabs.trailweight.uicomponents.TrailsGramsButtonStyle
+import com.auroralabs.trailweight.uicomponents.AuroraButtonStyle
 import dev.auroralaboratories.trailweight.dataclasses.Item
 import dev.auroralaboratories.trailweight.preferences.UnitPreferences
 import dev.auroralaboratories.trailweight.reusablemessages.ConfirmationMessage
@@ -175,7 +175,7 @@ fun AddItem(
                             modifier = Modifier
                                 .weight(1f)
                                 .padding(end = 8.dp),
-                            style = TrailsGramsButtonStyle.Outlined,
+                            style = AuroraButtonStyle.Outlined,
                             icon = Icons.Default.Cancel,
                         )
                         TrailWeightButton(
@@ -196,7 +196,7 @@ fun AddItem(
                             text = ("Delete Item"),
                             onClick = { showDeleteItemWarning = true },
                             modifier = Modifier.padding(top = 8.dp),
-                            style = TrailsGramsButtonStyle.Destructive,
+                            style = AuroraButtonStyle.Destructive,
                             icon = Icons.Default.Delete,
                         )
                     }

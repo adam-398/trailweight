@@ -53,7 +53,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.auroralabs.trailweight.uicomponents.TrailWeightButton
 import com.auroralabs.trailweight.uicomponents.TrailWeightInputField
-import com.auroralabs.trailweight.uicomponents.TrailsGramsButtonStyle
+import com.auroralabs.trailweight.uicomponents.AuroraButtonStyle
 import dev.auroralaboratories.trailweight.Supabase.loginUser
 import dev.auroralaboratories.trailweight.ui.theme.TrailWeightTheme
 import kotlinx.coroutines.launch
@@ -208,7 +208,7 @@ fun LoginScreen(navController: NavController) {
             TrailWeightButton(
                 text = "Register",
                 onClick = { navController.navigate("register") },
-                style = TrailsGramsButtonStyle.Secondary,
+                style = AuroraButtonStyle.Secondary,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 24.dp)

@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
 
-enum class TrailsGramsButtonStyle { Primary, Secondary, Outlined, Destructive }
+enum class AuroraButtonStyle { Primary, Secondary, Outlined, Destructive }
 
 /**
  * Composable function that displays a waymark button.
@@ -33,24 +33,24 @@ fun TrailWeightButton(
     modifier: Modifier = Modifier,
     text: String? = null,
     onClick: () -> Unit,
-    style: TrailsGramsButtonStyle = TrailsGramsButtonStyle.Primary,
+    style: AuroraButtonStyle = AuroraButtonStyle.Primary,
     icon: ImageVector? = null,
     enabled: Boolean = true,
 ) {
     val contentColor = when (style) {
-        TrailsGramsButtonStyle.Primary -> MaterialTheme.colorScheme.onPrimary
-        TrailsGramsButtonStyle.Secondary -> MaterialTheme.colorScheme.onSecondary
-        TrailsGramsButtonStyle.Outlined -> MaterialTheme.colorScheme.primary
-        TrailsGramsButtonStyle.Destructive -> MaterialTheme.colorScheme.onError
+        AuroraButtonStyle.Primary -> MaterialTheme.colorScheme.onPrimary
+        AuroraButtonStyle.Secondary -> MaterialTheme.colorScheme.onSecondary
+        AuroraButtonStyle.Outlined -> MaterialTheme.colorScheme.primary
+        AuroraButtonStyle.Destructive -> MaterialTheme.colorScheme.onError
     }
     val containerColor = when (style) {
-        TrailsGramsButtonStyle.Primary -> MaterialTheme.colorScheme.primary
-        TrailsGramsButtonStyle.Secondary -> MaterialTheme.colorScheme.secondary
-        TrailsGramsButtonStyle.Outlined -> Color.Transparent
-        TrailsGramsButtonStyle.Destructive -> MaterialTheme.colorScheme.error
+        AuroraButtonStyle.Primary -> MaterialTheme.colorScheme.primary
+        AuroraButtonStyle.Secondary -> MaterialTheme.colorScheme.secondary
+        AuroraButtonStyle.Outlined -> Color.Transparent
+        AuroraButtonStyle.Destructive -> MaterialTheme.colorScheme.error
     }
 
-    val border = if (style == TrailsGramsButtonStyle.Outlined) {
+    val border = if (style == AuroraButtonStyle.Outlined) {
         ButtonDefaults.outlinedButtonBorder.copy(brush = SolidColor(MaterialTheme.colorScheme.primary))
     } else null
 
@@ -63,7 +63,7 @@ fun TrailWeightButton(
         border = border,
         enabled = enabled,
         modifier = modifier.heightIn(min = 48.dp),
-        elevation = if (style == TrailsGramsButtonStyle.Outlined) null else ButtonDefaults.buttonElevation(
+        elevation = if (style == AuroraButtonStyle.Outlined) null else ButtonDefaults.buttonElevation(
             defaultElevation = 8.dp,
             pressedElevation = 12.dp
         ),

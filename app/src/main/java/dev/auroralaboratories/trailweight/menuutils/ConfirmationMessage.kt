@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.auroralabs.trailweight.uicomponents.TrailWeightButton
-import com.auroralabs.trailweight.uicomponents.TrailsGramsButtonStyle
+import com.auroralabs.trailweight.uicomponents.AuroraButtonStyle
 
 /**
  * Reusable confirmation screen
@@ -94,13 +94,13 @@ fun ConfirmationMessage(
                         text = dismissString,
                         onClick = onDismiss,
                         modifier = Modifier.weight(1f),
-                        style = TrailsGramsButtonStyle.Outlined,
+                        style = AuroraButtonStyle.Outlined,
                         icon = dismissIcon
                     )
                     TrailWeightButton(
                         text = confirmString,
                         onClick = onConfirm,
-                        style = TrailsGramsButtonStyle.Primary,
+                        style = AuroraButtonStyle.Primary,
                         modifier = Modifier.weight(1f),
                         icon = confirmIcon
                     )

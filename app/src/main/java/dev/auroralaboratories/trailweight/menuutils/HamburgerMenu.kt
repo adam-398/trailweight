@@ -19,7 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.auroralabs.trailweight.uicomponents.TrailsGramsButtonStyle
+import com.auroralabs.trailweight.uicomponents.AuroraButtonStyle
 import dev.auroralaboratories.trailweight.Supabase.deleteUserAccount
 import dev.auroralaboratories.trailweight.Supabase.logoutUser
 import dev.auroralaboratories.trailweight.reusablemessages.ConfirmationMessage

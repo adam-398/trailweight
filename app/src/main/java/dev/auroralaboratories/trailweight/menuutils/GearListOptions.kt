@@ -109,7 +109,7 @@ fun GearListOptions(
                 }
             },
             onDismiss = { showDeleteListWarning = false },
-            confirmStyle = com.auroralabs.trailweight.uicomponents.TrailsGramsButtonStyle.Primary
+            confirmStyle = com.auroralabs.trailweight.uicomponents.AuroraButtonStyle.Primary
         )
     }
 }

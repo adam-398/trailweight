@@ -35,7 +35,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.auroralabs.trailweight.uicomponents.TrailsGramsButtonStyle
+import com.auroralabs.trailweight.uicomponents.AuroraButtonStyle
 import dev.auroralaboratories.trailweight.Supabase.deleteUserAccount
 import dev.auroralaboratories.trailweight.preferences.ThemePreferences
 import dev.auroralaboratories.trailweight.preferences.UnitPreferences
@@ -186,7 +186,7 @@ fun SettingsScreen(navController: NavController) {
             message = "Are you sure you want to delete your account?",
             confirmString = "Delete",
             dismissString = "Cancel",
-            confirmStyle = TrailsGramsButtonStyle.Destructive,
+            confirmStyle = AuroraButtonStyle.Destructive,
             onConfirm = {
                 coroutineScope.launch {
                     val success = deleteUserAccount()

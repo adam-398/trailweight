@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.auroralabs.trailweight.uicomponents.TrailWeightButton
-import com.auroralabs.trailweight.uicomponents.TrailsGramsButtonStyle
+import com.auroralabs.trailweight.uicomponents.AuroraButtonStyle
 
 /**
  * Reusable confirmation message
@@ -48,7 +48,7 @@ fun ConfirmationMessage(
     onDismiss: () -> Unit,
     confirmIcon: ImageVector? = null,
     dismissIcon: ImageVector? = null,
-    confirmStyle: TrailsGramsButtonStyle = TrailsGramsButtonStyle.Primary
+    confirmStyle: AuroraButtonStyle = AuroraButtonStyle.Primary
 ) {
     Dialog(
         onDismissRequest = onDismiss,
@@ -95,7 +95,7 @@ fun ConfirmationMessage(
                         text = dismissString,
                         onClick = onDismiss,
                         modifier = Modifier.weight(1f),
-                        style = TrailsGramsButtonStyle.Outlined,
+                        style = AuroraButtonStyle.Outlined,
                         icon = dismissIcon
                     )
                     TrailWeightButton(

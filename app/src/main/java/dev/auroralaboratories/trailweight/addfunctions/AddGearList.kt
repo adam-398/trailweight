@@ -14,7 +14,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.auroralabs.trailweight.uicomponents.TrailWeightButton
 import com.auroralabs.trailweight.uicomponents.TrailWeightInputField
-import com.auroralabs.trailweight.uicomponents.TrailsGramsButtonStyle
+import com.auroralabs.trailweight.uicomponents.AuroraButtonStyle
 import dev.auroralaboratories.trailweight.dataclasses.GearList
 
 /**
@@ -89,7 +89,7 @@ fun AddGearList(
                             text = "Cancel",
                             onClick = onDismiss,
                             modifier = Modifier.weight(1f).padding(end = 8.dp),
-                            style = TrailsGramsButtonStyle.Outlined,
+                            style = AuroraButtonStyle.Outlined,
                             icon = Icons.Default.Cancel
                         )
                         TrailWeightButton(
