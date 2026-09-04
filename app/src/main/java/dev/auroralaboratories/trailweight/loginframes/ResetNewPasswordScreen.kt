@@ -235,9 +235,10 @@ fun ResetNewPasswordScreen(navController: NavController) {
             confirmString = "OK",
             onConfirm = {
                 navController.navigate("login") {
-                    popUpTo("register") {
+                    popUpTo(navController.graph.startDestinationId) {
                         inclusive = true
                     }
+                    launchSingleTop = true
                 }
             }
         )

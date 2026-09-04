@@ -59,6 +59,10 @@ import dev.auroralaboratories.trailweight.reusablemessages.ReusableMessage
 import dev.auroralaboratories.trailweight.ui.theme.TrailWeightTheme
 import kotlinx.coroutines.launch
 
+/**
+ * Composable function that displays the register screen.
+ * @param navController The NavController to use for navigation.
+ */
 @Composable
 fun RegisterUser(navController: NavController) {
     val coroutineScope = rememberCoroutineScope()
