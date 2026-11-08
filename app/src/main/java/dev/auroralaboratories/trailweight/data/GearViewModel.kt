@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -91,4 +92,15 @@ class GearViewModel(application: Application) : AndroidViewModel(application) {
     fun updateGearItem(gearItem: GearItem) = viewModelScope.launch {
         repository.updateGearItem(gearItem)
     }
+
+    /**
+     * Total weight in grams of each list, keyed by list ID. Lists with no items are not in the map.
+     */
+    val listWeights: StateFlow<Map<Long, Double>> = repository.listWeights
+        .map { weights -> weights.associate { it.listId to it.totalWeight } }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyMap()
+        )
 }

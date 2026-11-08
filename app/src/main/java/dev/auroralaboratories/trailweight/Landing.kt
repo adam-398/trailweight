@@ -47,7 +47,7 @@ fun LandingScreen(navController: NavController) {
     val viewModel: GearViewModel = viewModel()
     val gearLists by viewModel.allGearLists.collectAsStateWithLifecycle()
     var isCreatingList by remember { mutableStateOf(false) }
-    val totalWeights = emptyMap<Long, Double>()
+    val totalWeights by viewModel.listWeights.collectAsStateWithLifecycle()
 
     Column(
         modifier = Modifier

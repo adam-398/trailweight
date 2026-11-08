@@ -44,4 +44,11 @@ interface GearItemDao : BaseDao<GearItem> {
     @Query("SELECT * FROM gear_items WHERE id = :id")
     suspend fun get(id: Long): GearItem?
 
+    /**
+     * Observes the total weight of each list that has items.
+     * @return A [Flow] of [ListWeight]s, one per list. Lists with no items are not included.
+     */
+    @Query("SELECT listId, COALESCE(SUM(weight), 0.0) AS totalWeight FROM gear_items GROUP BY listId")
+    fun observeListWeights(): Flow<List<ListWeight>>
+
 }

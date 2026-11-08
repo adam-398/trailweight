@@ -96,4 +96,9 @@ class GearRepository(private val gearListDao: GearListDao, private val gearItemD
      */
     suspend fun getGearItem(id: Long): GearItem? =
         gearItemDao.get(id)
+
+    /**
+     * Observes the total weight of each list that has items. Emits a fresh list whenever an item changes.
+     */
+    val listWeights: Flow<List<ListWeight>> = gearItemDao.observeListWeights()
 }

@@ -26,5 +26,7 @@ interface GearListDao : BaseDao<GearList> {
      *  * @return The [GearList] with the given ID, or null if not found.
      */
     @Query("SELECT * FROM gear_lists WHERE id = :id")
-    suspend fun get(id: Long): GearList?
+    suspend fun get(id: Long): GearList
+
+
 }
