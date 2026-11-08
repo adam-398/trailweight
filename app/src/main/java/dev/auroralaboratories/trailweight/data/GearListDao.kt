@@ -17,13 +17,13 @@ interface GearListDao : BaseDao<GearList> {
      * Observes all [GearList]s in the database.
      * @return A [Flow] of a list of [GearList]s.
      */
-    @Query("SELECT * FROM gear_lists")
+    @Query("SELECT * FROM gear_lists ORDER BY createdAt DESC")
     fun observeAll(): Flow<List<GearList>>
 
     /**
      * Gets a [GearList] by its ID.
      * @param id The ID of the [GearList] to get.
-     * @return The [GearList] with the given ID.
+     *  * @return The [GearList] with the given ID, or null if not found.
      */
     @Query("SELECT * FROM gear_lists WHERE id = :id")
     suspend fun get(id: Long): GearList?
