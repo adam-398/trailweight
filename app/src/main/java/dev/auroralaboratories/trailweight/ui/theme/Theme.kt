@@ -1,6 +1,5 @@
 package dev.auroralaboratories.trailweight.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -9,34 +8,73 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import dev.auroralaboratories.trailweight.preferences.ThemePreferences
 
 private val DarkColorScheme = darkColorScheme(
-    background = Color(0xFF151812),
-    surface = Color(0xFF1D211A),
-    surfaceVariant = Color(0xFF2A2E26),
-    primary = Color(0xFFB3C68D),
-    onPrimary = Color(0xFF2A301D),
-    secondary = Color(0xFFD4855A),
-    onSecondary = Color(0xFF331D11),
-    tertiary = Color(0xFF7D99B5),
-    onTertiary = Color(0xFF0F1B26),
-    error = Color(0xFFF2B8B5)
+    primary = FjordDarkPrimary,
+    onPrimary = FjordDarkOnPrimary,
+    primaryContainer = FjordDarkPrimaryContainer,
+    onPrimaryContainer = FjordDarkOnPrimaryContainer,
+    secondary = FjordDarkSecondary,
+    onSecondary = FjordDarkOnSecondary,
+    secondaryContainer = FjordDarkSecondaryContainer,
+    onSecondaryContainer = FjordDarkOnSecondaryContainer,
+    tertiary = FjordDarkTertiary,
+    onTertiary = FjordDarkOnTertiary,
+    tertiaryContainer = FjordDarkTertiaryContainer,
+    onTertiaryContainer = FjordDarkOnTertiaryContainer,
+    error = FjordDarkError,
+    onError = FjordDarkOnError,
+    errorContainer = FjordDarkErrorContainer,
+    onErrorContainer = FjordDarkOnErrorContainer,
+    background = FjordDarkBackground,
+    onBackground = FjordDarkOnBackground,
+    surface = FjordDarkSurface,
+    onSurface = FjordDarkOnSurface,
+    surfaceVariant = FjordDarkSurfaceVariant,
+    onSurfaceVariant = FjordDarkOnSurfaceVariant,
+    surfaceContainerLow = FjordDarkSurfaceContainerLow,
+    surfaceContainer = FjordDarkSurfaceContainer,
+    surfaceContainerHigh = FjordDarkSurfaceContainerHigh,
+    outline = FjordDarkOutline,
+    outlineVariant = FjordDarkOutlineVariant,
+    inverseSurface = FjordDarkInverseSurface,
+    inverseOnSurface = FjordDarkInverseOnSurface,
+    inversePrimary = FjordDarkInversePrimary
 )
 
 private val LightColorScheme = lightColorScheme(
-    background = Color(0xFFFDFBF7),
-    surface = Color(0xFFF6F2EB),
-    surfaceVariant = Color(0xFFEFE8D8),
-    primary = Color(0xFF5A6B39),
-    onPrimary = Color(0xFFFFFFFF),
-    secondary = Color(0xFFC9642D),
-    onSecondary = Color(0xFFFFFFFF),
-    tertiary = Color(0xFF1A344F),
-    onTertiary = Color(0xFFFFFFFF),
-    error = Color(0xFFB3261E)
+    primary = FjordLightPrimary,
+    onPrimary = FjordLightOnPrimary,
+    primaryContainer = FjordLightPrimaryContainer,
+    onPrimaryContainer = FjordLightOnPrimaryContainer,
+    secondary = FjordLightSecondary,
+    onSecondary = FjordLightOnSecondary,
+    secondaryContainer = FjordLightSecondaryContainer,
+    onSecondaryContainer = FjordLightOnSecondaryContainer,
+    tertiary = FjordLightTertiary,
+    onTertiary = FjordLightOnTertiary,
+    tertiaryContainer = FjordLightTertiaryContainer,
+    onTertiaryContainer = FjordLightOnTertiaryContainer,
+    error = FjordLightError,
+    onError = FjordLightOnError,
+    errorContainer = FjordLightErrorContainer,
+    onErrorContainer = FjordLightOnErrorContainer,
+    background = FjordLightBackground,
+    onBackground = FjordLightOnBackground,
+    surface = FjordLightSurface,
+    onSurface = FjordLightOnSurface,
+    surfaceVariant = FjordLightSurfaceVariant,
+    onSurfaceVariant = FjordLightOnSurfaceVariant,
+    surfaceContainerLow = FjordLightSurfaceContainerLow,
+    surfaceContainer = FjordLightSurfaceContainer,
+    surfaceContainerHigh = FjordLightSurfaceContainerHigh,
+    outline = FjordLightOutline,
+    outlineVariant = FjordLightOutlineVariant,
+    inverseSurface = FjordLightInverseSurface,
+    inverseOnSurface = FjordLightInverseOnSurface,
+    inversePrimary = FjordLightInversePrimary
 )
 
 /**

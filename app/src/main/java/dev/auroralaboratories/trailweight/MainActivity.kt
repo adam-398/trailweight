@@ -18,7 +18,6 @@ import androidx.navigation.compose.composable
 import com.auroralabs.trailweight.loginframes.LoginScreen
 import dev.auroralaboratories.trailweight.Supabase.SupabaseClient
 import dev.auroralaboratories.trailweight.Supabase.SupabaseClient.supabase
-import dev.auroralaboratories.trailweight.ui.theme.TrailWeightTheme
 import io.github.jan.supabase.auth.auth
 import androidx.navigation.compose.rememberNavController
 import com.auroralabs.trailweight.loginframes.RegisterUser
@@ -29,6 +28,7 @@ import dev.auroralaboratories.trailweight.loginframes.ForgotPassword
 import dev.auroralaboratories.trailweight.loginframes.ResetNewPasswordScreen
 import dev.auroralaboratories.trailweight.preferences.ThemePreferences
 import dev.auroralaboratories.trailweight.preferences.UnitPreferences
+import dev.auroralaboratories.trailweight.ui.theme.TrailWeightTheme
 import io.github.jan.supabase.auth.parseSessionFromFragment
 import io.github.jan.supabase.auth.status.SessionStatus
 import kotlinx.coroutines.launch
