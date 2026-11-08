@@ -5,6 +5,7 @@ plugins {
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -64,7 +65,9 @@ dependencies {
 
     implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
     implementation("com.google.firebase:firebase-crashlytics")
-
+    implementation(libs.androidx.room.runtime)  // the database engine
+    implementation(libs.androidx.room.ktx)      // coroutines and Flow support
+    ksp(libs.androidx.room.compiler)            // the code generator
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
