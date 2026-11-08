@@ -15,7 +15,7 @@ import androidx.compose.ui.window.DialogProperties
 import com.auroralabs.trailweight.uicomponents.TrailWeightButton
 import com.auroralabs.trailweight.uicomponents.TrailWeightInputField
 import com.auroralabs.trailweight.uicomponents.AuroraButtonStyle
-import dev.auroralaboratories.trailweight.dataclasses.GearList
+import dev.auroralaboratories.trailweight.data.GearList
 
 /**
  * Composable function that displays an add gear list dialog.

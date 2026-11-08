@@ -16,7 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.auroralaboratories.trailweight.dataclasses.GearList
+import dev.auroralaboratories.trailweight.data.GearList
 import dev.auroralaboratories.trailweight.preferences.formatWeight
 
 /**
@@ -91,19 +91,19 @@ fun GearListCard(
 }
 
 val dummyGearLists = listOf(
-    GearList(id = "1", user_id = "user1", name = "Summer Thru-Hike", notes = "PCT section, July"),
-    GearList(id = "2", user_id = "user1", name = "Winter Overnight", notes = null),
-    GearList(id = "3", user_id = "user1", name = "Car Camping Trip", notes = "Bring extra chairs"),
-    GearList(id = "4", user_id = "user1", name = "Day Hike Essentials", notes = null),
-    GearList(id = "5", user_id = "user1", name = "Bikepacking Setup", notes = "Frame bag config")
+    GearList(id = 1, name = "Summer Thru-Hike", notes = "PCT section, July"),
+    GearList(id = 2, name = "Winter Overnight", notes = null),
+    GearList(id = 3, name = "Car Camping Trip", notes = "Bring extra chairs"),
+    GearList(id = 4, name = "Day Hike Essentials", notes = null),
+    GearList(id = 5, name = "Bikepacking Setup", notes = "Frame bag config")
 )
 
 val dummyTotalWeights = mapOf(
-    "1" to 6800.0,
-    "2" to 9450.0,
-    "3" to 22300.0,
-    "4" to 1200.0,
-    "5" to 8150.0
+    1L to 6800.0,
+    2L to 9450.0,
+    3L to 22300.0,
+    4L to 1200.0,
+    5L to 8150.0
 )
 
 //@Preview
