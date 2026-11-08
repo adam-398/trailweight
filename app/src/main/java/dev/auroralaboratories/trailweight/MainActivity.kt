@@ -38,7 +38,6 @@ import kotlinx.coroutines.launch
  * The main activity of the application.
  */
 class MainActivity : ComponentActivity() {
-
     private var pendingResetPasswordLink by mutableStateOf(false)
 
     private var pendingSharedListId by mutableStateOf<String?>(null)
