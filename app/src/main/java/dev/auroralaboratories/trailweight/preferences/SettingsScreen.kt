@@ -22,11 +22,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -35,15 +30,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.auroralabs.trailweight.uicomponents.AuroraButtonStyle
-import dev.auroralaboratories.trailweight.Supabase.deleteUserAccount
 import dev.auroralaboratories.trailweight.preferences.ThemePreferences
 import dev.auroralaboratories.trailweight.preferences.UnitPreferences
-import dev.auroralaboratories.trailweight.reusablemessages.ConfirmationMessage
-import dev.auroralaboratories.trailweight.reusablemessages.ReusableMessage
 import dev.auroralaboratories.trailweight.ui.theme.TrailWeightTheme
-import kotlinx.coroutines.launch
-
+import androidx.core.net.toUri
 
 /**
  * Composable function that displays the settings screen.
@@ -52,9 +42,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun SettingsScreen(navController: NavController) {
 
-    var deleteAccountMessage by remember { mutableStateOf(false) }
-    var showDeleteErrorMessage by remember { mutableStateOf(false) }
-    val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
     Column(
@@ -136,7 +123,7 @@ fun SettingsScreen(navController: NavController) {
                 .padding(20.dp)
                 .clickable {
                     val intent = Intent(Intent.ACTION_SENDTO).apply {
-                        data = Uri.parse("mailto:contact@auroralaboratories.dev")
+                        data = "mailto:contact@auroralaboratories.dev".toUri()
                     }
                     context.startActivity(intent)
                 },
@@ -148,69 +135,20 @@ fun SettingsScreen(navController: NavController) {
                 .padding(20.dp),
             contentAlignment = Alignment.BottomCenter
         ) {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    "Privacy Policy",
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .clickable {
-                            val intent = Intent(Intent.ACTION_VIEW).apply {
-                                data =
-                                    Uri.parse("https://auroralaboratories.dev/privacy-trailweight")
-                            }
-                            context.startActivity(intent)
-                        },
-                    style = MaterialTheme.typography.titleMedium
-                )
-                Text(
-                    "Delete account",
-                    color = MaterialTheme.colorScheme.error,
-                    modifier = Modifier
-                        .padding(20.dp)
-                        .clickable { deleteAccountMessage = true },
-                    style = MaterialTheme.typography.titleMedium,
-                )
-            }
-
-        }
-
-    }
-
-    if (deleteAccountMessage) {
-        ConfirmationMessage(
-            title = "Delete account",
-            message = "Are you sure you want to delete your account?",
-            confirmString = "Delete",
-            dismissString = "Cancel",
-            confirmStyle = AuroraButtonStyle.Destructive,
-            onConfirm = {
-                coroutineScope.launch {
-                    val success = deleteUserAccount()
-                    if (success) {
-                        navController.navigate("login") {
-                            popUpTo("login") { inclusive = true }
+            Text(
+                "Privacy Policy",
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .clickable {
+                        val intent = Intent(Intent.ACTION_VIEW).apply {
+                            data = "https://auroralaboratories.dev/privacy-trailweight".toUri()
                         }
-                    } else {
-                        showDeleteErrorMessage = true
-                        deleteAccountMessage = false
-                    }
-                }
-            },
-            onDismiss = { deleteAccountMessage = false }
-        )
-    }
-
-    if (showDeleteErrorMessage) {
-        ReusableMessage(
-            title = "Error",
-            message = "Failed to delete account",
-            confirmString = "OK",
-            onConfirm = { showDeleteErrorMessage = false }
-        )
+                        context.startActivity(intent)
+                    },
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
     }
 }
 
@@ -218,5 +156,4 @@ fun SettingsScreen(navController: NavController) {
 @Composable
 fun SettingsScreenPreview() {
     TrailWeightTheme { SettingsScreen(navController = NavController(LocalContext.current)) }
-
 }

@@ -1,6 +1,5 @@
 package dev.auroralaboratories.trailweight.menuutils
 
-import android.content.Intent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -15,36 +14,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import dev.auroralaboratories.trailweight.Supabase.deleteGearListById
 import dev.auroralaboratories.trailweight.reusablemessages.ConfirmationMessage
-import kotlinx.coroutines.launch
 
 /**
  * Composable function that displays an edit or delete gear list button.
  * @param modifier The modifier to apply to the button.
- * @param listId The ID of the gear list.
- * @param gearListName The name of the gear list.
- * @param onEditClick The action to perform when the edit button is clicked.
- * @param onDeleted The action to perform when the gear list is deleted.
+ * @param gearListName The name of the gear list, shown in the delete confirmation.
+ * @param onEditClick The action to perform when Edit is clicked.
+ * @param onDelete The action to perform when the user confirms deleting the list.
  */
 @Composable
 fun GearListOptions(
     modifier: Modifier = Modifier,
-    listId: String,
-    shareId: String?,
     gearListName: String?,
     onEditClick: () -> Unit,
-    onDeleted: () -> Unit,
+    onDelete: () -> Unit,
 ) {
-    val coroutineScope = rememberCoroutineScope()
     var expanded by remember { mutableStateOf(false) }
     var showDeleteListWarning by remember { mutableStateOf(false) }
-    val context = LocalContext.current
 
     Box(modifier = modifier.padding(8.dp)) {
         IconButton(onClick = { expanded = !expanded }) {
@@ -73,23 +63,6 @@ fun GearListOptions(
                     showDeleteListWarning = true
                 }
             )
-            DropdownMenuItem(
-                text = { Text("Share", color = MaterialTheme.colorScheme.onSurface) },
-                onClick = {
-                    expanded = false
-                    if (shareId != null) {
-                        val shareLink = "trailweight://list/$shareId"
-                        val sendIntent = Intent(Intent.ACTION_SEND).apply {
-                            type = "text/plain"
-                            putExtra(
-                                Intent.EXTRA_TEXT,
-                                "Check out my gear list on Trailweight: $shareLink"
-                            )
-                        }
-                        context.startActivity(Intent.createChooser(sendIntent, "Share list"))
-                    }
-                }
-            )
         }
     }
 
@@ -100,13 +73,8 @@ fun GearListOptions(
             confirmString = "Delete",
             dismissString = "Cancel",
             onConfirm = {
-                coroutineScope.launch {
-                    val success = deleteGearListById(listId)
-                    showDeleteListWarning = false
-                    if (success) {
-                        onDeleted()
-                    }
-                }
+                showDeleteListWarning = false
+                onDelete()
             },
             onDismiss = { showDeleteListWarning = false },
             confirmStyle = com.auroralabs.trailweight.uicomponents.AuroraButtonStyle.Primary

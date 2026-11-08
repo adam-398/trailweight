@@ -3,7 +3,6 @@ package dev.auroralaboratories.trailweight.cards
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -21,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.auroralaboratories.trailweight.dataclasses.Item
+import dev.auroralaboratories.trailweight.data.GearItem
 import dev.auroralaboratories.trailweight.preferences.formatWeight
 import dev.auroralaboratories.trailweight.ui.theme.TrailWeightTheme
 
@@ -32,7 +31,7 @@ import dev.auroralaboratories.trailweight.ui.theme.TrailWeightTheme
  */
 @Composable
 fun ItemCard(
-    item: Item,
+    item: GearItem,
     onClick: () -> Unit
 ) {
     Card(
@@ -49,7 +48,6 @@ fun ItemCard(
             defaultElevation = 2.dp,
             pressedElevation = 6.dp
         ),
-
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
@@ -107,9 +105,9 @@ fun ItemCard(
 fun ItemCardPreview() {
     TrailWeightTheme {
         ItemCard(
-            item = Item(
-                id = "1",
-                list_id = "list1",
+            item = GearItem(
+                id = 1,
+                listId = 1,
                 name = "test",
                 weight = 1200.0,
                 category = "Shelter",
@@ -118,5 +116,4 @@ fun ItemCardPreview() {
             onClick = {}
         )
     }
-
 }

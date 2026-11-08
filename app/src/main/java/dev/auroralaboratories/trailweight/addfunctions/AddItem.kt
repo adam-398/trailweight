@@ -39,7 +39,7 @@ import androidx.compose.ui.window.DialogProperties
 import com.auroralabs.trailweight.uicomponents.TrailWeightButton
 import com.auroralabs.trailweight.uicomponents.TrailWeightInputField
 import com.auroralabs.trailweight.uicomponents.AuroraButtonStyle
-import dev.auroralaboratories.trailweight.dataclasses.Item
+import dev.auroralaboratories.trailweight.data.GearItem
 import dev.auroralaboratories.trailweight.preferences.UnitPreferences
 import dev.auroralaboratories.trailweight.reusablemessages.ConfirmationMessage
 
@@ -58,7 +58,7 @@ fun AddItem(
     onSaved: (name: String, weight: Double?, category: String, notes: String) -> Unit,
     isSaving: Boolean = false,
     onDelete: (() -> Unit)? = null,
-    existingItem: Item? = null,
+    existingItem: GearItem? = null,
 ) {
     var showDeleteItemWarning by remember { mutableStateOf(false) }
 

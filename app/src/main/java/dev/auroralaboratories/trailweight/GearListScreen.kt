@@ -27,36 +27,29 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import dev.auroralaboratories.trailweight.dataclasses.GearList
-import dev.auroralaboratories.trailweight.dataclasses.Item
-import dev.auroralaboratories.trailweight.Supabase.addItem
-import dev.auroralaboratories.trailweight.Supabase.deleteItemById
-import dev.auroralaboratories.trailweight.Supabase.getGearListById
-import dev.auroralaboratories.trailweight.Supabase.getItemsByListId
-import dev.auroralaboratories.trailweight.Supabase.updateGearListById
-import dev.auroralaboratories.trailweight.Supabase.updateItemById
 import dev.auroralaboratories.trailweight.addfunctions.AddGearList
 import dev.auroralaboratories.trailweight.addfunctions.AddItem
 import dev.auroralaboratories.trailweight.cards.ItemCard
+import dev.auroralaboratories.trailweight.data.GearItem
+import dev.auroralaboratories.trailweight.data.GearViewModel
 import dev.auroralaboratories.trailweight.menuutils.GearListOptions
 import dev.auroralaboratories.trailweight.piechartutils.weightsByCategory
 import dev.auroralaboratories.trailweight.preferences.formatWeight
 import io.github.dautovicharis.charts.PieChart
 import io.github.dautovicharis.charts.model.toChartDataSet
 import io.github.dautovicharis.charts.style.PieChartDefaults
-import kotlinx.coroutines.launch
 
 /**
  * Composable function that displays a gear list screen.
@@ -66,24 +59,16 @@ import kotlinx.coroutines.launch
 @Composable
 fun GearListScreen(
     navController: NavController,
-    listId: String
+    listId: Long
 ) {
+    val viewModel: GearViewModel = viewModel()
+    val gearLists by viewModel.allGearLists.collectAsStateWithLifecycle()
+    val items by remember(listId) { viewModel.itemsFor(listId) }.collectAsStateWithLifecycle()
+    val gearList = gearLists.find { it.id == listId }
 
     var showItemDialog by remember { mutableStateOf(false) }
-    var editingItem by remember { mutableStateOf<Item?>(null) }
-    var items by remember { mutableStateOf<List<Item>>(emptyList()) }
-    var gearList by remember { mutableStateOf<GearList?>(null) }
+    var editingItem by remember { mutableStateOf<GearItem?>(null) }
     var showEditListDialog by remember { mutableStateOf(false) }
-
-    val coroutineScope = rememberCoroutineScope()
-
-    LaunchedEffect(listId) {
-        gearList = getGearListById(listId)
-    }
-
-    LaunchedEffect(listId) {
-        items = getItemsByListId(listId)
-    }
 
     val categoryWeights = weightsByCategory(items)
     val categoryLabels = categoryWeights.keys.toList()
@@ -96,8 +81,6 @@ fun GearListScreen(
         "Hygiene / Toiletries", "Lighting", "Navigation", "Shelter",
         "Sleep system", "Tools / Repair", "Water / Filtration", "Waterproof clothing", "Other"
     )
-
-
 
     val basePieColors = listOf(
         Color(0xFFE05C4B), // Tomato red
@@ -141,8 +124,10 @@ fun GearListScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(onClick = { navController.popBackStack() }) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back",
-                    tint = MaterialTheme.colorScheme.onBackground)
+                Icon(
+                    Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back",
+                    tint = MaterialTheme.colorScheme.onBackground
+                )
             }
             Text(
                 text = gearList?.name ?: "Loading...",
@@ -150,11 +135,12 @@ fun GearListScreen(
                 color = MaterialTheme.colorScheme.onBackground
             )
             GearListOptions(
-                listId = listId,
                 gearListName = gearList?.name,
                 onEditClick = { showEditListDialog = true },
-                onDeleted = { navController.popBackStack() },
-                shareId = gearList?.share_id
+                onDelete = {
+                    gearList?.let { viewModel.deleteGearList(it) }
+                    navController.popBackStack()
+                }
             )
         }
 
@@ -180,14 +166,17 @@ fun GearListScreen(
                     }
                     item {
                         Column(
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier
+                                .fillMaxWidth()
                                 .padding(horizontal = 16.dp, vertical = 8.dp)
                         ) {
                             categoryWeights.entries.sortedByDescending { it.value }
                                 .forEach { (category, weight) ->
                                     val dotColor = categoryColorMap[category] ?: Color.Gray
                                     Row(
-                                        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(vertical = 4.dp),
                                         verticalAlignment = Alignment.CenterVertically,
                                         horizontalArrangement = Arrangement.SpaceBetween
                                     ) {
@@ -214,7 +203,7 @@ fun GearListScreen(
                         }
                     }
                 }
-                items(sortedItems) { item ->
+                items(sortedItems, key = { it.id }) { item ->
                     ItemCard(
                         item = item,
                         onClick = {
@@ -245,42 +234,33 @@ fun GearListScreen(
                 existingItem = editingItem,
                 onDismiss = { showItemDialog = false },
                 onSaved = { name, weight, category, notes ->
-                    coroutineScope.launch {
-                        val currentEditingItem = editingItem
-                        val success = if (currentEditingItem != null) {
-                            val updatedItem = currentEditingItem.copy(
+                    val currentEditingItem = editingItem
+                    if (currentEditingItem != null) {
+                        viewModel.updateGearItem(
+                            currentEditingItem.copy(
                                 name = name,
                                 weight = weight,
                                 category = category,
                                 notes = notes
                             )
-                            updateItemById(currentEditingItem.id ?: "", updatedItem)
-                        } else {
-                            val newItem = Item(
-                                list_id = listId,
+                        )
+                    } else {
+                        viewModel.insertGearItem(
+                            GearItem(
+                                listId = listId,
                                 name = name,
                                 weight = weight,
                                 category = category,
                                 notes = notes
                             )
-                            addItem(newItem)
-                        }
-                        showItemDialog = false
-                        if (success) {
-                            items = getItemsByListId(listId)
-                        }
+                        )
                     }
+                    showItemDialog = false
                 },
                 onDelete = if (editingItem != null) {
                     {
-                        val itemToDelete = editingItem
-                        coroutineScope.launch {
-                            val success = deleteItemById(itemToDelete?.id ?: "")
-                            showItemDialog = false
-                            if (success) {
-                                items = getItemsByListId(listId)
-                            }
-                        }
+                        editingItem?.let { viewModel.deleteGearItem(it) }
+                        showItemDialog = false
                     }
                 } else null
             )
@@ -291,97 +271,28 @@ fun GearListScreen(
                 existingGearList = gearList,
                 onDismiss = { showEditListDialog = false },
                 onSaved = { name, notes ->
-                    coroutineScope.launch {
-                        val currentGearList = gearList
-                        if (currentGearList != null) {
-                            val updated = currentGearList.copy(name = name, notes = notes)
-                            val success = updateGearListById(listId, updated)
-                            showEditListDialog = false
-                            if (success) {
-                                gearList = getGearListById(listId)
-                            }
-                        }
+                    gearList?.let {
+                        viewModel.updateGearList(
+                            it.copy(name = name, notes = notes.ifBlank { null })
+                        )
                     }
+                    showEditListDialog = false
                 }
             )
         }
     }
 }
 
-
 val dummyItems = listOf(
-    Item(
-        id = "1",
-        list_id = "list1",
-        name = "Tent",
-        weight = 1200.0,
-        category = "Shelter",
-        notes = null
-    ),
-    Item(
-        id = "2",
-        list_id = "list1",
-        name = "Sleeping Bag",
-        weight = 900.0,
-        category = "Sleeping bag / quilt",
-        notes = null
-    ),
-    Item(
-        id = "3",
-        list_id = "list1",
-        name = "Sleeping Pad",
-        weight = 450.0,
-        category = "Sleeping pad",
-        notes = null
-    ),
-    Item(
-        id = "4",
-        list_id = "list1",
-        name = "Backpack",
-        weight = 1400.0,
-        category = "Backpack",
-        notes = null
-    ),
-    Item(
-        id = "5",
-        list_id = "list1",
-        name = "Stove",
-        weight = 200.0,
-        category = "Cooking / Kitchen",
-        notes = null
-    ),
-    Item(
-        id = "6",
-        list_id = "list1",
-        name = "Pot",
-        weight = 250.0,
-        category = "Cooking / Kitchen",
-        notes = null
-    ),
-    Item(
-        id = "7",
-        list_id = "list1",
-        name = "Water Filter",
-        weight = 80.0,
-        category = "Water / Filtration",
-        notes = null
-    ),
-    Item(
-        id = "8",
-        list_id = "list1",
-        name = "Headlamp",
-        weight = 60.0,
-        category = "Lighting",
-        notes = null
-    ),
-    Item(
-        id = "9",
-        list_id = "list1",
-        name = "First Aid Kit",
-        weight = 150.0,
-        category = "First aid",
-        notes = null
-    )
+    GearItem(id = 1, listId = 1, name = "Tent", weight = 1200.0, category = "Shelter"),
+    GearItem(id = 2, listId = 1, name = "Sleeping Bag", weight = 900.0, category = "Sleeping bag / quilt"),
+    GearItem(id = 3, listId = 1, name = "Sleeping Pad", weight = 450.0, category = "Sleeping pad"),
+    GearItem(id = 4, listId = 1, name = "Backpack", weight = 1400.0, category = "Backpack"),
+    GearItem(id = 5, listId = 1, name = "Stove", weight = 200.0, category = "Cooking / Kitchen"),
+    GearItem(id = 6, listId = 1, name = "Pot", weight = 250.0, category = "Cooking / Kitchen"),
+    GearItem(id = 7, listId = 1, name = "Water Filter", weight = 80.0, category = "Water / Filtration"),
+    GearItem(id = 8, listId = 1, name = "Headlamp", weight = 60.0, category = "Lighting"),
+    GearItem(id = 9, listId = 1, name = "First Aid Kit", weight = 150.0, category = "First aid")
 )
 
 @Preview

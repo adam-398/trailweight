@@ -14,18 +14,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.auroralabs.trailweight.uicomponents.AuroraButtonStyle
-import dev.auroralaboratories.trailweight.Supabase.deleteUserAccount
-import dev.auroralaboratories.trailweight.Supabase.logoutUser
-import dev.auroralaboratories.trailweight.reusablemessages.ConfirmationMessage
-import dev.auroralaboratories.trailweight.reusablemessages.ReusableMessage
-import kotlinx.coroutines.launch
-
 
 /**
  * Composable function that displays a hamburger menu.
@@ -38,9 +30,6 @@ fun HamburgerMenu(
     navController: NavController,
 ) {
     var expanded by remember { mutableStateOf(false) }
-    var showLogOutDialog by remember { mutableStateOf(false) }
-    val coroutineScope = rememberCoroutineScope()
-
 
     Box(modifier = modifier.padding(8.dp)) {
         IconButton(onClick = { expanded = !expanded }) {
@@ -62,31 +51,6 @@ fun HamburgerMenu(
                     navController.navigate("settings")
                 }
             )
-            DropdownMenuItem(
-                text = { Text("Logout", color = MaterialTheme.colorScheme.error) },
-                onClick = {
-                    expanded = false
-                    showLogOutDialog = true
-                }
-            )
         }
-    }
-
-    if (showLogOutDialog) {
-        ConfirmationMessage(
-            title = "Log out",
-            message = "Are you sure you want to log out?",
-            confirmString = "Logout",
-            dismissString = "Cancel",
-            onConfirm = {
-                coroutineScope.launch {
-                    logoutUser()
-                    navController.navigate("login") {
-                        popUpTo("landing") { inclusive = true }
-                    }
-                }
-            },
-            onDismiss = { showLogOutDialog = false }
-        )
     }
 }
