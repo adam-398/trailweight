@@ -11,70 +11,70 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import dev.auroralaboratories.trailweight.preferences.ThemePreferences
 
-private val DarkColorScheme = darkColorScheme(
-    primary = FjordDarkPrimary,
-    onPrimary = FjordDarkOnPrimary,
-    primaryContainer = FjordDarkPrimaryContainer,
-    onPrimaryContainer = FjordDarkOnPrimaryContainer,
-    secondary = FjordDarkSecondary,
-    onSecondary = FjordDarkOnSecondary,
-    secondaryContainer = FjordDarkSecondaryContainer,
-    onSecondaryContainer = FjordDarkOnSecondaryContainer,
-    tertiary = FjordDarkTertiary,
-    onTertiary = FjordDarkOnTertiary,
-    tertiaryContainer = FjordDarkTertiaryContainer,
-    onTertiaryContainer = FjordDarkOnTertiaryContainer,
-    error = FjordDarkError,
-    onError = FjordDarkOnError,
-    errorContainer = FjordDarkErrorContainer,
-    onErrorContainer = FjordDarkOnErrorContainer,
-    background = FjordDarkBackground,
-    onBackground = FjordDarkOnBackground,
-    surface = FjordDarkSurface,
-    onSurface = FjordDarkOnSurface,
-    surfaceVariant = FjordDarkSurfaceVariant,
-    onSurfaceVariant = FjordDarkOnSurfaceVariant,
-    surfaceContainerLow = FjordDarkSurfaceContainerLow,
-    surfaceContainer = FjordDarkSurfaceContainer,
-    surfaceContainerHigh = FjordDarkSurfaceContainerHigh,
-    outline = FjordDarkOutline,
-    outlineVariant = FjordDarkOutlineVariant,
-    inverseSurface = FjordDarkInverseSurface,
-    inverseOnSurface = FjordDarkInverseOnSurface,
-    inversePrimary = FjordDarkInversePrimary
+private val NavyLightColorScheme = lightColorScheme(
+    primary = NavyLightPrimary,
+    onPrimary = NavyLightOnPrimary,
+    primaryContainer = NavyLightPrimaryContainer,
+    onPrimaryContainer = NavyLightOnPrimaryContainer,
+    secondary = NavyLightSecondary,
+    onSecondary = NavyLightOnSecondary,
+    secondaryContainer = NavyLightSecondaryContainer,
+    onSecondaryContainer = NavyLightOnSecondaryContainer,
+    tertiary = NavyLightTertiary,
+    onTertiary = NavyLightOnTertiary,
+    tertiaryContainer = NavyLightTertiaryContainer,
+    onTertiaryContainer = NavyLightOnTertiaryContainer,
+    error = NavyLightError,
+    onError = NavyLightOnError,
+    errorContainer = NavyLightErrorContainer,
+    onErrorContainer = NavyLightOnErrorContainer,
+    background = NavyLightBackground,
+    onBackground = NavyLightOnBackground,
+    surface = NavyLightSurface,
+    onSurface = NavyLightOnSurface,
+    surfaceVariant = NavyLightSurfaceVariant,
+    onSurfaceVariant = NavyLightOnSurfaceVariant,
+    surfaceContainerLow = NavyLightSurfaceContainerLow,
+    surfaceContainer = NavyLightSurfaceContainer,
+    surfaceContainerHigh = NavyLightSurfaceContainerHigh,
+    outline = NavyLightOutline,
+    outlineVariant = NavyLightOutlineVariant,
+    inverseSurface = NavyLightInverseSurface,
+    inverseOnSurface = NavyLightInverseOnSurface,
+    inversePrimary = NavyLightInversePrimary
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = FjordLightPrimary,
-    onPrimary = FjordLightOnPrimary,
-    primaryContainer = FjordLightPrimaryContainer,
-    onPrimaryContainer = FjordLightOnPrimaryContainer,
-    secondary = FjordLightSecondary,
-    onSecondary = FjordLightOnSecondary,
-    secondaryContainer = FjordLightSecondaryContainer,
-    onSecondaryContainer = FjordLightOnSecondaryContainer,
-    tertiary = FjordLightTertiary,
-    onTertiary = FjordLightOnTertiary,
-    tertiaryContainer = FjordLightTertiaryContainer,
-    onTertiaryContainer = FjordLightOnTertiaryContainer,
-    error = FjordLightError,
-    onError = FjordLightOnError,
-    errorContainer = FjordLightErrorContainer,
-    onErrorContainer = FjordLightOnErrorContainer,
-    background = FjordLightBackground,
-    onBackground = FjordLightOnBackground,
-    surface = FjordLightSurface,
-    onSurface = FjordLightOnSurface,
-    surfaceVariant = FjordLightSurfaceVariant,
-    onSurfaceVariant = FjordLightOnSurfaceVariant,
-    surfaceContainerLow = FjordLightSurfaceContainerLow,
-    surfaceContainer = FjordLightSurfaceContainer,
-    surfaceContainerHigh = FjordLightSurfaceContainerHigh,
-    outline = FjordLightOutline,
-    outlineVariant = FjordLightOutlineVariant,
-    inverseSurface = FjordLightInverseSurface,
-    inverseOnSurface = FjordLightInverseOnSurface,
-    inversePrimary = FjordLightInversePrimary
+private val NavyDarkColorScheme = darkColorScheme(
+    primary = NavyDarkPrimary,
+    onPrimary = NavyDarkOnPrimary,
+    primaryContainer = NavyDarkPrimaryContainer,
+    onPrimaryContainer = NavyDarkOnPrimaryContainer,
+    secondary = NavyDarkSecondary,
+    onSecondary = NavyDarkOnSecondary,
+    secondaryContainer = NavyDarkSecondaryContainer,
+    onSecondaryContainer = NavyDarkOnSecondaryContainer,
+    tertiary = NavyDarkTertiary,
+    onTertiary = NavyDarkOnTertiary,
+    tertiaryContainer = NavyDarkTertiaryContainer,
+    onTertiaryContainer = NavyDarkOnTertiaryContainer,
+    error = NavyDarkError,
+    onError = NavyDarkOnError,
+    errorContainer = NavyDarkErrorContainer,
+    onErrorContainer = NavyDarkOnErrorContainer,
+    background = NavyDarkBackground,
+    onBackground = NavyDarkOnBackground,
+    surface = NavyDarkSurface,
+    onSurface = NavyDarkOnSurface,
+    surfaceVariant = NavyDarkSurfaceVariant,
+    onSurfaceVariant = NavyDarkOnSurfaceVariant,
+    surfaceContainerLow = NavyDarkSurfaceContainerLow,
+    surfaceContainer = NavyDarkSurfaceContainer,
+    surfaceContainerHigh = NavyDarkSurfaceContainerHigh,
+    outline = NavyDarkOutline,
+    outlineVariant = NavyDarkOutlineVariant,
+    inverseSurface = NavyDarkInverseSurface,
+    inverseOnSurface = NavyDarkInverseOnSurface,
+    inversePrimary = NavyDarkInversePrimary
 )
 
 /**
@@ -98,8 +98,8 @@ fun TrailWeightTheme(
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        darkTheme -> NavyDarkColorScheme
+        else -> NavyLightColorScheme
     }
 
     MaterialTheme(

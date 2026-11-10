@@ -50,7 +50,8 @@ fun AuroraInputField(
     capitalization: KeyboardCapitalization = KeyboardCapitalization.None,
     supportingText: @Composable (() -> Unit)? = null,
     suffix: @Composable (() -> Unit)? = null,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    readOnly: Boolean = false
 ) {
     OutlinedTextField(
         value = value,
@@ -75,6 +76,7 @@ fun AuroraInputField(
         supportingText = supportingText,
         suffix = suffix,
         enabled = enabled,
+        readOnly = readOnly,
         keyboardActions = keyboardActions,
         visualTransformation = visualTransformation,
         trailingIcon = trailingIcon,

@@ -16,16 +16,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Save
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,14 +40,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.auroralabs.trailweight.uicomponents.AuroraButtonStyle
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.auroralabs.trailweight.uicomponents.AuroraButton
+import com.auroralabs.trailweight.uicomponents.AuroraButtonStyle
 import com.auroralabs.trailweight.uicomponents.AuroraInputField
 import dev.auroralaboratories.trailweight.data.GearItem
 import dev.auroralaboratories.trailweight.preferences.UnitPreferences
 import dev.auroralaboratories.trailweight.reusablemessages.ConfirmationMessage
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 
 
 /**
@@ -69,7 +70,15 @@ private fun filterWeightInput(input: String): String {
     return out.toString()
 }
 
+/** Last category saved for a new item. Held in memory only, so it resets when the app restarts. */
+private var lastUsedCategory: String? = null
 
+/**
+ * Composable function that displays an add item dialog.
+ * @param onDismiss The callback to invoke when the dialog is dismissed.
+ * @param onSaved The callback to invoke when the item is saved.
+ * @param isSaving Whether the item is being saved.
+ */
 @Composable
 fun AddItem(
     onDismiss: () -> Unit,
@@ -79,8 +88,12 @@ fun AddItem(
     existingItem: GearItem? = null,
 ) {
     Dialog(
-        onDismissRequest = onDismiss,
-        properties = DialogProperties(usePlatformDefaultWidth = false)
+        onDismissRequest = { if (!isSaving) onDismiss() },
+        properties = DialogProperties(
+            usePlatformDefaultWidth = false,
+            dismissOnBackPress = !isSaving,
+            dismissOnClickOutside = !isSaving
+        )
     ) {
         AddItemContent(onDismiss, onSaved, isSaving, onDelete, existingItem)
     }
@@ -122,7 +135,9 @@ fun AddItemContent(
     }
     var notes by remember { mutableStateOf(existingItem?.notes ?: "") }
     var expanded by remember { mutableStateOf(false) }
-    var selectedCategory by remember { mutableStateOf(existingItem?.category ?: itemCategories[0]) }
+    var selectedCategory by remember {
+        mutableStateOf(existingItem?.category ?: lastUsedCategory ?: itemCategories[0])
+    }
 
 
     Box(
@@ -139,8 +154,9 @@ fun AddItemContent(
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
         ) {
             Column(
-                modifier = Modifier.padding(16.dp)
-                .verticalScroll(rememberScrollState()),
+                modifier = Modifier
+                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
@@ -164,26 +180,23 @@ fun AddItemContent(
                             textAlign = TextAlign.End
                         )
                     },
+                    enabled = !isSaving,
                     modifier = Modifier.fillMaxWidth()
                 )
 
                 ExposedDropdownMenuBox(
                     expanded = expanded,
-                    onExpandedChange = { expanded = !expanded },
+                    onExpandedChange = { if (!isSaving) expanded = !expanded },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 8.dp)
                 ) {
-                    TextField(
+                    AuroraInputField(
                         value = selectedCategory,
                         onValueChange = {},
+                        label = "Category",
                         readOnly = true,
-                        label = { Text("Category") },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant
-                        ),
+                        enabled = !isSaving,
                         modifier = Modifier
                             .menuAnchor()
                             .fillMaxWidth()
@@ -206,6 +219,7 @@ fun AddItemContent(
                     suffix = { Text(if (isMetric) "g" else "oz") },
                     keyboardType = KeyboardType.Decimal,
                     imeAction = ImeAction.Next,
+                    enabled = !isSaving,
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -222,6 +236,7 @@ fun AddItemContent(
                             textAlign = TextAlign.End
                         )
                     },
+                    enabled = !isSaving,
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -233,6 +248,7 @@ fun AddItemContent(
                     AuroraButton(
                         text = "Cancel",
                         onClick = onDismiss,
+                        enabled = !isSaving,
                         modifier = Modifier
                             .weight(1f)
                             .padding(end = 8.dp),
@@ -244,22 +260,27 @@ fun AddItemContent(
                         onClick = {
                             val weightInGrams = itemWeight.toDoubleOrNull()
                                 ?.let { if (isMetric) it else it * 28.3495 }
-                            onSaved(itemName, weightInGrams, selectedCategory, notes)
+                            if (existingItem == null) lastUsedCategory = selectedCategory
+                            onSaved(itemName.trim(), weightInGrams, selectedCategory, notes.trim())
                         },
+                        enabled = itemName.isNotBlank() && !isSaving,
                         modifier = Modifier.weight(1f),
                         icon = Icons.Default.Save,
-                        enabled = itemName.isNotBlank()
                     )
                 }
 
                 if (existingItem != null && onDelete != null) {
-                    AuroraButton(
-                        text = ("Delete Item"),
+                    TextButton(
                         onClick = { showDeleteItemWarning = true },
-                        modifier = Modifier.padding(top = 8.dp),
-                        style = AuroraButtonStyle.Destructive,
-                        icon = Icons.Default.Delete,
-                    )
+                        enabled = !isSaving,
+                        colors = ButtonDefaults.textButtonColors(
+                            contentColor = MaterialTheme.colorScheme.error
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Icon(Icons.Default.Delete, contentDescription = null)
+                        Text("Delete Item", modifier = Modifier.padding(start = 8.dp))
+                    }
                 }
             }
         }
