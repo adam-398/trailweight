@@ -20,11 +20,13 @@ data class ExportGearItem (
 /**
  * Data class representing an exported gear list.
  * @property name The name of the gear list.
+ * @property notes Any additional notes about the gear list.
  * @property createdAt The date and time the gear list was created for export.
  * @property items The list of items in the gear list.
  */
 data class ExportGearList(
     val name: String,
+    val notes: String? = null,
     val createdAt: Long,
     val items: List<ExportGearItem>
 )
@@ -44,6 +46,7 @@ data class ExportData(
             lists.forEach { list ->
                 listsArray.put(JSONObject().apply {
                     put("name", list.name)
+                    put("notes", list.notes ?: JSONObject.NULL)
                     put("createdAt", list.createdAt)
                     put("items", JSONArray().also { itemsArray ->
                         list.items.forEach { item ->
@@ -80,6 +83,7 @@ data class ExportData(
                     val itemsArray = l.getJSONArray("items")
                     ExportGearList(
                         name = l.getString("name"),
+                        notes = if (l.isNull("notes")) null else l.getString("notes"),
                         createdAt = l.optLong("createdAt", System.currentTimeMillis()),
                         items = (0 until itemsArray.length()).map { ii ->
                             val i = itemsArray.getJSONObject(ii)

@@ -176,7 +176,7 @@ fun TransferScreen(
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
             Text(
-                "Paste text exported from Trail Weight. Lists are added as new copies.",
+                "Paste a list shared from Trail Weight to add it to your app.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 8.dp)
@@ -188,7 +188,7 @@ fun TransferScreen(
                     pastedText = it
                     message = null
                 },
-                label = { Text("Export text") },
+                label = { Text("Paste text here") },
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .fillMaxWidth()

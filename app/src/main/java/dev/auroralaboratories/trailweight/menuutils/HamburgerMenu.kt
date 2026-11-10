@@ -1,10 +1,10 @@
 package dev.auroralaboratories.trailweight.menuutils
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.DropdownMenu
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.SwapVert
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -16,13 +16,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
 /**
- * Composable function that displays a hamburger menu.
- * @param modifier The modifier to apply to the menu.
- * @param navController The navigation controller to use for navigating to other screens.
+ * App menu on the home screen: Settings and Transfer.
+ * @param modifier The modifier to apply to the menu button.
+ * @param navController Used to open the chosen screen.
  */
 @Composable
 fun HamburgerMenu(
@@ -30,29 +29,34 @@ fun HamburgerMenu(
     navController: NavController,
 ) {
     var expanded by remember { mutableStateOf(false) }
+    val itemColors = appMenuItemColors()
 
-    Box(modifier = modifier.padding(8.dp)) {
-        IconButton(onClick = { expanded = !expanded }) {
+    Box(modifier = modifier) {
+        IconButton(onClick = { expanded = true }) {
             Icon(
-                imageVector = Icons.Default.Menu,
-                tint = MaterialTheme.colorScheme.onBackground,
-                contentDescription = "Menu"
+                imageVector = Icons.Filled.Menu,
+                contentDescription = "Menu",
+                tint = MaterialTheme.colorScheme.onSurface
             )
         }
-        DropdownMenu(
+
+        AppDropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false },
-            modifier = Modifier.padding(8.dp)
+            onDismissRequest = { expanded = false }
         ) {
             DropdownMenuItem(
-                text = { Text("Settings", color = MaterialTheme.colorScheme.onSurface) },
+                text = { Text("Settings") },
+                leadingIcon = { Icon(Icons.Outlined.Settings, contentDescription = null) },
+                colors = itemColors,
                 onClick = {
                     expanded = false
                     navController.navigate("settings")
                 }
             )
             DropdownMenuItem(
-                text = { Text("Transfer", color = MaterialTheme.colorScheme.onSurface) },
+                text = { Text("Transfer") },
+                leadingIcon = { Icon(Icons.Outlined.SwapVert, contentDescription = null) },
+                colors = itemColors,
                 onClick = {
                     expanded = false
                     navController.navigate("transfer")

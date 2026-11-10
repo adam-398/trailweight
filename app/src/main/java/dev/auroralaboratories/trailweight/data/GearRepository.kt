@@ -132,6 +132,7 @@ class GearRepository(
             exportLists.add(
                 ExportGearList(
                     name = list.name,
+                    notes = list.notes,
                     createdAt = list.createdAt,
                     items = exportItems
                 )
@@ -148,7 +149,7 @@ class GearRepository(
         database.withTransaction {
             for (list in data.lists) {
                 val newListId = gearListDao.insert(
-                    GearList(name = list.name, createdAt = list.createdAt)
+                    GearList(name = list.name, notes = list.notes, createdAt = list.createdAt)
                 )
                 for (item in list.items) {
                     gearItemDao.insert(
