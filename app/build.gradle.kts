@@ -46,17 +46,15 @@ android {
 }
 
 dependencies {
-    implementation(platform("io.github.jan-tennert.supabase:bom:3.4.1"))
-    implementation("io.github.jan-tennert.supabase:postgrest-kt")
-    implementation("io.github.jan-tennert.supabase:storage-kt")
-    implementation("io.github.jan-tennert.supabase:auth-kt")
-    implementation("io.ktor:ktor-client-android:3.4.1")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
     implementation("androidx.navigation:navigation-compose:2.9.7")
     implementation("androidx.compose.material:material-icons-extended")
 
     implementation("sh.calvin.reorderable:reorderable:2.4.0")
     implementation("com.google.accompanist:accompanist-swiperefresh:0.36.0")
+
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
 
 
 

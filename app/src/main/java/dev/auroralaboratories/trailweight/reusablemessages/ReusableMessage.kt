@@ -24,7 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.auroralabs.trailweight.uicomponents.TrailWeightButton
+import com.auroralabs.trailweight.uicomponents.AuroraButton
 import dev.auroralaboratories.trailweight.ui.theme.TrailWeightTheme
 
 /**
@@ -76,7 +76,7 @@ fun ReusableMessage(
                         textAlign = TextAlign.Center
                     )
                 }
-                TrailWeightButton(
+                AuroraButton(
                     text = confirmString,
                     onClick = { onConfirm() },
                     modifier = Modifier

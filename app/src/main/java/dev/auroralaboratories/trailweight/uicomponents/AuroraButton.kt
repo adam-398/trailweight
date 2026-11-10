@@ -29,7 +29,7 @@ enum class AuroraButtonStyle { Primary, Secondary, Outlined, Destructive }
  * @param enabled Whether the button is enabled or not.
  */
 @Composable
-fun TrailWeightButton(
+fun AuroraButton(
     modifier: Modifier = Modifier,
     text: String? = null,
     onClick: () -> Unit,

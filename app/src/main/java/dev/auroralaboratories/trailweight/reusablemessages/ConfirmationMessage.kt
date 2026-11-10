@@ -23,7 +23,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.auroralabs.trailweight.uicomponents.TrailWeightButton
+import com.auroralabs.trailweight.uicomponents.AuroraButton
 import com.auroralabs.trailweight.uicomponents.AuroraButtonStyle
 
 /**
@@ -91,14 +91,14 @@ fun ConfirmationMessage(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally)
                 ) {
-                    TrailWeightButton(
+                    AuroraButton(
                         text = dismissString,
                         onClick = onDismiss,
                         modifier = Modifier.weight(1f),
                         style = AuroraButtonStyle.Outlined,
                         icon = dismissIcon
                     )
-                    TrailWeightButton(
+                    AuroraButton(
                         text = confirmString,
                         onClick = onConfirm,
                         style = confirmStyle,

@@ -12,8 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.auroralabs.trailweight.uicomponents.TrailWeightButton
-import com.auroralabs.trailweight.uicomponents.TrailWeightInputField
+import com.auroralabs.trailweight.uicomponents.AuroraButton
+import com.auroralabs.trailweight.uicomponents.AuroraInputField
 import com.auroralabs.trailweight.uicomponents.AuroraButtonStyle
 import dev.auroralaboratories.trailweight.data.GearList
 
@@ -67,14 +67,14 @@ fun AddGearList(
                         color = MaterialTheme.colorScheme.onSurface
                     )
 
-                    TrailWeightInputField(
+                    AuroraInputField(
                         value = listName,
                         onValueChange = { listName = it },
                         label = "List Name",
                         modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
                     )
 
-                    TrailWeightInputField(
+                    AuroraInputField(
                         value = notes,
                         onValueChange = { notes = it },
                         label = "Notes",
@@ -85,14 +85,14 @@ fun AddGearList(
                         modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        TrailWeightButton(
+                        AuroraButton(
                             text = "Cancel",
                             onClick = onDismiss,
                             modifier = Modifier.weight(1f).padding(end = 8.dp),
                             style = AuroraButtonStyle.Outlined,
                             icon = Icons.Default.Cancel
                         )
-                        TrailWeightButton(
+                        AuroraButton(
                             text = if (isSaving) "Saving..." else "Save",
                             onClick = { onSaved(listName, notes) },
                             modifier = Modifier.weight(1f),

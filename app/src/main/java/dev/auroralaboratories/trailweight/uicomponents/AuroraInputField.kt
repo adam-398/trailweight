@@ -9,12 +9,12 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.material3.Text
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 
 /**
@@ -33,7 +33,7 @@ import androidx.compose.ui.text.input.KeyboardType
  * @param textStyle The text style to apply to the input field.
  */
 @Composable
-fun TrailWeightInputField(
+fun AuroraInputField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
@@ -46,7 +46,11 @@ fun TrailWeightInputField(
     textStyle: TextStyle = TextStyle(fontSize = 16.sp),
     keyboardType: KeyboardType = KeyboardType.Text,
     singleLine: Boolean = true,
-    isError: Boolean = false
+    isError: Boolean = false,
+    capitalization: KeyboardCapitalization = KeyboardCapitalization.None,
+    supportingText: @Composable (() -> Unit)? = null,
+    suffix: @Composable (() -> Unit)? = null,
+    enabled: Boolean = true
 ) {
     OutlinedTextField(
         value = value,
@@ -63,7 +67,14 @@ fun TrailWeightInputField(
             unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
         ),
         shape = RoundedCornerShape(8.dp),
-        keyboardOptions = KeyboardOptions(imeAction = imeAction, keyboardType = keyboardType),
+        keyboardOptions = KeyboardOptions(
+            capitalization = capitalization,
+            imeAction = imeAction,
+            keyboardType = keyboardType
+        ),
+        supportingText = supportingText,
+        suffix = suffix,
+        enabled = enabled,
         keyboardActions = keyboardActions,
         visualTransformation = visualTransformation,
         trailingIcon = trailingIcon,
