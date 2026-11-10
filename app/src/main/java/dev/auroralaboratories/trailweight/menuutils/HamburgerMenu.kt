@@ -51,6 +51,13 @@ fun HamburgerMenu(
                     navController.navigate("settings")
                 }
             )
+            DropdownMenuItem(
+                text = { Text("Transfer", color = MaterialTheme.colorScheme.onSurface) },
+                onClick = {
+                    expanded = false
+                    navController.navigate("transfer")
+                }
+            )
         }
     }
 }

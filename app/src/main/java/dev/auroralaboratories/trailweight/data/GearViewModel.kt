@@ -27,11 +27,6 @@ class GearViewModel(application: Application) : AndroidViewModel(application) {
         database.gearItemDao()
     )
 
-    // TEMP TEST
-    init {
-        importText("H4sIAAAAAAAA_32QsU7DMBBAfyW6ORJJlbYiG5QNxNKRMhj34hi75yi-hqKKf-eCEIorUnk7vfds3xkG7KMNBHWZg7eRI9QvZyB1QKiBMTLkoHtUjPs7Fmp9W5WroqqW5WKdg2U8JMZ7Qw2J8oHWtMLT0XsJiG5C_ynAQzBZPHadtxiFoyB3yBi-8r-G27vmWmITgrNkst1N9mhZt0gzIe0DtyM5qZVFkcZ-mZkEqeGK_KwGaxSP-_tff1Paderkp43FReT-h9Fufhtqoi8v7KdxPP9-RuL0A6m-bdEz9on9KucbSlvXZRkCAAA") { Log.d("Export", "import result = $it") }
-    }
-
 
     /**
      * Live list of all [GearList]s, newest first. Emits a fresh list whenever the table changes.

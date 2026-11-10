@@ -135,6 +135,7 @@ fun GearListScreen(
                 color = MaterialTheme.colorScheme.onBackground
             )
             GearListOptions(
+                gearListId = gearList?.id ?: listId,
                 gearListName = gearList?.name,
                 onEditClick = { showEditListDialog = true },
                 onDelete = {

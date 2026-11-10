@@ -54,6 +54,7 @@ class MainActivity : ComponentActivity() {
                     composable("settings") {
                         SettingsScreen(navController)
                     }
+                    composable("transfer") { TransferScreen(navController) }
                 }
             }
         }
