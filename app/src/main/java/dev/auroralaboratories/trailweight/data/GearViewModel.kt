@@ -1,8 +1,10 @@
 package dev.auroralaboratories.trailweight.data
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import dev.auroralaboratories.trailweight.core.database.SnapshotCodec
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -16,12 +18,20 @@ import kotlinx.coroutines.launch
  */
 class GearViewModel(application: Application) : AndroidViewModel(application) {
 
+
     private val database = TrailWeightDatabase.getInstance(application)
 
     private val repository = GearRepository(
+        database,
         database.gearListDao(),
         database.gearItemDao()
     )
+
+    // TEMP TEST
+    init {
+        importText("H4sIAAAAAAAA_32QsU7DMBBAfyW6ORJJlbYiG5QNxNKRMhj34hi75yi-hqKKf-eCEIorUnk7vfds3xkG7KMNBHWZg7eRI9QvZyB1QKiBMTLkoHtUjPs7Fmp9W5WroqqW5WKdg2U8JMZ7Qw2J8oHWtMLT0XsJiG5C_ynAQzBZPHadtxiFoyB3yBi-8r-G27vmWmITgrNkst1N9mhZt0gzIe0DtyM5qZVFkcZ-mZkEqeGK_KwGaxSP-_tff1Paderkp43FReT-h9Fufhtqoi8v7KdxPP9-RuL0A6m-bdEz9on9KucbSlvXZRkCAAA") { Log.d("Export", "import result = $it") }
+    }
+
 
     /**
      * Live list of all [GearList]s, newest first. Emits a fresh list whenever the table changes.
@@ -103,4 +113,33 @@ class GearViewModel(application: Application) : AndroidViewModel(application) {
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = emptyMap()
         )
+
+    /**
+     * Builds the shareable text for the chosen lists.
+     * @param listIds The IDs of the lists to export.
+     * @param onReady Called with the encoded text when it is ready.
+     */
+    fun exportText(listIds: Set<Long>, onReady: (String) -> Unit) {
+        viewModelScope.launch {
+            val data = repository.exportLists(listIds)
+            val encoded = SnapshotCodec.encode(data.toJson())
+            onReady(encoded)
+        }
+    }
+    /**
+     * Imports lists from pasted export text.
+     * @param text The encoded text produced by [exportText].
+     * @param onResult Called with the number of lists imported, or the error if the text was invalid.
+     */
+    fun importText(text: String, onResult: (Result<Int>) -> Unit) {
+        viewModelScope.launch {
+            val result = runCatching {
+                val json = SnapshotCodec.decode(text)
+                val data = ExportData.fromJson(json)
+                repository.importData(data)
+            }
+            onResult(result)
+        }
+    }
+
 }

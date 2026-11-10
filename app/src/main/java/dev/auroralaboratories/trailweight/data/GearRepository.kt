@@ -1,5 +1,6 @@
 package dev.auroralaboratories.trailweight.data
 
+import androidx.room.withTransaction
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -7,8 +8,11 @@ import kotlinx.coroutines.flow.Flow
  * @param gearListDao The DAO for the [GearList] entity.
  * @param gearItemDao The DAO for the [GearItem] entity.
  */
-class GearRepository(private val gearListDao: GearListDao, private val gearItemDao: GearItemDao) {
-
+class GearRepository(
+    private val database: TrailWeightDatabase,
+    private val gearListDao: GearListDao,
+    private val gearItemDao: GearItemDao
+) {
     /**
      * Observes all [GearList]s in the database.
      */
@@ -35,7 +39,7 @@ class GearRepository(private val gearListDao: GearListDao, private val gearItemD
      * @param id The ID of the [GearList] to get.
      * @return The [GearList] with the given ID, or null if not found.
      */
-    suspend fun getGearList(id: Long): GearList? {
+    suspend fun getGearList(id: Long): GearList {
         return gearListDao.get(id)
     }
 
@@ -101,4 +105,64 @@ class GearRepository(private val gearListDao: GearListDao, private val gearItemD
      * Observes the total weight of each list that has items. Emits a fresh list whenever an item changes.
      */
     val listWeights: Flow<List<ListWeight>> = gearItemDao.observeListWeights()
+
+    /**
+     * Exports the specified lists to a [ExportData] object.
+     * @param listIds The IDs of the lists to export.
+     * @return A [ExportData] object containing the exported lists.
+     */
+    suspend fun exportLists(listIds: Set<Long>): ExportData {
+        val exportLists = mutableListOf<ExportGearList>()
+
+        for (id in listIds) {
+            val list = gearListDao.get(id)
+
+            val exportItems = mutableListOf<ExportGearItem>()
+            for (item in gearItemDao.getItemsByListId(id)) {
+                exportItems.add(
+                    ExportGearItem(
+                        name = item.name,
+                        weight = item.weight,
+                        category = item.category,
+                        notes = item.notes
+                    )
+                )
+            }
+
+            exportLists.add(
+                ExportGearList(
+                    name = list.name,
+                    createdAt = list.createdAt,
+                    items = exportItems
+                )
+            )
+        }
+        return ExportData(lists = exportLists)
+    }
+
+    /**
+     * Saves exported lists as new lists. Never overwrites existing ones.
+     * @return The number of lists imported.
+     */
+    suspend fun importData(data: ExportData): Int {
+        database.withTransaction {
+            for (list in data.lists) {
+                val newListId = gearListDao.insert(
+                    GearList(name = list.name, createdAt = list.createdAt)
+                )
+                for (item in list.items) {
+                    gearItemDao.insert(
+                        GearItem(
+                            listId = newListId,
+                            name = item.name,
+                            weight = item.weight,
+                            category = item.category,
+                            notes = item.notes
+                        )
+                    )
+                }
+            }
+        }
+        return data.lists.size
+    }
 }
