@@ -1,6 +1,7 @@
 package dev.auroralaboratories.trailweight
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -10,6 +11,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import dev.auroralaboratories.trailweight.core.database.SnapshotCodec
+import dev.auroralaboratories.trailweight.data.ExportData
+import dev.auroralaboratories.trailweight.data.ExportGearItem
+import dev.auroralaboratories.trailweight.data.ExportGearList
 import dev.auroralaboratories.trailweight.preferences.ThemePreferences
 import dev.auroralaboratories.trailweight.preferences.UnitPreferences
 import dev.auroralaboratories.trailweight.ui.theme.TrailWeightTheme
