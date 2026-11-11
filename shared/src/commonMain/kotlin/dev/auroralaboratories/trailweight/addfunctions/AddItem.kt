@@ -41,13 +41,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import dev.auroralaboratories.uicomponents.AuroraButton
-import dev.auroralaboratories.uicomponents.AuroraButtonStyle
-import dev.auroralaboratories.uicomponents.AuroraInputField
 import dev.auroralaboratories.trailweight.data.GearItem
 import dev.auroralaboratories.trailweight.otherutils.formatDecimal
-import dev.auroralaboratories.trailweight.preferences.UnitPreferences
 import dev.auroralaboratories.trailweight.reusablemessages.ConfirmationMessage
+import dev.auroralaboratories.trailweight.uicomponents.AuroraButton
+import dev.auroralaboratories.trailweight.uicomponents.AuroraButtonStyle
+import dev.auroralaboratories.trailweight.uicomponents.AuroraInputField
 
 
 /**
