@@ -1,4 +1,4 @@
-package com.auroralabs.trailweight.uicomponents
+package dev.auroralaboratories.trailweight.uicomponents
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions

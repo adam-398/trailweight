@@ -13,9 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.auroralabs.trailweight.uicomponents.AuroraButton
-import com.auroralabs.trailweight.uicomponents.AuroraInputField
-import com.auroralabs.trailweight.uicomponents.AuroraButtonStyle
+import dev.auroralaboratories.trailweight.uicomponents.AuroraButton
+import dev.auroralaboratories.trailweight.uicomponents.AuroraInputField
+import dev.auroralaboratories.trailweight.uicomponents.AuroraButtonStyle
 import dev.auroralaboratories.trailweight.data.GearList
 
 /**
