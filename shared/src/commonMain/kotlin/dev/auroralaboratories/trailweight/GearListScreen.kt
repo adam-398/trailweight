@@ -1,0 +1,297 @@
+package dev.auroralaboratories.trailweight
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import dev.auroralaboratories.trailweight.addfunctions.AddGearList
+import dev.auroralaboratories.trailweight.addfunctions.AddItem
+import dev.auroralaboratories.trailweight.cards.ItemCard
+import dev.auroralaboratories.trailweight.data.GearItem
+import dev.auroralaboratories.trailweight.data.GearViewModel
+import dev.auroralaboratories.trailweight.menuutils.GearListOptions
+import dev.auroralaboratories.trailweight.piechartutils.weightsByCategory
+import dev.auroralaboratories.trailweight.preferences.formatWeight
+import io.github.dautovicharis.charts.PieChart
+import io.github.dautovicharis.charts.model.toChartDataSet
+import io.github.dautovicharis.charts.style.PieChartDefaults
+
+/**
+ * Composable function that displays a gear list screen.
+ * @param navController The navigation controller to use.
+ * @param listId The ID of the gear list to display.
+ */
+@Composable
+fun GearListScreen(
+    navController: NavController,
+    listId: Long
+) {
+    val viewModel: GearViewModel = viewModel()
+    val gearLists by viewModel.allGearLists.collectAsStateWithLifecycle()
+    val items by remember(listId) { viewModel.itemsFor(listId) }.collectAsStateWithLifecycle()
+    val gearList = gearLists.find { it.id == listId }
+
+    var showItemDialog by remember { mutableStateOf(false) }
+    var editingItem by remember { mutableStateOf<GearItem?>(null) }
+    var showEditListDialog by remember { mutableStateOf(false) }
+
+    val categoryWeights = weightsByCategory(items)
+    val categoryLabels = categoryWeights.keys.toList()
+    val categoryValues = categoryWeights.values.map { it.toFloat() }
+    val sortedItems = items.sortedByDescending { it.weight ?: 0.0 }
+    val totalWeight = categoryValues.sum()
+
+    val allCategories = listOf(
+        "Backpack", "Clothing", "Cooking / Kitchen", "Dog supplies", "Electronics", "First aid",
+        "Hygiene / Toiletries", "Lighting", "Navigation", "Shelter",
+        "Sleep system", "Tools / Repair", "Water / Filtration", "Waterproof clothing", "Other"
+    )
+
+    val basePieColors = listOf(
+        Color(0xFFE05C4B), // Tomato red
+        Color(0xFF3A86C8), // Steel blue
+        Color(0xFFF0A500), // Amber gold
+        Color(0xFF2DBF7F), // Emerald
+        Color(0xFF9B59B6), // Violet
+        Color(0xFFE8854A), // Burnt orange
+        Color(0xFF1A8C8C), // Teal
+        Color(0xFFD63E7A), // Raspberry
+        Color(0xFF5C9E3A), // Fern green
+        Color(0xFF6C7FD8), // Periwinkle
+        Color(0xFFC0392B), // Crimson
+        Color(0xFFF5D040), // Sunflower
+        Color(0xFF2E4FA3), // Cobalt
+        Color(0xFFA0522D), // Sienna
+        Color(0xFF4BC8D4), // Sky cyan
+    )
+
+    val categoryColorMap = allCategories.zip(basePieColors).toMap()
+    val chartColors = categoryLabels.map { categoryColorMap[it] ?: Color.Gray }
+
+    val pieChartDataSet = categoryValues.toChartDataSet(
+        title = "${gearList?.name ?: ""} - ${formatWeight(totalWeight.toDouble())}",
+        postfix = "g",
+        labels = categoryLabels
+    )
+
+    Column(
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.background)
+            .fillMaxSize()
+    ) {
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .windowInsetsPadding(WindowInsets.statusBars)
+                .padding(8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = { navController.popBackStack() }) {
+                Icon(
+                    Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back",
+                    tint = MaterialTheme.colorScheme.onBackground
+                )
+            }
+            Text(
+                text = gearList?.name ?: "Loading...",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            GearListOptions(
+                gearListId = gearList?.id ?: listId,
+                gearListName = gearList?.name,
+                onEditClick = { showEditListDialog = true },
+                onDelete = {
+                    gearList?.let { viewModel.deleteGearList(it) }
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        Box(modifier = Modifier.weight(1f)) {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(bottom = 100.dp)
+            ) {
+                if (items.isNotEmpty()) {
+                    item {
+                        Box(
+                            modifier = Modifier.fillMaxWidth(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            PieChart(
+                                dataSet = pieChartDataSet,
+                                style = PieChartDefaults.style(
+                                    legendVisible = false,
+                                    pieColors = chartColors
+                                )
+                            )
+                        }
+                    }
+                    item {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 8.dp)
+                        ) {
+                            categoryWeights.entries.sortedByDescending { it.value }
+                                .forEach { (category, weight) ->
+                                    val dotColor = categoryColorMap[category] ?: Color.Gray
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(vertical = 4.dp),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.SpaceBetween
+                                    ) {
+                                        Row(verticalAlignment = Alignment.CenterVertically) {
+                                            Box(
+                                                modifier = Modifier
+                                                    .size(10.dp)
+                                                    .background(dotColor, shape = CircleShape)
+                                            )
+                                            Spacer(modifier = Modifier.width(8.dp))
+                                            Text(
+                                                category,
+                                                style = MaterialTheme.typography.bodyMedium,
+                                                color = MaterialTheme.colorScheme.onSurface
+                                            )
+                                        }
+                                        Text(
+                                            formatWeight(weight),
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            color = MaterialTheme.colorScheme.onSurface
+                                        )
+                                    }
+                                }
+                        }
+                    }
+                }
+                items(sortedItems, key = { it.id }) { item ->
+                    ItemCard(
+                        item = item,
+                        onClick = {
+                            editingItem = item
+                            showItemDialog = true
+                        }
+                    )
+                }
+            }
+
+            FloatingActionButton(
+                onClick = {
+                    editingItem = null
+                    showItemDialog = true
+                },
+                modifier = Modifier
+                    .padding(25.dp)
+                    .align(Alignment.BottomEnd),
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
+            ) {
+                Icon(Icons.Filled.Add, contentDescription = "Add")
+            }
+        }
+
+        if (showItemDialog) {
+            AddItem(
+                existingItem = editingItem,
+                onDismiss = { showItemDialog = false },
+                onSaved = { name, weight, category, notes ->
+                    val currentEditingItem = editingItem
+                    if (currentEditingItem != null) {
+                        viewModel.updateGearItem(
+                            currentEditingItem.copy(
+                                name = name,
+                                weight = weight,
+                                category = category,
+                                notes = notes
+                            )
+                        )
+                    } else {
+                        viewModel.insertGearItem(
+                            GearItem(
+                                listId = listId,
+                                name = name,
+                                weight = weight,
+                                category = category,
+                                notes = notes
+                            )
+                        )
+                    }
+                    showItemDialog = false
+                },
+                onDelete = if (editingItem != null) {
+                    {
+                        editingItem?.let { viewModel.deleteGearItem(it) }
+                        showItemDialog = false
+                    }
+                } else null
+            )
+        }
+
+        if (showEditListDialog) {
+            AddGearList(
+                existingGearList = gearList,
+                onDismiss = { showEditListDialog = false },
+                onSaved = { name, notes ->
+                    gearList?.let {
+                        viewModel.updateGearList(
+                            it.copy(name = name, notes = notes.ifBlank { null })
+                        )
+                    }
+                    showEditListDialog = false
+                }
+            )
+        }
+    }
+}
+
+val dummyItems = listOf(
+    GearItem(id = 1, listId = 1, name = "Tent", weight = 1200.0, category = "Shelter"),
+    GearItem(id = 2, listId = 1, name = "Sleeping Bag", weight = 900.0, category = "Sleeping bag / quilt"),
+    GearItem(id = 3, listId = 1, name = "Sleeping Pad", weight = 450.0, category = "Sleeping pad"),
+    GearItem(id = 4, listId = 1, name = "Backpack", weight = 1400.0, category = "Backpack"),
+    GearItem(id = 5, listId = 1, name = "Stove", weight = 200.0, category = "Cooking / Kitchen"),
+    GearItem(id = 6, listId = 1, name = "Pot", weight = 250.0, category = "Cooking / Kitchen"),
+    GearItem(id = 7, listId = 1, name = "Water Filter", weight = 80.0, category = "Water / Filtration"),
+    GearItem(id = 8, listId = 1, name = "Headlamp", weight = 60.0, category = "Lighting"),
+    GearItem(id = 9, listId = 1, name = "First Aid Kit", weight = 150.0, category = "First aid")
+)
+
