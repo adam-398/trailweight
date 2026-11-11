@@ -24,6 +24,11 @@ import com.auroralabs.trailweight.uicomponents.AuroraButton
 import dev.auroralaboratories.trailweight.data.GearViewModel
 import dev.auroralaboratories.trailweight.preferences.formatWeight
 
+/**
+ * Composable function that displays the transfer screen.
+ * @param navController The NavController to use for navigation.
+ * @param viewModel The GearViewModel to use for data.
+ */
 @Composable
 fun TransferScreen(
     navController: NavController,
@@ -42,7 +47,6 @@ fun TransferScreen(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-        // Header (same inset and padding as Landing)
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -73,7 +77,6 @@ fun TransferScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(bottom = 24.dp)
         ) {
-            // Export
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -227,6 +230,7 @@ fun TransferScreen(
         }
     }
 }
+
 
 fun Context.shareText(text: String) {
     val intent = Intent(Intent.ACTION_SEND).apply {

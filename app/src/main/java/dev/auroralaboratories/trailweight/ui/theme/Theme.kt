@@ -79,8 +79,8 @@ private val NavyDarkColorScheme = darkColorScheme(
 
 /**
  * Composable function that sets the theme for the app.
- * @param dynamicColor Whether to use dynamic colors or not.
- * @param content The content to be displayed.
+ * @param dynamicColor Whether to use dynamic color schemes.
+ * @param content The content to apply the theme to.
  */
 @Composable
 fun TrailWeightTheme(

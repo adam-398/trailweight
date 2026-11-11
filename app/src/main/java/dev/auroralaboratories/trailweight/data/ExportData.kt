@@ -31,6 +31,7 @@ data class ExportGearList(
     val items: List<ExportGearItem>
 )
 
+
 data class ExportData(
     val version: Int = CURRENT_VERSION,
     val lists: List<ExportGearList>
@@ -63,6 +64,10 @@ data class ExportData(
         })
     }.toString()
 
+    /**
+     * Companion object containing constants and functions related to the export data format.
+     * @property CURRENT_VERSION The current version of the export data format.
+     */
     companion object {
         const val CURRENT_VERSION = 1
 

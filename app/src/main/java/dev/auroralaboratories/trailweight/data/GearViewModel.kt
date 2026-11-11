@@ -117,10 +117,12 @@ class GearViewModel(application: Application) : AndroidViewModel(application) {
     fun exportText(listIds: Set<Long>, onReady: (String) -> Unit) {
         viewModelScope.launch {
             val data = repository.exportLists(listIds)
-            val encoded = SnapshotCodec.encode(data.toJson())
+            val json = data.toJson()
+            val encoded = SnapshotCodec.encode(json)
             onReady(encoded)
         }
     }
+
     /**
      * Imports lists from pasted export text.
      * @param text The encoded text produced by [exportText].
