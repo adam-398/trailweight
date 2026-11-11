@@ -1,15 +1,19 @@
 package dev.auroralaboratories.trailweight.core.database
 
-import android.util.Base64
-import java.io.ByteArrayOutputStream
-import java.util.zip.GZIPInputStream
-import java.util.zip.GZIPOutputStream
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
+import okio.Buffer
+import okio.GzipSink
+import okio.GzipSource
+import okio.buffer
 
 /**
  * A codec for encoding and decoding strings to and from snapshots.
  */
+@OptIn(ExperimentalEncodingApi::class)
 object SnapshotCodec {
-    private const val FLAGS = Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING
+    private val encoder = Base64.UrlSafe.withPadding(Base64.PaddingOption.ABSENT)
+    private val decoder = Base64.UrlSafe.withPadding(Base64.PaddingOption.PRESENT_OPTIONAL)
 
     /**
      * encodes a string to a snapshot
@@ -17,9 +21,11 @@ object SnapshotCodec {
      * @return The encoded string
      */
     fun encode(text: String): String {
-        val out = ByteArrayOutputStream()
-        GZIPOutputStream(out).use { it.write(text.toByteArray(Charsets.UTF_8)) }
-        return Base64.encodeToString(out.toByteArray(), FLAGS)
+        val compressed = Buffer()
+        val sink = GzipSink(compressed).buffer()
+        sink.writeUtf8(text)
+        sink.close()
+        return encoder.encode(compressed.readByteArray())
     }
 
     /**
@@ -27,7 +33,11 @@ object SnapshotCodec {
      * @param encoded The string to decode
      * @return The decoded string
      */
-    fun decode(encoded: String): String =
-        GZIPInputStream(Base64.decode(encoded.trim(), FLAGS).inputStream())
-            .use { String(it.readBytes(), Charsets.UTF_8) }
+    fun decode(encoded: String): String {
+        val compressed = Buffer().write(decoder.decode(encoded.trim()))
+        val source = GzipSource(compressed).buffer()
+        val text = source.readUtf8()
+        source.close()
+        return text
+    }
 }
