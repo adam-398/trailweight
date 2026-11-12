@@ -1,7 +1,17 @@
 package dev.auroralaboratories.trailweight.data
 
-import org.json.JSONArray
-import org.json.JSONObject
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.buildJsonArray
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.json.doubleOrNull
+import kotlinx.serialization.json.int
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.serialization.json.longOrNull
+import kotlinx.serialization.json.put
+import kotlin.time.Clock
 
 /**
  * Data class representing an exported item in a gear list.
@@ -31,7 +41,6 @@ data class ExportGearList(
     val items: List<ExportGearItem>
 )
 
-
 data class ExportData(
     val version: Int = CURRENT_VERSION,
     val lists: List<ExportGearList>
@@ -41,21 +50,21 @@ data class ExportData(
      * Converts the export data to a JSON string.
      * @return The JSON string representation of the export data.
      */
-    fun toJson(): String = JSONObject().apply {
+    fun toJson(): String = buildJsonObject {
         put("version", version)
-        put("lists", JSONArray().also { listsArray ->
+        put("lists", buildJsonArray {
             lists.forEach { list ->
-                listsArray.put(JSONObject().apply {
+                add(buildJsonObject {
                     put("name", list.name)
-                    put("notes", list.notes ?: JSONObject.NULL)
+                    put("notes", list.notes)
                     put("createdAt", list.createdAt)
-                    put("items", JSONArray().also { itemsArray ->
+                    put("items", buildJsonArray {
                         list.items.forEach { item ->
-                            itemsArray.put(JSONObject().apply {
+                            add(buildJsonObject {
                                 put("name", item.name)
-                                put("weight", item.weight ?: JSONObject.NULL)
+                                put("weight", item.weight)
                                 put("category", item.category)
-                                put("notes", item.notes ?: JSONObject.NULL)
+                                put("notes", item.notes)
                             })
                         }
                     })
@@ -77,26 +86,25 @@ data class ExportData(
          * @return The export data object.
          */
         fun fromJson(json: String): ExportData {
-            val root = JSONObject(json)
-            val version = root.getInt("version")
+            val root = Json.parseToJsonElement(json).jsonObject
+            val version = root.getValue("version").jsonPrimitive.int
             require(version <= CURRENT_VERSION) { "Unsupported export version $version" }
-            val listsArray = root.getJSONArray("lists")
             return ExportData(
                 version,
-                (0 until listsArray.length()).map { li ->
-                    val l = listsArray.getJSONObject(li)
-                    val itemsArray = l.getJSONArray("items")
+                root.getValue("lists").jsonArray.map { listElement ->
+                    val l = listElement.jsonObject
                     ExportGearList(
-                        name = l.getString("name"),
-                        notes = if (l.isNull("notes")) null else l.getString("notes"),
-                        createdAt = l.optLong("createdAt", System.currentTimeMillis()),
-                        items = (0 until itemsArray.length()).map { ii ->
-                            val i = itemsArray.getJSONObject(ii)
+                        name = l.getValue("name").jsonPrimitive.content,
+                        notes = l["notes"]?.jsonPrimitive?.contentOrNull,
+                        createdAt = l["createdAt"]?.jsonPrimitive?.longOrNull
+                            ?: Clock.System.now().toEpochMilliseconds(),
+                        items = l.getValue("items").jsonArray.map { itemElement ->
+                            val i = itemElement.jsonObject
                             ExportGearItem(
-                                name = i.getString("name"),
-                                weight = if (i.isNull("weight")) null else i.getDouble("weight"),
-                                category = i.getString("category"),
-                                notes = if (i.isNull("notes")) null else i.getString("notes")
+                                name = i.getValue("name").jsonPrimitive.content,
+                                weight = i["weight"]?.jsonPrimitive?.doubleOrNull,
+                                category = i.getValue("category").jsonPrimitive.content,
+                                notes = i["notes"]?.jsonPrimitive?.contentOrNull
                             )
                         }
                     )
