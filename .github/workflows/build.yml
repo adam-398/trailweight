@@ -19,4 +19,4 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v5
 
-      - run: ./gradlew :androidApp:assembleDebug
+      - run: ./gradlew :androidApp:assembleDebug :shared:testAndroidHostTest
