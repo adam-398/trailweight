@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.savedstate.read
 import dev.auroralaboratories.trailweight.data.TrailWeightDatabase
+import dev.auroralaboratories.trailweight.ui.theme.TrailWeightTheme
 
 /**
  * Composable function that represents the main application.
@@ -16,7 +17,7 @@ import dev.auroralaboratories.trailweight.data.TrailWeightDatabase
  */
 @Composable
 fun App(database: TrailWeightDatabase) {
-    MaterialTheme {
+    TrailWeightTheme {
         val navController = rememberNavController()
 
         NavHost(
