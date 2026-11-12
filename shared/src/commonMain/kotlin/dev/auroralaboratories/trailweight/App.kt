@@ -1,29 +1,40 @@
 package dev.auroralaboratories.trailweight
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import androidx.savedstate.read
 import dev.auroralaboratories.trailweight.data.TrailWeightDatabase
 
 /**
- * The main app composable.
+ * Composable function that represents the main application.
  * @param database The database to use.
  */
 @Composable
 fun App(database: TrailWeightDatabase) {
     MaterialTheme {
-        Column(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.primaryContainer)
-                .safeContentPadding()
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
+        val navController = rememberNavController()
+
+        NavHost(
+            navController = navController,
+            startDestination = "landing"
         ) {
+            composable("landing") {
+                LandingScreen(navController, database)
+            }
+            composable(
+                route = "gearList/{listId}",
+                arguments = listOf(navArgument("listId") { type = NavType.LongType })
+            ) { backStackEntry ->
+                val listId = backStackEntry.arguments?.read { getLong("listId") }
+                if (listId != null) {
+                    GearListScreen(navController, listId, database)
+                }
+            }
         }
     }
 }
