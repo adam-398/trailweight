@@ -1,6 +1,6 @@
 # TrailWeight
 
-![Trail Weight: know exactly what you carry](docs/images/feature-graphic.png)
+![Trail Weight: know exactly what you carry](assets/feature-graphic.png)
 
 TrailWeight is a hiking gear tracker. Build a gear list for each trip, record what each item weighs, and see where the weight goes.
 
@@ -14,9 +14,9 @@ TrailWeight is a hiking gear tracker. Build a gear list for each trip, record wh
   <img src="assets/screenshot-3-add-gear.png" alt="Adding an item" width="250">
 </p>
 <p>
-  <img src="docs/images/screenshot-4-share-lists.png" alt="List menu with export" width="250">
-  <img src="docs/images/screenshot-5-dark-mode.png" alt="Dark theme" width="250">
-  <img src="docs/images/screenshot-6-no-account.png.png" alt="No Account" width="250">
+  <img src="assets/screenshot-4-share-lists.png" alt="List menu with export" width="250">
+  <img src="assets/screenshot-5-dark-mode.png" alt="Dark theme" width="250">
+  <img src="assets/screenshot-6-no-account.png" alt="No Account" width="250">
 </p>
 
 ## Features
