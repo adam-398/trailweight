@@ -1,31 +1,66 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
+# TrailWeight
 
-* [/iosApp](./iosApp/iosApp) contains an iOS application. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+![Trail Weight: know exactly what you carry](docs/images/feature-graphic.png)
 
-* [/shared](./shared/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./shared/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./shared/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./shared/src/jvmMain/kotlin)
-    folder is the appropriate location.
+TrailWeight is a hiking gear tracker. Build a gear list for each trip, record what each item weighs, and see where the weight goes.
 
-### Running the apps
+[Get it on Google Play]([Play Store link])
 
-Use the run configurations provided by the run widget in your IDE's toolbar. You can also use these commands and options:
+## Screenshots
 
-- Android app: `./gradlew :androidApp:assembleDebug`
-- iOS app: open the [/iosApp](./iosApp) directory in Xcode and run it from there.
+<p>
+  <img src="assets/screenshot-1-weight-breakdown.png" alt="Gear lists with total weights" width="250">
+  <img src="assets/screenshot-2-gear-lists.png" alt="Weight breakdown by category" width="250">
+  <img src="assets/screenshot-3-add-gear.png" alt="Adding an item" width="250">
+</p>
+<p>
+  <img src="docs/images/screenshot-4-share-lists.png" alt="List menu with export" width="250">
+  <img src="docs/images/screenshot-5-dark-mode.png" alt="Dark theme" width="250">
+  <img src="docs/images/screenshot-6-no-account.png.png" alt="No Account" width="250">
+</p>
 
-### Running tests
+## Features
 
-Use the run button in your IDE's editor gutter, or run tests using Gradle tasks:
+- Multiple gear lists, each with its own items and weights
+- Items grouped by category, with a pie chart breakdown of weight per category
+- Metric or imperial units
+- Light and dark themes
+- Export and import of all data as a snapshot file, for backups or sharing with others
+- Works offline. All data is stored on the device.
 
-- Android tests: `./gradlew :shared:testAndroidHostTest`
-- iOS tests: `./gradlew :shared:iosSimulatorArm64Test`
+## Platforms
 
----
+| Platform | Status |
+|----------|--------|
+| Android  | Released on Google Play |
+| iOS      | In progress, not yet released |
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+## Tech stack
+
+TrailWeight is built with Kotlin Multiplatform and Compose Multiplatform. The UI, data layer and business logic are shared between Android and iOS.
+
+- **UI:** Compose Multiplatform, Navigation Compose
+- **Database:** Room (multiplatform) with the bundled SQLite driver
+- **Settings:** Multiplatform Settings
+- **Serialization:** kotlinx.serialization, Okio
+
+## Project structure
+
+
+## Building
+
+### Android
+
+Requirements: Android Studio, JDK 17 or later.
+
+```
+./gradlew :androidApp:assembleDebug
+```
+
+Or open the project in Android Studio and run the `androidApp` configuration.
+
+### iOS
+
+Requirements: macOS, Xcode.
+
+Open `iosApp/iosApp.xcodeproj` in Xcode and run on a device or simulator.
