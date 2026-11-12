@@ -28,12 +28,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import dev.auroralaboratories.trailweight.addfunctions.AddGearList
 import dev.auroralaboratories.trailweight.cards.GearListCard
 import dev.auroralaboratories.trailweight.data.GearList
 import dev.auroralaboratories.trailweight.data.GearViewModel
+import dev.auroralaboratories.trailweight.data.TrailWeightDatabase
 import dev.auroralaboratories.trailweight.menuutils.HamburgerMenu
 
 /**
@@ -41,9 +44,13 @@ import dev.auroralaboratories.trailweight.menuutils.HamburgerMenu
  * @param navController The NavController to use for navigation.
  */
 @Composable
-fun LandingScreen(navController: NavController) {
+fun LandingScreen(navController: NavController, database: TrailWeightDatabase) {
 
-    val viewModel: GearViewModel = viewModel()
+    val viewModel: GearViewModel = viewModel(
+        factory = viewModelFactory {
+            initializer { GearViewModel(database) }
+        }
+    )
     val gearLists by viewModel.allGearLists.collectAsStateWithLifecycle()
     var isCreatingList by remember { mutableStateOf(false) }
     val totalWeights by viewModel.listWeights.collectAsStateWithLifecycle()

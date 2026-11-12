@@ -37,12 +37,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavController
 import dev.auroralaboratories.trailweight.addfunctions.AddGearList
 import dev.auroralaboratories.trailweight.addfunctions.AddItem
 import dev.auroralaboratories.trailweight.cards.ItemCard
 import dev.auroralaboratories.trailweight.data.GearItem
 import dev.auroralaboratories.trailweight.data.GearViewModel
+import dev.auroralaboratories.trailweight.data.TrailWeightDatabase
 import dev.auroralaboratories.trailweight.menuutils.GearListOptions
 import dev.auroralaboratories.trailweight.piechartutils.weightsByCategory
 import dev.auroralaboratories.trailweight.preferences.formatWeight
@@ -58,9 +61,14 @@ import io.github.dautovicharis.charts.style.PieChartDefaults
 @Composable
 fun GearListScreen(
     navController: NavController,
-    listId: Long
+    listId: Long,
+    database: TrailWeightDatabase
 ) {
-    val viewModel: GearViewModel = viewModel()
+    val viewModel: GearViewModel = viewModel(
+        factory = viewModelFactory {
+            initializer { GearViewModel(database) }
+        }
+    )
     val gearLists by viewModel.allGearLists.collectAsStateWithLifecycle()
     val items by remember(listId) { viewModel.itemsFor(listId) }.collectAsStateWithLifecycle()
     val gearList = gearLists.find { it.id == listId }
