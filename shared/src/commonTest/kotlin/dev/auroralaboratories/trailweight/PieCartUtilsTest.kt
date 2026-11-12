@@ -5,6 +5,9 @@ import dev.auroralaboratories.trailweight.piechartutils.weightsByCategory
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+/**
+ * Test class for the [PieCartUtils] class.
+ */
 class PieCartUtilsTest {
 
     @Test

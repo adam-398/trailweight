@@ -5,6 +5,9 @@ import dev.auroralaboratories.trailweight.preferences.UnitPreferences
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+/**
+ * Test class for the [formatWeight] function.
+ */
 class WeightFormatTest{
 
     @Test

@@ -5,6 +5,9 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFails
 import kotlin.test.assertFalse
 
+/**
+ * Test class for the [SnapshotCodec] class.
+ */
 class SnapshotCodecTest {
 
     @Test
