@@ -43,6 +43,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import dev.auroralaboratories.trailweight.data.GearItem
 import dev.auroralaboratories.trailweight.otherutils.formatDecimal
+import dev.auroralaboratories.trailweight.preferences.UnitPreferences
 import dev.auroralaboratories.trailweight.reusablemessages.ConfirmationMessage
 import dev.auroralaboratories.trailweight.uicomponents.AuroraButton
 import dev.auroralaboratories.trailweight.uicomponents.AuroraButtonStyle

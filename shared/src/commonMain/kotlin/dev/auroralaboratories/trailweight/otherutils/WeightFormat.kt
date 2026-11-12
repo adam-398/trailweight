@@ -1,5 +1,7 @@
 package dev.auroralaboratories.trailweight.otherutils
 
+import dev.auroralaboratories.trailweight.preferences.UnitPreferences
+
 
 /**
  * Formats the weight of an item in grams.

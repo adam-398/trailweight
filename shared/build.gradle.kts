@@ -58,6 +58,7 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.androidx.navigation.compose)
             implementation(libs.compose.material.icons.extended)
+            implementation(libs.charts.pie)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

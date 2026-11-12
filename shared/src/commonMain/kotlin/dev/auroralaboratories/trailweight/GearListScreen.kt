@@ -48,7 +48,7 @@ import dev.auroralaboratories.trailweight.data.GearViewModel
 import dev.auroralaboratories.trailweight.data.TrailWeightDatabase
 import dev.auroralaboratories.trailweight.menuutils.GearListOptions
 import dev.auroralaboratories.trailweight.piechartutils.weightsByCategory
-import dev.auroralaboratories.trailweight.preferences.formatWeight
+import dev.auroralaboratories.trailweight.otherutils.formatWeight
 import io.github.dautovicharis.charts.PieChart
 import io.github.dautovicharis.charts.model.toChartDataSet
 import io.github.dautovicharis.charts.style.PieChartDefaults

@@ -17,7 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.auroralaboratories.trailweight.data.GearList
-import dev.auroralaboratories.trailweight.preferences.formatWeight
+import dev.auroralaboratories.trailweight.otherutils.formatWeight
 
 /**
  * Composable function that displays a gear list card.
