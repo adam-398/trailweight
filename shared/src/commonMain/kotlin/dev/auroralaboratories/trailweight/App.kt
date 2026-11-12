@@ -35,6 +35,12 @@ fun App(database: TrailWeightDatabase) {
                     GearListScreen(navController, listId, database)
                 }
             }
+            composable("settings") {
+                SettingsScreen(navController)
+            }
+            composable("transfer") {
+                TransferScreen(navController, database)
+            }
         }
     }
 }

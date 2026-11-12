@@ -16,22 +16,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavController
 import dev.auroralaboratories.trailweight.data.GearViewModel
+import dev.auroralaboratories.trailweight.data.TrailWeightDatabase
 import dev.auroralaboratories.trailweight.otherutils.formatWeight
 import dev.auroralaboratories.trailweight.uicomponents.AuroraButton
-
 /**
  * Composable function that displays the transfer screen.
  * @param navController The NavController to use for navigation.
- * @param viewModel The GearViewModel to use for data.
+ * @param database The database the screen's ViewModel is built from.
  */
 @Composable
 fun TransferScreen(
     navController: NavController,
-    viewModel: GearViewModel = viewModel()
+    database: TrailWeightDatabase
 ) {
-    val viewModel: GearViewModel = viewModel()
+    val viewModel: GearViewModel = viewModel(
+        factory = viewModelFactory {
+            initializer { GearViewModel(database) }
+        }
+    )
     val share = rememberShareText()
     val lists by viewModel.allGearLists.collectAsStateWithLifecycle()
     val weights by viewModel.listWeights.collectAsStateWithLifecycle()
