@@ -18,6 +18,7 @@ dependencies {
     implementation(libs.compose.uiToolingPreview)
     debugImplementation(libs.compose.uiTooling)
     implementation(libs.multiplatform.settings)
+    implementation(libs.androidx.room.runtime)
 }
 
 android {
