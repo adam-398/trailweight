@@ -1,10 +1,10 @@
 # TrailWeight
 
-![Trail Weight: know exactly what you carry](assets/feature-graphic.png)
+![Trail Weight: know exactly what you carry](assets/feature-graphic-B-light.png)
 
 TrailWeight is a hiking gear tracker. Build a gear list for each trip, record what each item weighs, and see where the weight goes.
 
-[Get it on Google Play]([Play Store link])
+[Get it on Google Play](https://play.google.com/store/apps/details?id=dev.auroralaboratories.trailweight)
 
 ## Screenshots
 
@@ -44,10 +44,6 @@ TrailWeight is built with Kotlin Multiplatform and Compose Multiplatform. The UI
 - **Settings:** Multiplatform Settings
 - **Serialization:** kotlinx.serialization, Okio
 
-## Project structure
-
-
-## Building
 
 ### Android
 
