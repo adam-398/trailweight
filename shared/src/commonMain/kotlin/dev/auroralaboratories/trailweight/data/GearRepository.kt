@@ -1,7 +1,9 @@
 package dev.auroralaboratories.trailweight.data
 
-import androidx.room.withTransaction
+
 import kotlinx.coroutines.flow.Flow
+import androidx.room.immediateTransaction
+import androidx.room.useWriterConnection
 
 /**
  * Repository for the [GearList] and [GearItem] entities.
@@ -146,21 +148,23 @@ class GearRepository(
      * @return The number of lists imported.
      */
     suspend fun importData(data: ExportData): Int {
-        database.withTransaction {
-            for (list in data.lists) {
-                val newListId = gearListDao.insert(
-                    GearList(name = list.name, notes = list.notes, createdAt = list.createdAt)
-                )
-                for (item in list.items) {
-                    gearItemDao.insert(
-                        GearItem(
-                            listId = newListId,
-                            name = item.name,
-                            weight = item.weight,
-                            category = item.category,
-                            notes = item.notes
-                        )
+        database.useWriterConnection { connection ->
+            connection.immediateTransaction {
+                for (list in data.lists) {
+                    val newListId = gearListDao.insert(
+                        GearList(name = list.name, notes = list.notes, createdAt = list.createdAt)
                     )
+                    for (item in list.items) {
+                        gearItemDao.insert(
+                            GearItem(
+                                listId = newListId,
+                                name = item.name,
+                                weight = item.weight,
+                                category = item.category,
+                                notes = item.notes
+                            )
+                        )
+                    }
                 }
             }
         }
