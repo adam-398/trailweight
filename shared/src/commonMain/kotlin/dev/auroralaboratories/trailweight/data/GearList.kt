@@ -15,5 +15,5 @@ data class GearList(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val name: String,
     val notes: String? = "",
-    val createdAt: Long = System.currentTimeMillis()
+    val createdAt: Long = (kotlin.time.Clock.System.now().toEpochMilliseconds())
 )

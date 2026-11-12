@@ -34,5 +34,5 @@ data class GearItem(
     val weight: Double? = null,
     val category: String,
     val notes: String? = null,
-    val createdAt: Long = System.currentTimeMillis()
+    val createdAt: Long = (kotlin.time.Clock.System.now().toEpochMilliseconds())
 )
