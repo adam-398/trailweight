@@ -1,5 +1,6 @@
 package dev.auroralaboratories.trailweight
 
+import dev.auroralaboratories.trailweight.otherutils.rememberPickTextFile
 import dev.auroralaboratories.trailweight.otherutils.rememberShareText
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -23,6 +24,7 @@ import dev.auroralaboratories.trailweight.data.GearViewModel
 import dev.auroralaboratories.trailweight.data.TrailWeightDatabase
 import dev.auroralaboratories.trailweight.otherutils.formatWeight
 import dev.auroralaboratories.trailweight.uicomponents.AuroraButton
+import dev.auroralaboratories.trailweight.uicomponents.AuroraButtonStyle
 /**
  * Composable function that displays the transfer screen.
  * @param navController The NavController to use for navigation.
@@ -45,6 +47,16 @@ fun TransferScreen(
     var pastedText by remember { mutableStateOf("") }
     var message by remember { mutableStateOf<String?>(null) }
     var messageIsError by remember { mutableStateOf(false) }
+    val pickCsv = rememberPickTextFile { file ->
+        if (file == null) return@rememberPickTextFile
+        viewModel.importLighterPackCsv(file.text, file.name) { result ->
+            messageIsError = result.isFailure
+            message = result.fold(
+                onSuccess = { count -> "Imported $count item(s) from LighterPack." },
+                onFailure = { it.message ?: "That doesn't look like a LighterPack CSV." }
+            )
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -230,6 +242,31 @@ fun TransferScreen(
                         if (result.isSuccess) pastedText = ""
                     }
                 }
+            )
+
+            HorizontalDivider(
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
+                color = MaterialTheme.colorScheme.outlineVariant
+            )
+            Text(
+                "Import from LighterPack",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+            Text(
+                "In LighterPack, open a list, choose Share → Export to CSV, then pick that file here.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 8.dp)
+            )
+            AuroraButton(
+                text = "Choose CSV file",
+                style = AuroraButtonStyle.Outlined,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                onClick = pickCsv
             )
         }
     }

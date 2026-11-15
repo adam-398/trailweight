@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlin.time.Clock
 
 /**
  * ViewModel for the GearList screen.
@@ -131,6 +132,24 @@ class GearViewModel(database: TrailWeightDatabase) : ViewModel() {
                 val json = SnapshotCodec.decode(text)
                 val data = ExportData.fromJson(json)
                 repository.importData(data)
+            }
+            onResult(result)
+        }
+    }
+
+    /**
+     * Imports a CSV file exported from LighterPack as a new list.
+     * @param csv The full text of the CSV file.
+     * @param fileName The picked file's name, used as the list name. The extension is dropped.
+     * @param onResult Called with the number of items imported, or the error if the file was invalid.
+     */
+    fun importLighterPackCsv(csv: String, fileName: String?, onResult: (Result<Int>) -> Unit) {
+        viewModelScope.launch {
+            val result = runCatching {
+                val listName = fileName?.substringBeforeLast('.').orEmpty()
+                val data = LighterPackCsv.parse(csv, listName, Clock.System.now().toEpochMilliseconds())
+                repository.importData(data)
+                data.lists.sumOf { it.items.size }
             }
             onResult(result)
         }
