@@ -57,6 +57,7 @@ import io.github.dautovicharis.charts.style.PieChartDefaults
  * Composable function that displays a gear list screen.
  * @param navController The navigation controller to use.
  * @param listId The ID of the gear list to display.
+ * @param database The database to use.
  */
 @Composable
 fun GearListScreen(
